@@ -1,0 +1,23 @@
+
+xcuserdata/
+
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+
+.build/
+
+Carthage/Build/
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
