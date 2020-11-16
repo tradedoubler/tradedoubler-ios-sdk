@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49337971256189100044E460 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49337970256189100044E460 /* AdSupport.framework */; };
+		49337977256190B30044E460 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49337976256190B30044E460 /* AppTrackingTransparency.framework */; };
+		493379802562CB020044E460 /* String+SHA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B2E2F25603DEB00BED401 /* String+SHA.swift */; };
+		495B2E452560418200BED401 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495B2E442560418200BED401 /* SystemConfiguration.framework */; };
 		49A618582549B35F00399334 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618572549B35F00399334 /* AppDelegate.swift */; };
 		49A6185A2549B35F00399334 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618592549B35F00399334 /* SceneDelegate.swift */; };
 		49A6185C2549B35F00399334 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A6185B2549B35F00399334 /* DemoViewController.swift */; };
@@ -77,6 +81,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		49337970256189100044E460 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		49337976256190B30044E460 /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
+		495B2E2F25603DEB00BED401 /* String+SHA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA.swift"; sourceTree = "<group>"; };
+		495B2E3A25603EFF00BED401 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
+		495B2E442560418200BED401 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		49A618542549B35F00399334 /* TradeDoublerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TradeDoublerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A618572549B35F00399334 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49A618592549B35F00399334 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -107,7 +116,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				495B2E452560418200BED401 /* SystemConfiguration.framework in Frameworks */,
+				49337977256190B30044E460 /* AppTrackingTransparency.framework in Frameworks */,
 				49A618A42549B45400399334 /* TradeDoublerSDK.framework in Frameworks */,
+				49337971256189100044E460 /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,15 +155,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		495B2E3925603EFE00BED401 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49337976256190B30044E460 /* AppTrackingTransparency.framework */,
+				49337970256189100044E460 /* AdSupport.framework */,
+				495B2E442560418200BED401 /* SystemConfiguration.framework */,
+				495B2E3A25603EFF00BED401 /* libcommonCrypto.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		49A6184B2549B35F00399334 = {
 			isa = PBXGroup;
 			children = (
+				495B2E2F25603DEB00BED401 /* String+SHA.swift */,
 				49A618562549B35F00399334 /* TradeDoublerDemo */,
 				49A6186D2549B36200399334 /* TradeDoublerDemoTests */,
 				49A618782549B36200399334 /* TradeDoublerDemoUITests */,
 				49A618902549B45300399334 /* TradeDoublerSDK */,
 				49A6189D2549B45300399334 /* TradeDoublerSDKTests */,
 				49A618552549B35F00399334 /* Products */,
+				495B2E3925603EFE00BED401 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -450,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493379802562CB020044E460 /* String+SHA.swift in Sources */,
 				49A618C02549B9D400399334 /* InternalLogger.swift in Sources */,
 				49A618B62549B55400399334 /* PublicSDKInterface.swift in Sources */,
 			);
@@ -638,13 +664,17 @@
 				CODE_SIGN_ENTITLEMENTS = TradeDoublerDemo/TradeDoublerDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BY75YQ67T2;
+				DEVELOPMENT_TEAM = 772RH2549C;
 				INFOPLIST_FILE = TradeDoublerDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adhoc.TradeDoublerDemo;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adhoc.at.TradeDoublerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -661,13 +691,17 @@
 				CODE_SIGN_ENTITLEMENTS = TradeDoublerDemo/TradeDoublerDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BY75YQ67T2;
+				DEVELOPMENT_TEAM = 772RH2549C;
 				INFOPLIST_FILE = TradeDoublerDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adhoc.TradeDoublerDemo;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adhoc.at.TradeDoublerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -763,10 +797,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = BY75YQ67T2;
+				DEVELOPMENT_TEAM = 772RH2549C;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -777,8 +812,9 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adtucholski.first1.TradeDoublerSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adtucholski.first-.TradeDoublerSDK";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -793,10 +829,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = BY75YQ67T2;
+				DEVELOPMENT_TEAM = 772RH2549C;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -807,8 +844,9 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adtucholski.first1.TradeDoublerSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adtucholski.first-.TradeDoublerSDK";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;

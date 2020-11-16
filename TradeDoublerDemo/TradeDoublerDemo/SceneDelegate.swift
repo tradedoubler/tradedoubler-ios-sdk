@@ -48,6 +48,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        print("oppennni \(URLContexts.count)")
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        print("continue with scene, activity: \(userActivity.debugDescription)")
+    }
 
+    func scene(_ scene: UIScene, didFailToContinueUserActivityWithType userActivityType: String, error: Error) {
+        print("failed activity: \(userActivity.debugDescription)")
+    }
 }
 

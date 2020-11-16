@@ -8,10 +8,16 @@
 import Foundation
 
 public class Tracker {
-    public init() {}
+    private init() {}
+    
+    public static let shared = Tracker()
+    private let logger = InternalLogger.shared
     
     public func track(_ url: URL, tduid: String) {
-        let logger = InternalLogger()
         logger.urlPassed(url: url, tduid: tduid)//recognize url type, set or read tduid
+    }
+    
+    public func firstRequest(host: String, organizationId: String, user: String, tduid: String, isEmail: Bool) {
+        logger.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
     }
 }

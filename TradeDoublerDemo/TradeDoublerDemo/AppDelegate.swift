@@ -10,15 +10,44 @@ import TradeDoublerSDK
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let host = "tbs.tradedoubler.com"
+    private let organizationId = "945630"
+    private let email = "adam.tucholski@britenet.com.pl"
+    private let tduid = "f895c014d17b2a60370d5a4f65e22995"
+    /*https://tbs.tradedoubler.com/user?o=$organization&extid=$extid&exttype=1&tduid=$tduid&verify=true
+*/
 //    var window: UIWindow?
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        guard let options = launchOptions,
+        /*let appDefaults = ["base_url": "http://www.tdserve.com/adt/trackback.html",
+                           "timeout": "5",
+                           "org_id": "\(AppDelegate.organizationId)",
+                           "evt_id": "",
+                           "test_mode": false,
+                           "currency": "EUR",
+                           "order_value": "7.00",
+                           "in_app_evt_id": "",
+                           "in_app_order_value": "7.50",
+                           "to_app_order_value": "140"
+        ] as [String : AnyHashable]
+        print(appDefaults)
+        UserDefaults.standard.register(defaults: appDefaults)*/
+        let isEmail: Bool
+        let user: String
+        if let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") {
+            user = advertisingIdentifier
+            isEmail = false
+        } else {
+            user = email
+            isEmail = true
+        }
+        Tracker.shared.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
+        //TODO: after getting associated domains to actual work uncomment & edit
+        /*guard let options = launchOptions,
               let url = options[UIApplication.LaunchOptionsKey(rawValue: "url")] as? URL, let tduid = options[UIApplication.LaunchOptionsKey(rawValue: "tduid")] as? String else {
             passToSDK(url: URL.init(string: "www.google.pl")!, tduid: "some tduid (stub, none obtained)")
             return true
         }
-        passToSDK(url: url, tduid: tduid)
+        passToSDK(url: url, tduid: tduid)*/
             return true
         }
 
@@ -39,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 //Try to detect TDUID on URL opening header
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("oppen \(url)")
         print("opening URL: \(url.absoluteString)")
         
         for key in options.keys {
@@ -49,11 +79,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         print("failure when opening url \(url)")
+        print("https://www.tradedoubler.com/en/?tduid=f895c014d17b2a60370d5a4f65e22995")//tduid for stubbing
         return false
     }
 
     func passToSDK(url: URL, tduid: String) {
-        let tracker = Tracker()
-        tracker.track(url, tduid: tduid)
+        Tracker.shared.track(url, tduid: tduid)
+    }
+    
+    func application(_ application: UIApplication, didUpdate userActivity: NSUserActivity) {
+        print("update activity \(userActivity)")
+    }
+    
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        print("will continue activity \(userActivity.debugDescription)")
+        return true
+    }
+    
+    func application(_ application: UIApplication, didFailToContinueUserActivityWithType userActivityType: String, error: Error) {
+        print("failedactivity \(userActivity.debugDescription) error: \(error.localizedDescription)")
+    }
+    
+    func setIDFA(_ iDFAString: String) {
+        Tracker.shared.firstRequest(host: host, organizationId: organizationId, user: iDFAString, tduid: tduid, isEmail: false)
     }
 }
