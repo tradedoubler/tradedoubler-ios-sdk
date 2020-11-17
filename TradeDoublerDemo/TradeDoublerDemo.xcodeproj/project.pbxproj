@@ -24,8 +24,10 @@
 		49A618A12549B45400399334 /* TradeDoublerSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 49A618912549B45300399334 /* TradeDoublerSDK.h */; platformFilter = ios; settings = {ATTRIBUTES = (Public, ); }; };
 		49A618A42549B45400399334 /* TradeDoublerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A6188F2549B45300399334 /* TradeDoublerSDK.framework */; };
 		49A618A52549B45400399334 /* TradeDoublerSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 49A6188F2549B45300399334 /* TradeDoublerSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		49A618B62549B55400399334 /* PublicSDKInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618B52549B55400399334 /* PublicSDKInterface.swift */; };
-		49A618C02549B9D400399334 /* InternalLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618BF2549B9D400399334 /* InternalLogger.swift */; };
+		49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618B52549B55400399334 /* TDSDKInterface.swift */; };
+		49A618C02549B9D400399334 /* URLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618BF2549B9D400399334 /* URLHandler.swift */; };
+		49E8EEC22563C394004F9069 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8EEC12563C394004F9069 /* DataHandler.swift */; };
+		49FD58912563F7CE006F6286 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD58902563F7CE006F6286 /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,9 +108,11 @@
 		49A618972549B45300399334 /* TradeDoublerSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TradeDoublerSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A6189E2549B45400399334 /* TradeDoublerSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeDoublerSDKTests.swift; sourceTree = "<group>"; };
 		49A618A02549B45400399334 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		49A618B52549B55400399334 /* PublicSDKInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicSDKInterface.swift; sourceTree = "<group>"; };
-		49A618BF2549B9D400399334 /* InternalLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalLogger.swift; sourceTree = "<group>"; };
+		49A618B52549B55400399334 /* TDSDKInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDSDKInterface.swift; sourceTree = "<group>"; };
+		49A618BF2549B9D400399334 /* URLHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandler.swift; sourceTree = "<group>"; };
 		49A618F1254C430600399334 /* TradeDoublerDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TradeDoublerDemo.entitlements; sourceTree = "<group>"; };
+		49E8EEC12563C394004F9069 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
+		49FD58902563F7CE006F6286 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,8 +234,10 @@
 			children = (
 				49A618912549B45300399334 /* TradeDoublerSDK.h */,
 				49A618922549B45300399334 /* Info.plist */,
-				49A618B52549B55400399334 /* PublicSDKInterface.swift */,
-				49A618BF2549B9D400399334 /* InternalLogger.swift */,
+				49A618B52549B55400399334 /* TDSDKInterface.swift */,
+				49A618BF2549B9D400399334 /* URLHandler.swift */,
+				49E8EEC12563C394004F9069 /* DataHandler.swift */,
+				49FD58902563F7CE006F6286 /* Notifications.swift */,
 			);
 			path = TradeDoublerSDK;
 			sourceTree = "<group>";
@@ -475,9 +481,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49FD58912563F7CE006F6286 /* Notifications.swift in Sources */,
+				49E8EEC22563C394004F9069 /* DataHandler.swift in Sources */,
 				493379802562CB020044E460 /* String+SHA.swift in Sources */,
-				49A618C02549B9D400399334 /* InternalLogger.swift in Sources */,
-				49A618B62549B55400399334 /* PublicSDKInterface.swift in Sources */,
+				49A618C02549B9D400399334 /* URLHandler.swift in Sources */,
+				49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

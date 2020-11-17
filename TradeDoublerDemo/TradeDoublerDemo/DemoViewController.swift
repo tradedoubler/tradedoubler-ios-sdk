@@ -12,11 +12,15 @@ import TradeDoublerSDK
 
 class DemoViewController: UIViewController {
 
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
 
+    @IBAction func createEvent(_ sender: Any) {
+        TDSDKInterface.shared.randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
+    }
     @IBAction func useIDFA(_ sender: Any) {
         //ask for IDFA right after
         guard let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") else {
@@ -26,6 +30,7 @@ class DemoViewController: UIViewController {
             return
         }
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        TDSDKInterface.shared.firstRequest(host: appDelegate.host, organizationId: appDelegate.organizationId, user: advertisingIdentifier, tduid: appDelegate.tduid, isEmail: false)
         appDelegate.setIDFA(advertisingIdentifier)
     }
     @available(iOS 14, *)

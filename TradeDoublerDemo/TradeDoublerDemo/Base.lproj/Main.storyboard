@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,19 +17,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szr-kb-9hY">
-                                <rect key="frame" x="175.5" y="438" width="63" height="30"/>
-                                <state key="normal" title="Use IDFA"/>
-                                <connections>
-                                    <action selector="useIDFA:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlR-uf-4WH"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
+                                <rect key="frame" x="163" y="423" width="88" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szr-kb-9hY">
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="30"/>
+                                        <state key="normal" title="Use IDFA"/>
+                                        <connections>
+                                            <action selector="useIDFA:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlR-uf-4WH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-9j-bb2">
+                                        <rect key="frame" x="0.0" y="30" width="88" height="30"/>
+                                        <state key="normal" title="Create event"/>
+                                        <connections>
+                                            <action selector="createEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sup-EG-hA2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemGrayColor"/>
                         <constraints>
-                            <constraint firstItem="Szr-kb-9hY" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="7pc-rv-yqq"/>
-                            <constraint firstItem="Szr-kb-9hY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="v8v-iy-DO5"/>
+                            <constraint firstItem="YIW-Yc-OzB" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="COG-cn-KVr"/>
+                            <constraint firstItem="YIW-Yc-OzB" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="tOu-4l-l4U"/>
                         </constraints>
                     </view>
                 </viewController>
