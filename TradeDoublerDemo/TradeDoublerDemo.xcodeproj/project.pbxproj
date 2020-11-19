@@ -10,6 +10,7 @@
 		49337971256189100044E460 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49337970256189100044E460 /* AdSupport.framework */; };
 		49337977256190B30044E460 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49337976256190B30044E460 /* AppTrackingTransparency.framework */; };
 		493379802562CB020044E460 /* String+SHA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B2E2F25603DEB00BED401 /* String+SHA.swift */; };
+		49340202256544530038B12A /* InternalLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49340201256544530038B12A /* InternalLogger.swift */; };
 		495B2E452560418200BED401 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495B2E442560418200BED401 /* SystemConfiguration.framework */; };
 		49A618582549B35F00399334 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618572549B35F00399334 /* AppDelegate.swift */; };
 		49A6185A2549B35F00399334 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618592549B35F00399334 /* SceneDelegate.swift */; };
@@ -85,6 +86,7 @@
 /* Begin PBXFileReference section */
 		49337970256189100044E460 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		49337976256190B30044E460 /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
+		49340201256544530038B12A /* InternalLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalLogger.swift; sourceTree = "<group>"; };
 		495B2E2F25603DEB00BED401 /* String+SHA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA.swift"; sourceTree = "<group>"; };
 		495B2E3A25603EFF00BED401 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		495B2E442560418200BED401 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -238,6 +240,7 @@
 				49A618BF2549B9D400399334 /* URLHandler.swift */,
 				49E8EEC12563C394004F9069 /* DataHandler.swift */,
 				49FD58902563F7CE006F6286 /* Notifications.swift */,
+				49340201256544530038B12A /* InternalLogger.swift */,
 			);
 			path = TradeDoublerSDK;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 			files = (
 				49FD58912563F7CE006F6286 /* Notifications.swift in Sources */,
 				49E8EEC22563C394004F9069 /* DataHandler.swift in Sources */,
+				49340202256544530038B12A /* InternalLogger.swift in Sources */,
 				493379802562CB020044E460 /* String+SHA.swift in Sources */,
 				49A618C02549B9D400399334 /* URLHandler.swift in Sources */,
 				49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */,

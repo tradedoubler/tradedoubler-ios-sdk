@@ -27,7 +27,8 @@ extension String {
             for byte in digest {
                 sha256String += String(format:"%02x", UInt8(byte))
             }
-            print("SHA256 is \(sha256String)")
+        
+        Logger.TDLOG("SHA256 is \(sha256String)")
         
             return sha256String
     }

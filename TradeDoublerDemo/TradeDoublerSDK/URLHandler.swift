@@ -30,7 +30,7 @@ class URLHandler {
             components.queryItems = queryItems
         }
         let url = components.url!
-        print(url, " in line \(#line) of \(#file)")
+        Logger.TDLOG("\(url) in line \(#line) of \(#file)")
         let task = session.dataTask(with: url) { (data, response, error) in
             /*if let redirUrl = response?.url {
                 let components = URLComponents.init(url: redirUrl, resolvingAgainstBaseURL: false)
@@ -39,25 +39,25 @@ class URLHandler {
                 }
             }*/
             if let redir = response?.url {
-                print("gotta \(redir)")
+                Logger.TDLOG("gotta \(redir)")
             }
             if let resp = response as? HTTPURLResponse {
-                print(resp.statusCode)
+                Logger.TDLOG(resp.statusCode.description)
             }
             if let error = error {
-                print("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
             }
             if let data = data {
                 guard let toPrint = String(data: data, encoding: .utf8) else {
-                    print("file \(#file) line: \(#line) \nNO STRING")
+                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
                     return
                 }
-                print("server answered: \n", toPrint)
-                print(toPrint)
+                Logger.TDLOG("server answered: \n \(toPrint)")
+                Logger.TDLOG(toPrint)
             }
         }
         task.resume()
-//        print("Your tduid to be securely saved & used later is: \(tduid)")
+//        Logger.TDLOG("Your tduid to be securely saved & used later is: \(tduid)")
     }
     
     /// For email login: isEmail must be true & user parameter is set to email address
@@ -80,25 +80,37 @@ class URLHandler {
     }
     
     func randomEvent(organizationId: String, user: String? = nil, isEmail: Bool? = nil) {
-        let url = createPixelTrackingStep(host: "tbs.tradedoubler.com", organizationId: organizationId, eventId: "123", orderOrLeadNo: "15", isOrder: false, tduid: DataHandler.shared.tduid!, user: user, isEmail: isEmail)
+        let url = createPixelTrackingStep(host: "tbs.tradedoubler.com", organizationId: organizationId, eventId: "361093", orderOrLeadNo: "12", isOrder: false, tduid: DataHandler.shared.tduid!, user: user, isEmail: isEmail)
         
-        print("file \(#file) line \(#line) url: ", url)
-        let task = session.dataTask(with: url) { (data, response, error) in
+        Logger.TDLOG("file \(#file) line \(#line) url: \(url)")
+        let t1a = session.downloadTask(with: url) { (url1, resp1, err) in
+            if let rsp = resp1 as? HTTPURLResponse {
+                Logger.TDLOG(rsp.statusCode.description)
+            }
+            if let uuu = url1 {
+                Logger.TDLOG(uuu.absoluteString)
+            }
+            if let eee = err {
+                Logger.TDLOG(eee.localizedDescription)
+            }
+        }
+        t1a.resume()
+        /*let task = session.dataTask(with: url) { (data, response, error) in
             if let resp = response as? HTTPURLResponse {
-                print(resp.statusCode)
+                Logger.TDLOG(String(resp.statusCode))
             }
             if let error = error {
-                print("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
             }
             if let data = data {
                 guard let toPrint = String(data: data, encoding: .utf8) else {
-                    print("file \(#file) line: \(#line) \nNO STRING")
+                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
                     return
                 }
-                print(toPrint)
+                Logger.TDLOG(toPrint)
             }
         }
-        task.resume()
+        task.resume()*/
     }
     private func createPixelTrackingStep(host:String, organizationId: String, eventId: String, orderOrLeadNo: String, isOrder: Bool, orderValue: String? = nil, currency: String? = nil,/*type - flag for iframe required??,*/ validOn: String? = nil, checksum: String? = nil, reportInfo: String? = nil, tduid: String, user: String? = nil, isEmail: Bool? = nil, voucher: String? = nil) -> URL {
         var components = URLComponents()
@@ -121,7 +133,8 @@ class URLHandler {
         if user != nil {queryItems.append(URLQueryItem(name: "extid", value: user!.sha256()))}
         if isEmail != nil {queryItems.append(URLQueryItem(name: "exttype", value: "\(isEmail! ? 1 : 0)"))}
         queryItems.append(URLQueryItem(name: "tduid", value: tduid))
-        queryItems.append(URLQueryItem(name: "type", value: "iframe"))
+        queryItems.append(URLQueryItem(name: "f", value: "0"))
+//        queryItems.append(URLQueryItem(name: "type", value: "iframe"))
         components.queryItems = queryItems
         return components.url!
     }
@@ -139,40 +152,48 @@ class URLHandler {
         let url = createPixelTrackingStep(host: host, organizationId: organizationId, eventId: eventId, orderOrLeadNo: orderOrLeadNo, isOrder: isOrder, orderValue: orderValue, currency: currency, validOn: validOn, checksum: checksum, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail, voucher: voucher)
         let task = session.dataTask(with: url) { (data, response, error) in
             if let resp = response as? HTTPURLResponse {
-                print(resp.statusCode)
+                Logger.TDLOG(resp.statusCode.description)
             }
             if let error = error {
-                print("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
             }
             if let data = data {
                 guard let toPrint = String(data: data, encoding: .utf8) else {
-                    print("file \(#file) line: \(#line) \nNO STRING")
+                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
                     return
                 }
-                print(toPrint)
+                Logger.TDLOG(toPrint)
             }
         }
         task.resume()
     }
     func firstRequest(host:String, organizationId: String, user: String, tduid: String, isEmail: Bool) {
         let url = createFirstStep(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
-        print("file \(#file) line \(#line) url: ", url)
+        Logger.TDLOG("file \(#file) line \(#line) url: \(url)")
         let task = session.dataTask(with: url) { (data, response, error) in
             if let resp = response as? HTTPURLResponse {
-                print(resp.statusCode)
+                Logger.TDLOG(resp.statusCode.description)
             }
             if let error = error {
-                print("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
             }
             if let data = data {
                 guard let toPrint = String(data: data, encoding: .utf8) else {
-                    print("file \(#file) line: \(#line) \nNO STRING")
+                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
                     return
                 }
-                print(toPrint)
+                Logger.TDLOG(toPrint)
             }
         }
         task.resume()
+    }
+    
+    func oldSaleRequest() {
+        
+    }
+    
+    func oldLeadRequest() {
+        
     }
 }
 
@@ -183,11 +204,30 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
     
     func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         if let url = request.url?.absoluteString {
+            Logger.TDLOG(url)
             let components = URLComponents(string: url)
-            let maybeTduid = components?.queryItems?.filter({ (item) -> Bool in
+            guard let maybeTduid = components?.queryItems?.filter({ (item) -> Bool in
                 item.name == tduidKey
-            })
-            if let tduid = maybeTduid?.first {
+            }) else {
+                let task = session.dataTask(with: URLRequest.init(url: request.url!)) { (dt, re, er) in
+                    if let resp = re as? HTTPURLResponse {
+                        Logger.TDLOG(resp.statusCode.description)
+                    }
+                    if let err = er {
+                        Logger.TDLOG(err.localizedDescription)
+                    }
+                    if let daata = dt {
+                        guard let toPrint = String(data: daata, encoding: .utf8) else {
+                            Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
+                            return
+                        }
+                        Logger.TDLOG(toPrint)
+                    }
+                }
+                task.resume()
+                return
+            }
+            if let tduid = maybeTduid.first {
                 let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!, recoveredKey: false])
                 DispatchQueue.main.async {
                     DataHandler.shared.tduid = tduid.value
@@ -195,7 +235,7 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
                 }
             }
         }
-//        print("got redirect from \(request.url!.absoluteString)")
+//        Logger.TDLOG("got redirect from \(request.url!.absoluteString)")
         
     }
     
