@@ -201,12 +201,14 @@ class URLHandler {
         let checksum = countChecksum(secretCode: secretCode, orderNumber: DataHandler.shared.orderNumber, orderValue: orderValue)
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "tbs.tradedoubler.com"
+        components.host = "tbl.tradedoubler.com"
         components.path = "/report"
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
         queryItems.append(URLQueryItem(name: "orderNumber", value: DataHandler.shared.orderNumber))
+        queryItems.append(URLQueryItem(name: "orderValue", value: orderValue))
+        queryItems.append(URLQueryItem(name: "currency", value: "EUR"))
         queryItems.append(URLQueryItem(name: "checksum", value: checksum))
         DataHandler.shared.orderNumber = ""
         queryItems.append(URLQueryItem(name: "extid", value: user.sha256()))
@@ -242,7 +244,7 @@ class URLHandler {
     private func createLeadTrackingStep(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) -> URL {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = "tbs.tradedoubler.com"
+        components.host = "tbl.tradedoubler.com"
         components.path = "/report"
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))

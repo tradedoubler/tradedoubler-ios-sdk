@@ -19,14 +19,15 @@ class DemoViewController: UIViewController {
     }
 
     @IBAction func sdkSale(_ sender: Any) {
-        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(1000000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)//  randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
+        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)//  randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
-        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale_2, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(1000000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)
+        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale_2, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
     
     @IBAction func sdkLead(_ sender: Any) {
+        TDSDKInterface.shared.trackLead(organizationId: appDelegate.orgId, eventId: sdk_lead, secretCode: appDelegate.secretCode, timeout: 30, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
     
     @IBAction func useIDFA(_ sender: Any) {
