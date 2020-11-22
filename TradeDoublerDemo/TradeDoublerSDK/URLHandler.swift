@@ -18,6 +18,7 @@ class URLHandler {
     func getTduid(host: String, path: String, parameters: [String : String]) {
         //https://clk.tradedoubler.com/click?p(310409)a(982247)g(0)
         //https://clk.tradedoubler.com/click?a=982247&p=310409&g=0&f=0
+        print("at start we have orderNo = \(DataHandler.shared.orderNumber)")
         var components = URLComponents()
         components.scheme = "https"
         components.host = host
@@ -188,12 +189,97 @@ class URLHandler {
         task.resume()
     }
     
-    func oldSaleRequest() {
+    /*trackDownloadAsSale:(NSString*)organization withEvent:(NSString*)event withSecretCode:(NSString*)secretCode
+                    withTimeout:(int)timeout withLifeTimeValueDays:(int)ltvDays withCurrency:(NSString*)currency withOrderValue:(NSString*)orderValue withCookieTracking:(BOOL)cookieTracking
+     
+     
+    func oldSaleRequest(organization: String, event: String, orderNo: String, orderVal: String, currency: String, checkSum: String? = nil, identifier: String, limitTracking: Bool, isEmail: Bool) {
+        print("http://tbs.tradedoubler.com/report?organization=\(organization)&event=\(event)&orderNumber=\(orderNo)&orderValue=\(orderVal)&currency=\(currency)&checksum=\(checkSum)&deviceid=\(idfa)&limitAdTracking=\(limitTracking)")
+    }*/
+     
+    private func createSaleTrackingStep(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, tduid: String, user: String, isEmail: Bool) -> URL {
+        let checksum = countChecksum(secretCode: secretCode, orderNumber: DataHandler.shared.orderNumber, orderValue: orderValue)
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "tbs.tradedoubler.com"
+        components.path = "/report"
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "organization", value: organizationId))
+        queryItems.append(URLQueryItem(name: "event", value: eventId))
+        queryItems.append(URLQueryItem(name: "orderNumber", value: DataHandler.shared.orderNumber))
+        queryItems.append(URLQueryItem(name: "checksum", value: checksum))
+        DataHandler.shared.orderNumber = ""
+        queryItems.append(URLQueryItem(name: "extid", value: user.sha256()))
+        queryItems.append(URLQueryItem(name: "exttype", value: "\(isEmail ? 1 : 0)"))
+        if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
+        if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
+//        if validOn != nil {queryItems.append(URLQueryItem(name: "validOn", value: validOn))}
+//        if checksum != nil {queryItems.append(URLQueryItem(name: "checksum", value: checksum))}
+        if reportInfo != nil {queryItems.append(URLQueryItem(name: "reportInfo", value: reportInfo))}
+        components.queryItems = queryItems
+        return components.url!
+    }
+    
+    func trackSale(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, tduid: String, user: String, isEmail: Bool) {/* cookieTracking: Bool, ltvDays: Int)*/
+        
+        let url = createSaleTrackingStep(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail)
+        Logger.TDLOG(url.debugDescription)
+        let saleTask = session.downloadTask(with: url) { (url1, resp1, err) in
+            if let rsp = resp1 as? HTTPURLResponse {
+                Logger.TDLOG(rsp.statusCode.description)
+            }
+            if let uuu = url1 {
+                Logger.TDLOG(uuu.absoluteString)
+            }
+            if let eee = err {
+                Logger.TDLOG(eee.localizedDescription)
+            }
+        }
+        saleTask.resume()
         
     }
     
-    func oldLeadRequest() {
-        
+    private func createLeadTrackingStep(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) -> URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "tbs.tradedoubler.com"
+        components.path = "/report"
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "organization", value: organizationId))
+        queryItems.append(URLQueryItem(name: "event", value: eventId))
+        queryItems.append(URLQueryItem(name: "leadNumber", value: DataHandler.shared.orderNumber))
+        DataHandler.shared.orderNumber = ""
+        queryItems.append(URLQueryItem(name: "extid", value: user.sha256()))
+        queryItems.append(URLQueryItem(name: "exttype", value: "\(isEmail ? 1 : 0)"))
+        components.queryItems = queryItems
+        return components.url!
+    }
+    
+    func trackLead(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) {
+        let url = createLeadTrackingStep(organizationId: organizationId, eventId: eventId, secretCode: secretCode, timeout: timeout, user: user, isEmail: isEmail)
+        Logger.TDLOG(url.debugDescription)
+        let leadTask = session.downloadTask(with: url) { (url1, resp1, err) in
+            if let rsp = resp1 as? HTTPURLResponse {
+                Logger.TDLOG(rsp.statusCode.description)
+            }
+            if let uuu = url1 {
+                Logger.TDLOG(uuu.absoluteString)
+            }
+            if let eee = err {
+                Logger.TDLOG(eee.localizedDescription)
+            }
+        }
+        leadTask.resume()
+    }
+    
+    /*func oldLeadRequest(organization: String, event: String, leadNo: String, checkSum: String? = nil, identifier: String, limitTracking: Bool, isEmail: Bool) {
+        print("http://tbl.tradedoubler.com/report?organization=\(organization)&event=\(event)&leadNumber=\(leadNo)&checksum=\(checkSum)&deviceid=\(identifier.sha256())&limitAdTracking=\(limitTracking)")
+    }*/
+    
+    func countChecksum(secretCode: String, orderNumber: String, orderValue: String) -> String {
+        let prefix = "v04"
+        let suffix = secretCode + orderNumber + orderValue
+        return prefix + suffix.md5()
     }
 }
 

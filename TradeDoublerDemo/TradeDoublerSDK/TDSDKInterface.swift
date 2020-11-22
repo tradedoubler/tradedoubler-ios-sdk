@@ -29,8 +29,22 @@ public class TDSDKInterface {
         
     }
     
-    public func randomEvent(organizationId: String, user: String, isEmail: Bool? = nil) {
-        urlHandler.randomEvent(organizationId: organizationId, user: user, isEmail: isEmail)
+//    public func randomEvent(organizationId: String, user: String, isEmail: Bool? = nil) {
+//        urlHandler.randomEvent(organizationId: organizationId, user: user, isEmail: isEmail)
+//    }
+    
+    public func trackSale(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, user: String, isEmail: Bool) {
+        let tduid = DataHandler.shared.tduid!
+        urlHandler.trackSale(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail)
+    }
+    
+    public func trackLead(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) {
+//        let tduid = DataHandler.shared.tduid!
+        urlHandler.trackLead(organizationId: organizationId, eventId: eventId, secretCode: secretCode, timeout: timeout, user: user, isEmail: isEmail)
+    }
+    
+    public func trackInstall() {
+        
     }
     
     func simulateFirstClick(host: String, path: String, parameters: [String:String]) {

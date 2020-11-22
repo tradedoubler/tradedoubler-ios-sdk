@@ -8,10 +8,10 @@
 import UIKit
 import TradeDoublerSDK
 //defined sdk events
-let sdk_sale = 403759
-let sdk_app_install = 403761
-let sdk_sale_2 = 403763
-let sdk_lead = 403765
+let sdk_sale = "403759"
+let sdk_app_install = "403761"
+let sdk_sale_2 = "403763"
+let sdk_lead = "403765"
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,11 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let organizationId = /*"310409*/"945630"
     private let email = "adam.tucholski@britenet.com.pl"
     private let tduid = "f895c014d17b2a60370d5a4f65e22995"
-    private var isEmailValue = false
+    private var isEmailValue = true
     private var IDFA = ""
+    let secretCode = "123456789"//test account
     
     var isEmail: Bool {
         get {return isEmailValue}
+        set {isEmailValue = newValue}
     }
     
     var user: String {return IDFA.isEmpty ? email : IDFA}
@@ -55,13 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func login(tduid: String) {
-        let isEmail: Bool
-        let user: String
         if let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") {
-            user = advertisingIdentifier
+            IDFA = advertisingIdentifier
             isEmail = false
         } else {
-            user = email
             isEmail = true
         }
         TDSDKInterface.shared.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)

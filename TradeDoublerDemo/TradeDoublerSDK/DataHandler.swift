@@ -9,6 +9,7 @@ import Foundation
 
 public let tduidKey = "tduid"
 public let recoveredKey = "recovered"
+let orderNo = "orderNo"
 
 class DataHandler {
     
@@ -19,6 +20,19 @@ class DataHandler {
         
         set {
             UserDefaults.standard.setValue(newValue, forKey: tduidKey)
+        }
+    }
+    
+    var orderNumber: String {
+        get {
+            let temp = UserDefaults.standard.integer(forKey: orderNo)
+            return "\(temp)"
+        }
+        
+        set {
+            var temp = UserDefaults.standard.integer(forKey: orderNo)
+            temp = temp + 1
+            UserDefaults.standard.setValue(temp, forKey: orderNo)
         }
     }
     

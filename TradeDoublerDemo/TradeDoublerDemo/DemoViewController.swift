@@ -18,9 +18,17 @@ class DemoViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    @IBAction func createEvent(_ sender: Any) {
-        TDSDKInterface.shared.randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
+    @IBAction func sdkSale(_ sender: Any) {
+        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(1000000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)//  randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
+    
+    @IBAction func sdkSale2(_ sender: Any) {
+        TDSDKInterface.shared.trackSale(organizationId: appDelegate.orgId, eventId: sdk_sale_2, secretCode: appDelegate.secretCode, currency: nil, orderValue: "\(arc4random_uniform(1000000) + 1)", reportInfo: nil, user: appDelegate.user, isEmail: appDelegate.isEmail)
+    }
+    
+    @IBAction func sdkLead(_ sender: Any) {
+    }
+    
     @IBAction func useIDFA(_ sender: Any) {
         //ask for IDFA right after
         guard let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") else {

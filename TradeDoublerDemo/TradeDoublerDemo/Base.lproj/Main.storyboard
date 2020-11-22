@@ -17,21 +17,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
-                                <rect key="frame" x="163" y="423" width="88" height="60"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
+                                <rect key="frame" x="168" y="373" width="78" height="160"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szr-kb-9hY">
-                                        <rect key="frame" x="0.0" y="0.0" width="88" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="78" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="QZa-nD-yzP"/>
+                                        </constraints>
                                         <state key="normal" title="Use IDFA"/>
                                         <connections>
                                             <action selector="useIDFA:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlR-uf-4WH"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-9j-bb2">
-                                        <rect key="frame" x="0.0" y="30" width="88" height="30"/>
-                                        <state key="normal" title="Create event"/>
+                                        <rect key="frame" x="0.0" y="40" width="78" height="40"/>
+                                        <state key="normal" title="Sdk - sale"/>
                                         <connections>
-                                            <action selector="createEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sup-EG-hA2"/>
+                                            <action selector="sdkSale:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vE9-86-a6P"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HJF-lk-vCN">
+                                        <rect key="frame" x="0.0" y="80" width="78" height="40"/>
+                                        <state key="normal" title="Sdk - sale2"/>
+                                        <connections>
+                                            <action selector="sdkSale2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="awF-X0-c5m"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nus-c9-oSJ">
+                                        <rect key="frame" x="0.0" y="120" width="78" height="40"/>
+                                        <state key="normal" title="Sdk - lead"/>
+                                        <connections>
+                                            <action selector="sdkLead:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vlD-t8-eHb"/>
                                         </connections>
                                     </button>
                                 </subviews>
