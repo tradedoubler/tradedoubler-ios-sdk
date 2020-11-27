@@ -64,56 +64,42 @@ class URLHandler {
     /// For email login: isEmail must be true & user parameter is set to email address
     /// For IDFA usage: isEmail set to false & user parameter is IDFA string
     /// Developer should default to email if user refuses to use IDFA in settings (or redirect to settings requesting user consent)
-    private func createFirstStep(host:String, organizationId: String, user: String, tduid: String, isEmail: Bool) -> URL {
-        
+    private func createAppLaunchStep(organizationId: String, isEmail: Bool) -> URL? {
+        let mail = DataHandler.shared.email
+        let IDFA = DataHandler.shared.IDFA
+        let host = "tbl.tradedoubler.com"
+        if mail == nil && isEmail && IDFA == nil {
+            Logger.TDLOG("no email on launch")
+            return nil
+        }
+        if !isEmail && IDFA == nil {
+            Logger.TDLOG("no IDFA on launch")
+            return nil
+        }
+        let user = isEmail ? mail : IDFA
         var components = URLComponents()
             components.scheme = "https"
             components.host = host
             components.path = "/user"
-            components.queryItems = [
-                URLQueryItem(name: "o", value: organizationId),
-                URLQueryItem(name: "extid", value: user.sha256()),
-                URLQueryItem(name: "exttype", value: "\(isEmail ? 1 : 0)"),
-                URLQueryItem(name: "tduid", value: tduid),
-                URLQueryItem(name: "verify", value: "true")
-            ]
-        return components.url!
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "o", value: organizationId))
+        queryItems.append(URLQueryItem(name: "extid", value: user))
+        queryItems.append(URLQueryItem(name: "extid", value: user))
+        queryItems.append(URLQueryItem(name: "exttype", value: "1"))
+        if let tduid = DataHandler.shared.tduid {
+            queryItems.append(URLQueryItem(name: "tduid", value: tduid))
+        }
+        queryItems.append(URLQueryItem(name: "verify", value: "true"))
+        components.queryItems = queryItems
+        return components.url
     }
     
-    func randomEvent(organizationId: String, user: String? = nil, isEmail: Bool? = nil) {
-        let url = createPixelTrackingStep(host: "tbs.tradedoubler.com", organizationId: organizationId, eventId: "361093", orderOrLeadNo: "12", isOrder: false, tduid: DataHandler.shared.tduid!, user: user, isEmail: isEmail)
+    /*private func createPixelTrackingStep(host:String, organizationId: String, eventId: String, orderOrLeadNo: String, isOrder: Bool, orderValue: String? = nil, currency: String? = nil,/*type - flag for iframe required??,*/ validOn: String? = nil, checksum: String? = nil, reportInfo: String? = nil, user: String? = nil, isEmail: Bool? = nil, voucher: String? = nil) -> URL {
+        let tduid = DataHandler.shared.tduid
         
-        Logger.TDLOG("file \(#file) line \(#line) url: \(url)")
-        let t1a = session.downloadTask(with: url) { (url1, resp1, err) in
-            if let rsp = resp1 as? HTTPURLResponse {
-                Logger.TDLOG(rsp.statusCode.description)
-            }
-            if let uuu = url1 {
-                Logger.TDLOG(uuu.absoluteString)
-            }
-            if let eee = err {
-                Logger.TDLOG(eee.localizedDescription)
-            }
+        if tduid == nil {
+            Logger.TDLOG("NO TDUID in \(#function)")
         }
-        t1a.resume()
-        /*let task = session.dataTask(with: url) { (data, response, error) in
-            if let resp = response as? HTTPURLResponse {
-                Logger.TDLOG(String(resp.statusCode))
-            }
-            if let error = error {
-                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
-            }
-            if let data = data {
-                guard let toPrint = String(data: data, encoding: .utf8) else {
-                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                    return
-                }
-                Logger.TDLOG(toPrint)
-            }
-        }
-        task.resume()*/
-    }
-    private func createPixelTrackingStep(host:String, organizationId: String, eventId: String, orderOrLeadNo: String, isOrder: Bool, orderValue: String? = nil, currency: String? = nil,/*type - flag for iframe required??,*/ validOn: String? = nil, checksum: String? = nil, reportInfo: String? = nil, tduid: String, user: String? = nil, isEmail: Bool? = nil, voucher: String? = nil) -> URL {
         var components = URLComponents()
         if isOrder && orderValue == nil {
             fatalError("Order without order value is illegal!")
@@ -138,8 +124,8 @@ class URLHandler {
 //        queryItems.append(URLQueryItem(name: "type", value: "iframe"))
         components.queryItems = queryItems
         return components.url!
-    }
-    
+    }*/
+    /*
     /// If isOrder is true you must set orderValue
     /// User & isEmail must be both set or both left not set
     /// If not empty user is email address or IDFA string
@@ -150,7 +136,7 @@ class URLHandler {
     ///Use URL encoding and concatenate the name=value pairs into one string. Use "&" (ampersand) to separate properties and "|" (pipe) to separate products. For example:
     /// f1=12345&f2=Product Y&f3=10.99&f4=3|f1=67890&f2=Product Z&f3=1000.00&f4=1
     func pixelTrackingRequest(host:String, organizationId: String, eventId: String, orderOrLeadNo: String, isOrder: Bool, orderValue: String? = nil, currency: String? = nil,/*type - flag for iframe required??,*/ validOn: String? = nil, checksum: String? = nil, reportInfo: String? = nil, tduid: String, user: String? = nil, isEmail: Bool? = nil, voucher: String? = nil) {
-        let url = createPixelTrackingStep(host: host, organizationId: organizationId, eventId: eventId, orderOrLeadNo: orderOrLeadNo, isOrder: isOrder, orderValue: orderValue, currency: currency, validOn: validOn, checksum: checksum, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail, voucher: voucher)
+        let url = createPixelTrackingStep(host: host, organizationId: organizationId, eventId: eventId, orderOrLeadNo: orderOrLeadNo, isOrder: isOrder, orderValue: orderValue, currency: currency, validOn: validOn, checksum: checksum, reportInfo: reportInfo, user: user, isEmail: isEmail, voucher: voucher)
         let task = session.dataTask(with: url) { (data, response, error) in
             if let resp = response as? HTTPURLResponse {
                 Logger.TDLOG(resp.statusCode.description)
@@ -167,26 +153,49 @@ class URLHandler {
             }
         }
         task.resume()
-    }
-    func firstRequest(host:String, organizationId: String, user: String, tduid: String, isEmail: Bool) {
-        let url = createFirstStep(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
-        Logger.TDLOG("file \(#file) line \(#line) url: \(url)")
-        let task = session.dataTask(with: url) { (data, response, error) in
-            if let resp = response as? HTTPURLResponse {
-                Logger.TDLOG(resp.statusCode.description)
-            }
-            if let error = error {
-                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
-            }
-            if let data = data {
-                guard let toPrint = String(data: data, encoding: .utf8) else {
-                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                    return
+    }*/
+    //get email & idfa from storage
+    func appLaunch(organizationId: String) {
+        let emailUrl = createAppLaunchStep(organizationId: organizationId, isEmail: true)
+        let IDFAUrl = createAppLaunchStep(organizationId: organizationId, isEmail: false)
+        if emailUrl != nil {
+            Logger.TDLOG("file \(#file) line \(#line) url: \(emailUrl!)")
+            let emailTask = session.dataTask(with: emailUrl!) { (data, response, error) in
+                if let resp = response as? HTTPURLResponse {
+                    Logger.TDLOG(resp.statusCode.description)
                 }
-                Logger.TDLOG(toPrint)
+                if let error = error {
+                    Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                }
+                if let data = data {
+                    guard let toPrint = String(data: data, encoding: .utf8) else {
+                        Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
+                        return
+                    }
+                    Logger.TDLOG(toPrint)
+                }
             }
+            emailTask.resume()
         }
-        task.resume()
+        if IDFAUrl != nil {
+            Logger.TDLOG("file \(#file) line \(#line) url: \(IDFAUrl!)")
+            let IDFATask = session.dataTask(with: IDFAUrl!) { (data, response, error) in
+                if let resp = response as? HTTPURLResponse {
+                    Logger.TDLOG(resp.statusCode.description)
+                }
+                if let error = error {
+                    Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                }
+                if let data = data {
+                    guard let toPrint = String(data: data, encoding: .utf8) else {
+                        Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
+                        return
+                    }
+                    Logger.TDLOG(toPrint)
+                }
+            }
+            IDFATask.resume()
+        }
     }
     
     /*trackDownloadAsSale:(NSString*)organization withEvent:(NSString*)event withSecretCode:(NSString*)secretCode
@@ -197,7 +206,26 @@ class URLHandler {
         print("http://tbs.tradedoubler.com/report?organization=\(organization)&event=\(event)&orderNumber=\(orderNo)&orderValue=\(orderVal)&currency=\(currency)&checksum=\(checkSum)&deviceid=\(idfa)&limitAdTracking=\(limitTracking)")
     }*/
      
-    private func createSaleTrackingStep(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, tduid: String, user: String, isEmail: Bool) -> URL {
+    private func createSaleTrackingStep(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, isEmail: Bool) -> URL? {
+        let mail = DataHandler.shared.email
+        let IDFA = DataHandler.shared.IDFA
+        let user: String
+        if isEmail {
+            if mail == nil {
+                Logger.TDLOG("no email on launch")
+                return nil
+            } else {
+                user = mail!
+            }
+        } else {
+            if IDFA == nil {
+                Logger.TDLOG("no IDFA on launch")
+                return nil
+            } else {
+                user = IDFA!
+            }
+        }
+        
         let checksum = countChecksum(secretCode: secretCode, orderNumber: DataHandler.shared.orderNumber, orderValue: orderValue)
         var components = URLComponents()
         components.scheme = "https"
@@ -211,34 +239,52 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "currency", value: "EUR"))
         queryItems.append(URLQueryItem(name: "checksum", value: checksum))
         DataHandler.shared.orderNumber = ""
-        queryItems.append(URLQueryItem(name: "extid", value: user.sha256()))
-        queryItems.append(URLQueryItem(name: "exttype", value: "\(isEmail ? 1 : 0)"))
+        queryItems.append(URLQueryItem(name: "extid", value: user))
+        queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
         if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
 //        if validOn != nil {queryItems.append(URLQueryItem(name: "validOn", value: validOn))}
 //        if checksum != nil {queryItems.append(URLQueryItem(name: "checksum", value: checksum))}
         if reportInfo != nil {queryItems.append(URLQueryItem(name: "reportInfo", value: reportInfo))}
         components.queryItems = queryItems
-        return components.url!
+        return components.url
     }
     
     func trackSale(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, tduid: String, user: String, isEmail: Bool) {/* cookieTracking: Bool, ltvDays: Int)*/
         
-        let url = createSaleTrackingStep(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail)
-        Logger.TDLOG(url.debugDescription)
-        let saleTask = session.downloadTask(with: url) { (url1, resp1, err) in
-            if let rsp = resp1 as? HTTPURLResponse {
-                Logger.TDLOG(rsp.statusCode.description)
+        let host = "tbl.tradedoubler.com"
+        let emailUrl = createSaleTrackingStep(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: true)
+        let IDFAUrl = createSaleTrackingStep(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: false)
+        if emailUrl != nil {
+            let saleTaskEmail = session.downloadTask(with: emailUrl!) { (url1, resp1, err) in
+                if let rsp = resp1 as? HTTPURLResponse {
+                    Logger.TDLOG(rsp.statusCode.description)
+                }
+                if let uuu = url1 {
+                    Logger.TDLOG(uuu.absoluteString)
+                }
+                if let eee = err {
+                    Logger.TDLOG(eee.localizedDescription)
+                }
             }
-            if let uuu = url1 {
-                Logger.TDLOG(uuu.absoluteString)
-            }
-            if let eee = err {
-                Logger.TDLOG(eee.localizedDescription)
-            }
+            saleTaskEmail.resume()
         }
-        saleTask.resume()
+        Logger.TDLOG("SALE REQUEST: \n \(emailUrl!)")
         
+        if IDFAUrl != nil {
+            let saleTaskIDFA = session.downloadTask(with: IDFAUrl!) { (url1, resp1, err) in
+                if let rsp = resp1 as? HTTPURLResponse {
+                    Logger.TDLOG(rsp.statusCode.description)
+                }
+                if let uuu = url1 {
+                    Logger.TDLOG(uuu.absoluteString)
+                }
+                if let eee = err {
+                    Logger.TDLOG(eee.localizedDescription)
+                }
+            }
+            saleTaskIDFA.resume()
+        }
     }
     
     private func createLeadTrackingStep(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) -> URL {
@@ -283,6 +329,61 @@ class URLHandler {
         let suffix = secretCode + orderNumber + orderValue
         return prefix + suffix.md5()
     }
+    
+    // if has idfa send with idfa if email - send with email. Send both if available
+    func ceateAppInstallStep(organizationId: String, eventId: String, email: String? = nil, IDFA: String? = nil, isEmail: Bool) -> URL? {
+        let tduid = DataHandler.shared.tduid
+        let IDFA = DataHandler.shared.IDFA
+        let mail = DataHandler.shared.email
+        let user: String
+        if isEmail{
+            if mail == nil {
+                return nil
+            } else {
+                user = mail!
+            }
+        } else {
+            if IDFA == nil {
+                return nil
+            } else {
+                user = email!
+            }
+        }
+        let leadNumber = "\(Int64(Date().timeIntervalSince1970))" + generateRandomString(length: 6)
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "tbl.tradedoubler.com"
+        components.path = "/report"
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "organization", value: organizationId))
+        queryItems.append(URLQueryItem(name: "event", value: eventId))
+        queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
+        DataHandler.shared.orderNumber = ""
+        if tduid != nil {
+            queryItems.append(URLQueryItem(name: "tduid", value: tduid))
+        }
+        queryItems.append(URLQueryItem(name: "extid", value: user))
+        queryItems.append(URLQueryItem(name: "exttype", value: "1"))
+        components.queryItems = queryItems
+        return components.url
+        
+    }
+    
+    private func generateRandomString(length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let quantity = UInt32(letters.count)
+        var toReturn = ""
+        for _ in 0 ..< length {
+            let randomNo = Int(arc4random_uniform(quantity))
+            let character = letters.trimToCharAtIndex(index: randomNo)
+            toReturn += character
+        }
+        return toReturn
+    }
+    
+//    func createSaleBracketedStep() -> URL {
+//
+//    }
 }
 
 class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {

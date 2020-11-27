@@ -52,9 +52,7 @@ class DemoViewController: UIViewController {
                     print("Authorized")
                     DispatchQueue.main.async {
                         let advertisingIdentifier = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-                        UserDefaults.standard.set(advertisingIdentifier, forKey: "advertisingIdentifier")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.setIDFA(advertisingIdentifier)
+                        TDSDKInterface.shared.configureIDFA(advertisingIdentifier)
                     }
                 
                     // Now that we are authorized we can get the IDFA

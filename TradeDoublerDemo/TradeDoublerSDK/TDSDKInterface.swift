@@ -51,8 +51,24 @@ public class TDSDKInterface {
         urlHandler.getTduid(host: host, path: path, parameters: parameters)//recognize url type, set or read tduid
     }
     
-    public func firstRequest(host: String, organizationId: String, user: String, tduid: String, isEmail: Bool) {
-        urlHandler.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
+    public func configureEmail(_ email: String) {
+        DataHandler.shared.email = email
+    }
+    
+    public func logout() {
+        DataHandler.shared.email = nil
+    }
+    
+    public func configureIDFA(_ IDFA: String) {
+        if !IDFA.isNilUUIDString() {
+            DataHandler.shared.IDFA = IDFA
+        } else {
+            DataHandler.shared.IDFA = nil
+        }
+    }
+    
+    public func appLaunch(organizationId: String) {
+        urlHandler.appLaunch(organizationId: organizationId)
     }
     
 }

@@ -16,7 +16,6 @@ let sdk_lead = "403765"
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    let host = "tbs.tradedoubler.com"
     private let organizationId = /*"310409*/"945630"
     private let email = "adam.tucholski@britenet.com.pl"
     private let tduid = "f895c014d17b2a60370d5a4f65e22995"
@@ -63,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             isEmail = true
         }
-        TDSDKInterface.shared.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
+        TDSDKInterface.shared.appLaunch(organizationId: organizationId)
     }
     func presentAlert(title: String, message: String? = nil) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
@@ -165,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setIDFA(_ iDFAString: String) {
-        TDSDKInterface.shared.firstRequest(host: host, organizationId: organizationId, user: iDFAString, tduid: tduid, isEmail: false)
+        TDSDKInterface.shared.configureIDFA(IDFA)
     }
     
 }

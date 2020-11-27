@@ -7,7 +7,9 @@
 
 import Foundation
 
-public let tduidKey = "tduid"
+let tduidKey = "tduid"
+let emailKey = "mail"
+let IDFAKey = "idfa"
 public let recoveredKey = "recovered"
 let orderNo = "orderNo"
 
@@ -20,6 +22,24 @@ class DataHandler {
         
         set {
             UserDefaults.standard.setValue(newValue, forKey: tduidKey)
+        }
+    }
+    ///set "plain" IDFA, will be saved securely if not null (zeros). Returns sha or nil on read
+    var IDFA: String? {
+        get {
+            UserDefaults.standard.string(forKey: IDFAKey)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: IDFAKey)
+        }
+    }
+    //set "plain" email, will be saved securely. Returns sha or nil on read
+    var email: String? {
+        get {
+            UserDefaults.standard.string(forKey: emailKey)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: emailKey)
         }
     }
     

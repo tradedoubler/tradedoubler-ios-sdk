@@ -28,8 +28,6 @@ extension String {
             sha256String += String(format:"%02x", UInt8(byte))
         }
         
-        Logger.TDLOG("SHA256 is \(sha256String)")
-        
         return sha256String
     }
     
@@ -47,8 +45,6 @@ extension String {
         for byte in digest {
             md5String += String(format:"%02x", UInt8(byte))
         }
-        
-        Logger.TDLOG("MD5 is \(md5String)")
         
         return md5String
     }
