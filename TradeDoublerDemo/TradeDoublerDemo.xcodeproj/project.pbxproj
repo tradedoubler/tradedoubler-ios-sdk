@@ -29,7 +29,8 @@
 		49A618C02549B9D400399334 /* URLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618BF2549B9D400399334 /* URLHandler.swift */; };
 		49AC12C2256EDAFB000DB3A1 /* String+Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AC12C1256EDAFB000DB3A1 /* String+Index.swift */; };
 		49D4BC57256F1D510030E468 /* String+UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D4BC56256F1D510030E468 /* String+UUID.swift */; };
-		49E8EEC22563C394004F9069 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8EEC12563C394004F9069 /* DataHandler.swift */; };
+		49E8EEC22563C394004F9069 /* TradeDoublerSDKSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */; };
+		49F91EC0257459CE00270E11 /* ReportEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F91EBF257459CE00270E11 /* ReportEntry.swift */; };
 		49FD58912563F7CE006F6286 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD58902563F7CE006F6286 /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
@@ -117,7 +118,8 @@
 		49A618F1254C430600399334 /* TradeDoublerDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TradeDoublerDemo.entitlements; sourceTree = "<group>"; };
 		49AC12C1256EDAFB000DB3A1 /* String+Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Index.swift"; sourceTree = "<group>"; };
 		49D4BC56256F1D510030E468 /* String+UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UUID.swift"; sourceTree = "<group>"; };
-		49E8EEC12563C394004F9069 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
+		49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeDoublerSDKSettings.swift; sourceTree = "<group>"; };
+		49F91EBF257459CE00270E11 /* ReportEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEntry.swift; sourceTree = "<group>"; };
 		49FD58902563F7CE006F6286 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -242,11 +244,12 @@
 				49A618922549B45300399334 /* Info.plist */,
 				49A618B52549B55400399334 /* TDSDKInterface.swift */,
 				49A618BF2549B9D400399334 /* URLHandler.swift */,
-				49E8EEC12563C394004F9069 /* DataHandler.swift */,
+				49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */,
 				49FD58902563F7CE006F6286 /* Notifications.swift */,
 				49340201256544530038B12A /* InternalLogger.swift */,
 				49AC12C1256EDAFB000DB3A1 /* String+Index.swift */,
 				49D4BC56256F1D510030E468 /* String+UUID.swift */,
+				49F91EBF257459CE00270E11 /* ReportEntry.swift */,
 			);
 			path = TradeDoublerSDK;
 			sourceTree = "<group>";
@@ -491,11 +494,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				49FD58912563F7CE006F6286 /* Notifications.swift in Sources */,
-				49E8EEC22563C394004F9069 /* DataHandler.swift in Sources */,
+				49E8EEC22563C394004F9069 /* TradeDoublerSDKSettings.swift in Sources */,
 				49340202256544530038B12A /* InternalLogger.swift in Sources */,
 				493379802562CB020044E460 /* String+SHA.swift in Sources */,
 				49A618C02549B9D400399334 /* URLHandler.swift in Sources */,
 				49D4BC57256F1D510030E468 /* String+UUID.swift in Sources */,
+				49F91EC0257459CE00270E11 /* ReportEntry.swift in Sources */,
 				49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */,
 				49AC12C2256EDAFB000DB3A1 /* String+Index.swift in Sources */,
 			);

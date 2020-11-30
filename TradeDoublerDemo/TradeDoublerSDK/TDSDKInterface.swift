@@ -12,9 +12,10 @@ public class TDSDKInterface {
     
     public static let shared = TDSDKInterface()
     private let urlHandler = URLHandler.shared
+    private let settings = TradeDoublerSDKSettings.shared
     
     public func recoverTDUID(host: String, path: String, parameters: [String:String]) {
-        if let tduid = DataHandler.shared.tduid {
+        if let tduid = settings.tduid {
             let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid, recoveredKey: true])
             DispatchQueue.main.async {
                 NotificationCenter.default.post(toPost)
@@ -25,22 +26,26 @@ public class TDSDKInterface {
         
     }
     
-    func login(isEmail: Bool) {
-        
+    func login(email: String) {
+        settings.userEmail = email
+        //set email basically
     }
     
 //    public func randomEvent(organizationId: String, user: String, isEmail: Bool? = nil) {
 //        urlHandler.randomEvent(organizationId: organizationId, user: user, isEmail: isEmail)
 //    }
     
-    public func trackSale(organizationId: String, eventId: String, secretCode: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?, user: String, isEmail: Bool) {
-        let tduid = DataHandler.shared.tduid!
-        urlHandler.trackSale(organizationId: organizationId, eventId: eventId, secretCode: secretCode, currency: currency, orderValue: orderValue, reportInfo: reportInfo, tduid: tduid, user: user, isEmail: isEmail)
+    public func trackSale(eventId: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?) {
+        urlHandler.trackSale(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo)
     }
     
-    public func trackLead(organizationId: String, eventId: String, secretCode: String, timeout: Int, user: String, isEmail: Bool) {
+    public func trackLead(eventId: String) {
 //        let tduid = DataHandler.shared.tduid!
-        urlHandler.trackLead(organizationId: organizationId, eventId: eventId, secretCode: secretCode, timeout: timeout, user: user, isEmail: isEmail)
+        urlHandler.trackLead(eventId: eventId)
+    }
+    
+    public func trackOpenApp() {
+        urlHandler.trackOpenApp()
     }
     
     public func trackInstall() {
@@ -51,24 +56,42 @@ public class TDSDKInterface {
         urlHandler.getTduid(host: host, path: path, parameters: parameters)//recognize url type, set or read tduid
     }
     
-    public func configureEmail(_ email: String) {
-        DataHandler.shared.email = email
+    public func setEmail(_ email: String) {
+        settings.userEmail = email
     }
     
     public func logout() {
-        DataHandler.shared.email = nil
+        settings.userEmail = nil
     }
     
-    public func configureIDFA(_ IDFA: String) {
+    public func setIDFA(_ IDFA: String) {
         if !IDFA.isNilUUIDString() {
-            DataHandler.shared.IDFA = IDFA
+            settings.IDFA = IDFA
         } else {
-            DataHandler.shared.IDFA = nil
+            settings.IDFA = nil
         }
     }
     
-    public func appLaunch(organizationId: String) {
-        urlHandler.appLaunch(organizationId: organizationId)
+    public func setTDUID(_ TDUID: String) {
+        settings.tduid = TDUID
     }
     
+    public func organizationId() -> String? {
+        return settings.organizationId
+    }
+    /// email & IDFA are configured in separate methods due to protection level
+    public func configure(tduid: String? = nil, organizationId: String? = nil, secretCode: String? = nil, orderNumber: String = "") {
+        if tduid != nil {
+            settings.tduid = tduid
+        }
+        if organizationId != nil {
+            settings.organizationId = organizationId
+        }
+        if secretCode != nil {
+            settings.secretCode = secretCode
+        }
+        if !orderNumber.isEmpty {
+            settings.orderNumber = orderNumber
+        }
+    }
 }

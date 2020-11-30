@@ -15,29 +15,12 @@ let sdk_lead = "403765"
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    private let organizationId = /*"310409*/"945630"
-    private let email = "adam.tucholski@britenet.com.pl"
-    private let tduid = "f895c014d17b2a60370d5a4f65e22995"
-    private var isEmailValue = true
-    private var IDFA = ""
-    let secretCode = "123456789"//test account
-    
-    var isEmail: Bool {
-        get {return isEmailValue}
-        set {isEmailValue = newValue}
-    }
-    
-    var user: String {return IDFA.isEmpty ? email : IDFA}
+    //TODO:remove comment below when everything works
     /*https://tbs.tradedoubler.com/user?o=$organization&extid=$extid&exttype=1&tduid=$tduid&verify=true
 */
 //    var window: UIWindow?
+    let tradeDoubler = TDSDKInterface.shared
     
-    var orgId: String {
-        get {
-            return organizationId
-        }
-    }
     @objc private func gotTduid(_ notification: Notification) {
         
         let title: String
@@ -50,20 +33,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             title = "recovered TDUID"
         } else {
             title = "received TDUID"
+            if let tduid = notification.userInfo?["tduid"] as? String {
+                TDSDKInterface.shared.setTDUID(tduid)
+            }
         }
-        login(tduid: tduid)
+        
         presentAlert(title: title, message: notification.userInfo?["tduid"] as? String)
     }
     
-    func login(tduid: String) {
-        if let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") {
-            IDFA = advertisingIdentifier
-            isEmail = false
-        } else {
-            isEmail = true
-        }
-        TDSDKInterface.shared.appLaunch(organizationId: organizationId)
+    func configureFramework() {
+        tradeDoubler.setEmail("adam.tucholski@britenet.com.pl")
+        tradeDoubler.configure(organizationId: "945630", secretCode: "123456789")
     }
+    
     func presentAlert(title: String, message: String? = nil) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction.init(title: "OK", style: .default, handler: { _ in
@@ -75,19 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        /*let appDefaults = ["base_url": "http://www.tdserve.com/adt/trackback.html",
-                           "timeout": "5",
-                           "org_id": "\(AppDelegate.organizationId)",
-                           "evt_id": "",
-                           "test_mode": false,
-                           "currency": "EUR",
-                           "order_value": "7.00",
-                           "in_app_evt_id": "",
-                           "in_app_order_value": "7.50",
-                           "to_app_order_value": "140"
-        ] as [String : AnyHashable]
-        print(appDefaults)
-        UserDefaults.standard.register(defaults: appDefaults)*/
+        
         NotificationCenter.default.addObserver(self, selector: #selector(gotTduid(_:)), name: tduidFound, object: nil)
         
 //        https://clk.tradedoubler.com/click?p(310409)a(982247)g(0)
@@ -97,7 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "g" : "0",
             "f" : "0"// f is from first response (head meta tag)
         ]
-            
         TDSDKInterface.shared.recoverTDUID(host: "clk.tradedoubler.com", path: "/click", parameters: parameters)
 //        Tracker.shared.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
         //TODO: after getting associated domains to actual work uncomment & edit
@@ -164,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setIDFA(_ iDFAString: String) {
-        TDSDKInterface.shared.configureIDFA(IDFA)
+        TDSDKInterface.shared.setIDFA(iDFAString)
     }
     
 }

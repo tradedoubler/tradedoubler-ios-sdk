@@ -12,8 +12,10 @@ let emailKey = "mail"
 let IDFAKey = "idfa"
 public let recoveredKey = "recovered"
 let orderNo = "orderNo"
+let organizationIdKey = "organizationIdentifier"
+let secretKey = "userSecret"
 
-class DataHandler {
+class TradeDoublerSDKSettings {
     
     var tduid: String? {
         get {
@@ -24,6 +26,36 @@ class DataHandler {
             UserDefaults.standard.setValue(newValue, forKey: tduidKey)
         }
     }
+    
+    var organizationId: String? {
+        get {
+            return UserDefaults.standard.string(forKey: organizationIdKey)
+        }
+        
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: organizationIdKey)
+        }
+    }
+    
+    //set "plain" email, will be saved securely. Returns sha or nil on read
+    var userEmail: String? {
+        get {
+            UserDefaults.standard.string(forKey: emailKey)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: emailKey)
+        }
+    }
+    
+    var secretCode: String? {
+        get {
+            UserDefaults.standard.string(forKey: secretKey)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: secretKey)
+        }
+    }
+    
     ///set "plain" IDFA, will be saved securely if not null (zeros). Returns sha or nil on read
     var IDFA: String? {
         get {
@@ -33,20 +65,10 @@ class DataHandler {
             UserDefaults.standard.setValue(newValue?.sha256(), forKey: IDFAKey)
         }
     }
-    //set "plain" email, will be saved securely. Returns sha or nil on read
-    var email: String? {
-        get {
-            UserDefaults.standard.string(forKey: emailKey)
-        }
-        set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: emailKey)
-        }
-    }
     
     var orderNumber: String {
         get {
-            let temp = UserDefaults.standard.integer(forKey: orderNo)
-            return "\(temp)"
+            return "\(UserDefaults.standard.integer(forKey: orderNo))"
         }
         
         set {
@@ -58,6 +80,6 @@ class DataHandler {
     
     private init() {}
     
-    static let shared = DataHandler()
+    static let shared = TradeDoublerSDKSettings()
     
 }

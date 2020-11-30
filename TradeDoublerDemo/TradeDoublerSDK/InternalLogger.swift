@@ -8,18 +8,14 @@
 import Foundation
 
 class Logger {
+    public static var isDebug = false
     
-    static func isDebug() -> Bool{
-        #if DEBUG//only in development
-        return true
-        #else
-        return false
-        #endif
+    public static func setDebug(_ flag: Bool) {
+        isDebug = flag
     }
     
-    
     public static func TDLOG(_ string: String) {
-        if isDebug() {
+        if isDebug {
             print(string)
         }
     }
