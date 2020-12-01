@@ -8,7 +8,7 @@
 import Foundation
 
 class Logger {
-    public static var isDebug = false
+    public static var isDebug = true
     
     public static func setDebug(_ flag: Bool) {
         isDebug = flag

@@ -31,11 +31,11 @@ public class TDSDKInterface {
         //set email basically
     }
     
-//    public func randomEvent(organizationId: String, user: String, isEmail: Bool? = nil) {
-//        urlHandler.randomEvent(organizationId: organizationId, user: user, isEmail: isEmail)
-//    }
+    func setTracking(enabled: Bool) {
+        urlHandler.isTrackingEnabled = enabled
+    }
     
-    public func trackSale(eventId: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: String?) {
+    public func trackSale(eventId: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: ReportInfo?) {
         urlHandler.trackSale(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo)
     }
     
@@ -48,8 +48,8 @@ public class TDSDKInterface {
         urlHandler.trackOpenApp()
     }
     
-    public func trackInstall() {
-        
+    public func trackInstall(appInstallEventId: String) {
+        urlHandler.trackInstall(appInstallEventId: appInstallEventId)
     }
     
     func simulateFirstClick(host: String, path: String, parameters: [String:String]) {

@@ -12,6 +12,20 @@ public class ReportInfo {
     init(entries: [ReportEntry]) {
         reportEntries = entries
     }
+    
+    func toEncodedString() -> String {
+        return reportEntries.map( {
+            $0.toEncodedString()
+        }).joined(separator: "|")
+    }
+    
+    func orderValue() -> String {
+        var toReturn = Double(0)
+        for entry in reportEntries {
+            toReturn += entry.price * Double(entry.quantity)
+        }
+        return String(format: "%.02f", toReturn)
+    }
 }
 
 public class ReportEntry {
@@ -35,7 +49,8 @@ public class ReportEntry {
         if let nameToUtf8 = productName.cString(using: .utf8) {
             toReturn += (String(utf8String: nameToUtf8) ?? "") + "&f3="
         }
-        if let priceToUtf8 = "\(price)".cString(using: .utf8) {
+        let cutPrice = String(format: "%.02f", price)
+        if let priceToUtf8 = cutPrice.cString(using: .utf8) {
             toReturn += (String(utf8String: priceToUtf8) ?? "") + "&f4="
         }
         if let quantityToUtf8 = "\(quantity)".cString(using: .utf8) {

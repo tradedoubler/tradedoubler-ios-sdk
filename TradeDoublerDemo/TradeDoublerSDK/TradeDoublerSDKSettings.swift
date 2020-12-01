@@ -8,6 +8,7 @@
 import Foundation
 
 let tduidKey = "tduid"
+let tduidTimestampKey = "tduidTimestamp"
 let emailKey = "mail"
 let IDFAKey = "idfa"
 public let recoveredKey = "recovered"
@@ -19,11 +20,23 @@ class TradeDoublerSDKSettings {
     
     var tduid: String? {
         get {
+            if Date().timeIntervalSince1970 - UserDefaults.standard.double(forKey: tduidTimestampKey) > secondsTduidIsValid {
+                UserDefaults.standard.setValue(nil, forKey: tduidKey)
+                UserDefaults.standard.setValue(nil, forKey: tduidTimestampKey)
+                return nil
+            }
             return UserDefaults.standard.string(forKey: tduidKey)
         }
         
         set {
             UserDefaults.standard.setValue(newValue, forKey: tduidKey)
+            UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: tduidTimestampKey)
+        }
+    }
+    
+    var secondsTduidIsValid: Double{
+        get {
+            return 365 * 24 * 60 * 60
         }
     }
     
