@@ -67,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "g" : "0",
             "f" : "0"// f is from first response (head meta tag)
         ]
+        configureFramework()
         TDSDKInterface.shared.recoverTDUID(host: "clk.tradedoubler.com", path: "/click", parameters: parameters)
 //        Tracker.shared.firstRequest(host: host, organizationId: organizationId, user: user, tduid: tduid, isEmail: isEmail)
         //TODO: after getting associated domains to actual work uncomment & edit

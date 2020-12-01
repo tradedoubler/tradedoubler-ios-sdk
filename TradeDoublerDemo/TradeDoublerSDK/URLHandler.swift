@@ -9,7 +9,10 @@ import Foundation
 
 class URLHandler {
     
-    private init() {}
+    private init() {
+        session.configuration.timeoutIntervalForRequest = 15
+        session.configuration.timeoutIntervalForResource = 15
+    }
     
     private let session = URLSession.init(configuration: URLSessionConfiguration.default, delegate: TemporarySessionDelegate.shared, delegateQueue: nil)
     
@@ -18,6 +21,32 @@ class URLHandler {
     let settings = TradeDoublerSDKSettings.shared
     
     var isTrackingEnabled = true
+    
+    func executeURLFromOffline(_ URLString: String) {
+        guard let URL = URL(string: URLString) else {
+            Logger.TDLOG("string pased from save (\(URLString)) is NOT URL string!")
+            return
+        }
+        let task = session.dataTask(with: URL) { (data, response, error) in
+            if let resp = response as? HTTPURLResponse {
+                Logger.TDLOG(resp.statusCode.description)
+                if 200...299 ~= resp.statusCode {
+                    OfflineDataHandler.shared.requestComplete(URL)
+                }
+            }
+            if let error = error {
+                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                OfflineDataHandler.shared.requestFailed(error, url: URL)
+            }
+            if let data = data {
+                if let toPrint = String(data: data, encoding: .utf8) {
+                    Logger.TDLOG("server answered: \n \(toPrint)")
+                    Logger.TDLOG(toPrint)
+                }
+            }
+        }
+        task.resume()
+    }
     
     func getTduid(host: String, path: String, parameters: [String : String]) {
         //https://clk.tradedoubler.com/click?p(310409)a(982247)g(0)
@@ -35,34 +64,9 @@ class URLHandler {
             components.queryItems = queryItems
         }
         let url = components.url!
-        Logger.TDLOG("\(url) in line \(#line) of \(#file)")
-        let task = session.dataTask(with: url) { (data, response, error) in
-            /*if let redirUrl = response?.url {
-                let components = URLComponents.init(url: redirUrl, resolvingAgainstBaseURL: false)
-                let item = queryItems.filter { (item) -> Bool in
-                    item.name ==
-                }
-            }*/
-            if let redir = response?.url {
-                Logger.TDLOG("gotta \(redir)")
-            }
-            if let resp = response as? HTTPURLResponse {
-                Logger.TDLOG(resp.statusCode.description)
-            }
-            if let error = error {
-                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
-            }
-            if let data = data {
-                guard let toPrint = String(data: data, encoding: .utf8) else {
-                    Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                    return
-                }
-                Logger.TDLOG("server answered: \n \(toPrint)")
-                Logger.TDLOG(toPrint)
-            }
-        }
-        task.resume()
-//        Logger.TDLOG("Your tduid to be securely saved & used later is: \(tduid)")
+        Logger.TDLOG("\(url) in line \(#line) of \(#function)")
+        OfflineDataHandler.shared.addRequest(url)
+        //        Logger.TDLOG("Your tduid to be securely saved & used later is: \(tduid)")
     }
     
     //get email & idfa from storage
@@ -73,41 +77,11 @@ class URLHandler {
         
         if let emailUrl = buildAppLaunchUrl(isEmail: true) {
             Logger.TDLOG("file \(#file) line \(#line) url: \(emailUrl)")
-            let emailTask = session.dataTask(with: emailUrl) { (data, response, error) in
-                if let resp = response as? HTTPURLResponse {
-                    Logger.TDLOG(resp.statusCode.description)
-                }
-                if let error = error {
-                    Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
-                }
-                if let data = data {
-                    guard let toPrint = String(data: data, encoding: .utf8) else {
-                        Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                        return
-                    }
-                    Logger.TDLOG(toPrint)
-                }
-            }
-            emailTask.resume()
+            OfflineDataHandler.shared.addRequest(emailUrl)
         }
         if let IDFAUrl = buildAppLaunchUrl(isEmail: false) {
             Logger.TDLOG("file \(#file) line \(#line) url: \(IDFAUrl)")
-            let IDFATask = session.dataTask(with: IDFAUrl) { (data, response, error) in
-                if let resp = response as? HTTPURLResponse {
-                    Logger.TDLOG(resp.statusCode.description)
-                }
-                if let error = error {
-                    Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
-                }
-                if let data = data {
-                    guard let toPrint = String(data: data, encoding: .utf8) else {
-                        Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                        return
-                    }
-                    Logger.TDLOG(toPrint)
-                }
-            }
-            IDFATask.resume()
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
     }
     
@@ -118,34 +92,11 @@ class URLHandler {
         let leadNumber = generateRandomString() + "\(Int64(Date().timeIntervalSince1970))"
         
         if let emailUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: true) {
-            let saleTaskEmail = session.downloadTask(with: emailUrl) { (url1, resp1, err) in
-                Logger.TDLOG("SALE REQUEST: \n \(emailUrl)")
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskEmail.resume()
+            OfflineDataHandler.shared.addRequest(emailUrl)
         }
         
         if let IDFAUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: false) {
-            let saleTaskIDFA = session.downloadTask(with: IDFAUrl) { (url1, resp1, err) in
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskIDFA.resume()
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
     }
     
@@ -177,34 +128,11 @@ class URLHandler {
         }
         
         if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: true) {
-            let saleTaskEmail = session.downloadTask(with: emailUrl) { (url1, resp1, err) in
-                Logger.TDLOG("SALE REQUEST: \n \(emailUrl)")
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskEmail.resume()
+            OfflineDataHandler.shared.addRequest(emailUrl)
         }
         
         if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: false) {
-            let saleTaskIDFA = session.downloadTask(with: IDFAUrl) { (url1, resp1, err) in
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskIDFA.resume()
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
     }
     
@@ -214,34 +142,11 @@ class URLHandler {
         }
         
         if let emailUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
-            let saleTaskEmail = session.downloadTask(with: emailUrl) { (url1, resp1, err) in
-                Logger.TDLOG("SALE REQUEST: \n \(emailUrl)")
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskEmail.resume()
+            OfflineDataHandler.shared.addRequest(emailUrl)
         }
         
         if let IDFAUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: false) {
-            let saleTaskIDFA = session.downloadTask(with: IDFAUrl) { (url1, resp1, err) in
-                if let rsp = resp1 as? HTTPURLResponse {
-                    Logger.TDLOG(rsp.statusCode.description)
-                }
-                if let uuu = url1 {
-                    Logger.TDLOG(uuu.absoluteString)
-                }
-                if let eee = err {
-                    Logger.TDLOG(eee.localizedDescription)
-                }
-            }
-            saleTaskIDFA.resume()
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
         
     }
@@ -252,38 +157,12 @@ class URLHandler {
         }
         guard let emailUrl = buildTrackLeadUrl(eventId: eventId, isEmail: true) else {return}
         Logger.TDLOG(emailUrl.debugDescription)
-        let leadTaskEmail = session.downloadTask(with: emailUrl) { (url1, resp1, err) in
-            if let rsp = resp1 as? HTTPURLResponse {
-                Logger.TDLOG(rsp.statusCode.description)
-            }
-            if let uuu = url1 {
-                Logger.TDLOG(uuu.absoluteString)
-            }
-            if let eee = err {
-                Logger.TDLOG(eee.localizedDescription)
-            }
-        }
-        leadTaskEmail.resume()
+        OfflineDataHandler.shared.addRequest(emailUrl)
         
         guard let IDFAUrl = buildTrackLeadUrl(eventId: eventId, isEmail: false) else {return}
         Logger.TDLOG(IDFAUrl.debugDescription)
-        let leadTaskIDFA = session.downloadTask(with: IDFAUrl) { (url1, resp1, err) in
-            if let rsp = resp1 as? HTTPURLResponse {
-                Logger.TDLOG(rsp.statusCode.description)
-            }
-            if let uuu = url1 {
-                Logger.TDLOG(uuu.absoluteString)
-            }
-            if let eee = err {
-                Logger.TDLOG(eee.localizedDescription)
-            }
-        }
-        leadTaskIDFA.resume()
+        OfflineDataHandler.shared.addRequest(IDFAUrl)
     }
-    
-    /*func oldLeadRequest(organization: String, event: String, leadNo: String, checkSum: String? = nil, identifier: String, limitTracking: Bool, isEmail: Bool) {
-        print("http://tbl.tradedoubler.com/report?organization=\(organization)&event=\(event)&leadNumber=\(leadNo)&checksum=\(checkSum)&deviceid=\(identifier.sha256())&limitAdTracking=\(limitTracking)")
-    }*/
     
     func countChecksum(secretCode: String, orderNumber: String, orderValue: String) -> String {
         let prefix = "v04"
@@ -330,15 +209,15 @@ class URLHandler {
         
     }
     
-    private func generateRandomString() -> String {
-        let length = 6
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    private func generateRandomString(length: Int = 6) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".utf8
         let quantity = UInt32(letters.count)
         var toReturn = ""
         for _ in 0 ..< length {
             let randomNo = Int(arc4random_uniform(quantity))
-            let character = letters.trimToCharAtIndex(index: randomNo)
-            toReturn += character
+            let index = letters.index(letters.startIndex, offsetBy: randomNo)
+            let character = UnicodeScalar(UInt8(letters[index]))
+            toReturn += String(character)
         }
         return toReturn
     }
@@ -364,9 +243,9 @@ class URLHandler {
         }
         let user = isEmail ? mail : IDFA
         var components = URLComponents()
-            components.scheme = "https"
-            components.host = host
-            components.path = "/user"
+        components.scheme = "https"
+        components.host = host
+        components.path = "/user"
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "o", value: organizationId))
         queryItems.append(URLQueryItem(name: "extid", value: user))
@@ -498,22 +377,9 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
             guard let maybeTduid = components?.queryItems?.filter({ (item) -> Bool in
                 item.name == tduidKey
             }) else {
-                let task = session.dataTask(with: URLRequest.init(url: request.url!)) { (dt, re, er) in
-                    if let resp = re as? HTTPURLResponse {
-                        Logger.TDLOG(resp.statusCode.description)
-                    }
-                    if let err = er {
-                        Logger.TDLOG(err.localizedDescription)
-                    }
-                    if let daata = dt {
-                        guard let toPrint = String(data: daata, encoding: .utf8) else {
-                            Logger.TDLOG("file \(#file) line: \(#line) \nNO STRING")
-                            return
-                        }
-                        Logger.TDLOG(toPrint)
-                    }
+                if let url = request.url {
+                    OfflineDataHandler.shared.performRedirect(url)
                 }
-                task.resume()
                 return
             }
             if let tduid = maybeTduid.first {

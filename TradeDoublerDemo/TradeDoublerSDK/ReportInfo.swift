@@ -24,7 +24,7 @@ public class ReportInfo {
         for entry in reportEntries {
             toReturn += entry.price * Double(entry.quantity)
         }
-        return String(format: "%.02f", toReturn)
+        return String(format: "%.2f", toReturn)
     }
 }
 
@@ -49,7 +49,7 @@ public class ReportEntry {
         if let nameToUtf8 = productName.cString(using: .utf8) {
             toReturn += (String(utf8String: nameToUtf8) ?? "") + "&f3="
         }
-        let cutPrice = String(format: "%.02f", price)
+        let cutPrice = String(format: "%.2f", price)
         if let priceToUtf8 = cutPrice.cString(using: .utf8) {
             toReturn += (String(utf8String: priceToUtf8) ?? "") + "&f4="
         }

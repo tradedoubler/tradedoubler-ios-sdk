@@ -24,7 +24,7 @@ public class BasketInfo {
         for entry in basketEntries {
             toReturn += entry.price * Double(entry.quantity)
         }
-        return String(format: "%.02f", toReturn)
+        return String(format: "%.2f", toReturn)
     }
 }
 
@@ -52,7 +52,7 @@ public class BasketEntry {
         if let nameToUtf8 = productName.cString(using: .utf8) {
             toReturn += "n(\(String(utf8String: nameToUtf8) ?? ""))"
         }
-        let cutPrice = String(format: "%.02f", price)
+        let cutPrice = String(format: "%.2f", price)
         if let valueToUtf8 = cutPrice.cString(using: .utf8) {
             toReturn += "v(\(String(utf8String: valueToUtf8) ?? ""))"
         }
