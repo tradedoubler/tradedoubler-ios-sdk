@@ -172,7 +172,6 @@ class URLHandler {
     
     // if has idfa send with idfa if email - send with email. Send both if available
     func ceateAppInstallStep(organizationId: String, eventId: String, email: String? = nil, IDFA: String? = nil, isEmail: Bool) -> URL? {
-        let tduid = settings.tduid
         let IDFA = settings.IDFA
         let mail = settings.userEmail
         let user: String
@@ -199,9 +198,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "event", value: eventId))
         queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
         TradeDoublerSDKSettings.shared.orderNumber = ""
-        if tduid != nil {
-            queryItems.append(URLQueryItem(name: "tduid", value: tduid))
-        }
+        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         components.queryItems = queryItems
@@ -216,7 +213,7 @@ class URLHandler {
         for _ in 0 ..< length {
             let randomNo = Int(arc4random_uniform(quantity))
             let index = letters.index(letters.startIndex, offsetBy: randomNo)
-            let character = UnicodeScalar(UInt8(letters[index]))
+            let character = UnicodeScalar(letters[index])
             toReturn += String(character)
         }
         return toReturn
@@ -251,9 +248,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
-        if let tduid = TradeDoublerSDKSettings.shared.tduid {
-            queryItems.append(URLQueryItem(name: "tduid", value: tduid))
-        }
+        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "verify", value: "true"))
         components.queryItems = queryItems
         return components.url
@@ -374,23 +369,21 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
         if let url = request.url?.absoluteString {
             Logger.TDLOG(url)
             let components = URLComponents(string: url)
-            guard let maybeTduid = components?.queryItems?.filter({ (item) -> Bool in
-                item.name == tduidKey
-            }) else {
+            guard let tduid = components?.queryItems?.filter({ (item) -> Bool in
+                item.name.lowercased() == "tduid"
+            }).first else {
                 if let url = request.url {
                     OfflineDataHandler.shared.performRedirect(url)
                 }
                 return
             }
-            if let tduid = maybeTduid.first {
-                let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!, recoveredKey: false])
-                DispatchQueue.main.async {
-                    TradeDoublerSDKSettings.shared.tduid = tduid.value
-                    NotificationCenter.default.post(toPost)
-                }
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!, recoveredKey: false])
+            OfflineDataHandler.shared.requestComplete()
+            DispatchQueue.main.async {
+                TradeDoublerSDKSettings.shared.tduid = tduid.value
+                NotificationCenter.default.post(toPost)
             }
         }
-        
     }
     
 }

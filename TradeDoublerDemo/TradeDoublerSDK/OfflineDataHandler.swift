@@ -28,6 +28,9 @@ class OfflineDataHandler {
                 return
             }
             self.requests = self.decryptWithAes(data)
+            if !self.requests.isEmpty {
+                self.readRequest()
+            }
         }
     }
     
@@ -79,6 +82,10 @@ class OfflineDataHandler {
         addOperation { [weak self] in
             guard let self = self else {return}
             let absoluteStr = requestUrl.absoluteString
+            if self.requests.firstIndex(of: absoluteStr) != nil {
+                Logger.TDLOG("Tried adding the same request more than once, returning")
+                return
+            }
             Logger.TDLOG("appending \(absoluteStr)")
             self.requests.append(absoluteStr)
             UserDefaults.standard.setValue(self.encryptWithAes(self.createJsonString()), forKey: requestsKey)
@@ -125,7 +132,7 @@ class OfflineDataHandler {
         
     }
     
-    func requestComplete(_ req : URL) {
+    func requestComplete(_ req : URL? = nil) {
         addOperation { [weak self] in
             guard let self = self else {return}
             defer {
@@ -133,12 +140,16 @@ class OfflineDataHandler {
                 self.processing = false
                 self.readRequest()
             }
-            guard let index = self.requests.firstIndex(of: req.absoluteString) else {
-                Logger.TDLOG("\(req) finished but already removed from database")
+            guard let absolute = req?.absoluteString ?? self.currentRequest else {
+                Logger.TDLOG("WARNING! request complete, URL unknown")
+                return
+            }
+            
+            guard let index = self.requests.firstIndex(of: absolute) else {
+                Logger.TDLOG("\(absolute) finished but already removed from database")
                 self.processing = false
                 return
             }
-            let absolute = req.absoluteString
             Logger.TDLOG("finished \(absolute), removing")
             self.requests.remove(at: index)
             if self.currentRequest != absolute {
@@ -151,13 +162,15 @@ class OfflineDataHandler {
     
     func requestFailed(_ error: Error, url: URL) {
         addOperation {
+            defer {
+                self.currentRequest = nil
+                self.processing = false
+            }
             let absolute = url.absoluteString
             Logger.TDLOG("\(absolute) failed. Error: \(error.localizedDescription)")
             if self.currentRequest != absolute {
                 Logger.TDLOG("Weird. Failed processing request \(absolute) but current is \(self.currentRequest.debugDescription)")
             }
-            self.currentRequest = nil
-            self.processing = false
         }
     }
     

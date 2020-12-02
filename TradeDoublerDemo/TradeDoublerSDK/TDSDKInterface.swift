@@ -13,8 +13,9 @@ public class TDSDKInterface {
     public static let shared = TDSDKInterface()
     private let urlHandler = URLHandler.shared
     private let settings = TradeDoublerSDKSettings.shared
+    private let offlineManager = OfflineDataHandler.shared
     
-    public func recoverTDUID(host: String, path: String, parameters: [String:String]) {
+    public func simulateTDUIDClick(host: String, path: String, parameters: [String:String]) {
         if let tduid = settings.tduid {
             let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid, recoveredKey: true])
             DispatchQueue.main.async {

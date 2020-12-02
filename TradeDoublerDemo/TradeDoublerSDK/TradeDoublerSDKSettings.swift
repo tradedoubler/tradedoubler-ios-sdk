@@ -20,9 +20,13 @@ class TradeDoublerSDKSettings {
     
     var tduid: String? {
         get {
-            if Date().timeIntervalSince1970 - UserDefaults.standard.double(forKey: tduidTimestampKey) > secondsTduidIsValid {
+            var savedTimestamp = UserDefaults.standard.double(forKey: tduidTimestampKey)
+            if savedTimestamp.isNaN {// reading nil from settings may get you NaN
+                savedTimestamp = 0
+            }
+            if Date().timeIntervalSince1970 - savedTimestamp > secondsTduidIsValid {
                 UserDefaults.standard.setValue(nil, forKey: tduidKey)
-                UserDefaults.standard.setValue(nil, forKey: tduidTimestampKey)
+                UserDefaults.standard.setValue(Double(0), forKey: tduidTimestampKey)
                 return nil
             }
             return UserDefaults.standard.string(forKey: tduidKey)

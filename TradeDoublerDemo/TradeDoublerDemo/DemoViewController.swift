@@ -20,17 +20,35 @@ class DemoViewController: UIViewController {
     }
 
     @IBAction func sdkSale(_ sender: Any) {
+        performSegue(withIdentifier: segueId.segueToSale, sender: self)
+        return
         tradeDoubler.trackSale(eventId: sdk_sale, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil)//  randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
+        performSegue(withIdentifier: segueId.segueToSalePLT, sender: self)
+        return
         tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil)
     }
     
     @IBAction func sdkLead(_ sender: Any) {
+        performSegue(withIdentifier: segueId.SegueToLead, sender: self)
+        return
         tradeDoubler.trackLead(eventId: sdk_lead)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case segueId.segueToSale:
+            segue.destination.title = "SALE"
+        case segueId.segueToSalePLT:
+            segue.destination.title = "SALE_PLT"
+        case segueId.SegueToLead:
+            segue.destination.title = "LEAD"
+        default:
+            print("UNKNOWN SEGUE \(segue.identifier.debugDescription)")
+        }
+    }
     @IBAction func useIDFA(_ sender: Any) {
         //ask for IDFA right after
         guard let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") else {
