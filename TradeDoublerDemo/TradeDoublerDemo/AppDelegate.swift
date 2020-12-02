@@ -12,40 +12,31 @@ let sdk_sale = "403759"
 let sdk_app_install = "403761"
 let sdk_sale_2 = "403763"
 let sdk_lead = "403765"
+let sdk_plt_default = "51"
+let sdk_group_1 = "3408"
+let sdk_group_2 = "3168"
 
 //defined segue IDs to avoid typos
 struct segueId {
     static let segueToSale = "SegueToSale"
     static let segueToSalePLT = "SegueToSalePLT"
-    static let SegueToLead = "SegueToLead"
 }
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    //TODO:remove comment below when everything works
-    /*https://tbs.tradedoubler.com/user?o=$organization&extid=$extid&exttype=1&tduid=$tduid&verify=true
-*/
-//    var window: UIWindow?
+    
     let tradeDoubler = TDSDKInterface.shared
     
     @objc private func gotTduid(_ notification: Notification) {
         
-        let title: String
-        guard  let recovered = notification.userInfo?[recoveredKey] as? Bool else {
+        guard let tduid = notification.userInfo?[tduidKey] as? String else {
             presentAlert(title: "receiving TDUID failed")
             return
         }
         
-        if recovered  {
-            title = "recovered TDUID"
-        } else {
-            title = "received TDUID"
-            if let tduid = notification.userInfo?["tduid"] as? String {
-                TDSDKInterface.shared.setTDUID(tduid)
-            }
-        }
+        TDSDKInterface.shared.setTDUID(tduid)
         
-        presentAlert(title: title, message: notification.userInfo?["tduid"] as? String)
+        presentAlert(title: "TDUID", message: tduid)
     }
     
     func configureFramework() {
@@ -76,7 +67,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         
         configureFramework()
-        TDSDKInterface.shared.simulateTDUIDClick(host: "clk.tradedoubler.com", path: "/click", parameters: parameters)
+        tradeDoubler.simulateTDUIDClick(host: "clk.tradedoubler.com", path: "/click", parameters: parameters)
+        tradeDoubler.trackOpenApp()
         
         return true
     }
@@ -117,10 +109,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFailToContinueUserActivityWithType userActivityType: String, error: Error) {
         print("failedactivity \(userActivity.debugDescription) error: \(error.localizedDescription)")
-    }
-    
-    func setIDFA(_ iDFAString: String) {
-        TDSDKInterface.shared.setIDFA(iDFAString)
     }
     
 }

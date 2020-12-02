@@ -8,9 +8,13 @@
 import Foundation
 
 public class BasketInfo {
-    let basketEntries: [BasketEntry]
-    init(entries: [BasketEntry]) {
+    public var basketEntries: [BasketEntry]
+    public init(entries: [BasketEntry]) {
         basketEntries = entries
+    }
+    
+    public func append(_ entry: BasketEntry) {
+        basketEntries.append(entry)
     }
     
     func toEncodedString() -> String {
@@ -34,7 +38,7 @@ public class BasketEntry {
     let productName: String
     let price: Double
     let quantity: Int
-    init(group: String, id: String, productName: String, price: Double, quantity: Int) {
+    public init(group: String, id: String, productName: String, price: Double, quantity: Int) {
         self.group = group
         self.id = id
         self.productName = productName

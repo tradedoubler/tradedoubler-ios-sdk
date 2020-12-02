@@ -49,9 +49,8 @@ class URLHandler {
     }
     
     func getTduid(host: String, path: String, parameters: [String : String]) {
-        //https://clk.tradedoubler.com/click?p(310409)a(982247)g(0)
         //https://clk.tradedoubler.com/click?a=982247&p=310409&g=0&f=0
-        Logger.TDLOG("at start we have orderNo = " + "\(TradeDoublerSDKSettings.shared.orderNumber)")
+        Logger.TDLOG("at start we have orderNo = " + "\(settings.orderNumber)")
         var components = URLComponents()
         components.scheme = "https"
         components.host = host
@@ -108,7 +107,8 @@ class URLHandler {
             return nil
         }
         var components = URLComponents()
-        components.host = "https://tbl.tradedoubler.com"
+        components.scheme = "https"
+        components.host = "tbl.tradedoubler.com"
         components.path = "/report"
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: settings.organizationId))
@@ -122,25 +122,38 @@ class URLHandler {
     }
     
     
-    func trackSale(eventId: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: ReportInfo?) {
+    func trackSale(eventId: String, currency: String?, voucher: String? = nil, reportInfo: ReportInfo?) {
         if !isTrackingEnabled {
             return
         }
+        let orderValue = reportInfo?.orderValue() ?? "\(arc4random_uniform(10000) + 1)"
+        let internalVoucher: String?
+        if voucher != nil {
+            internalVoucher = voucher!.isEmpty ? nil : voucher
+        } else {
+            internalVoucher = voucher
+        }
         
-        if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: true) {
+        let orderNumber = settings.orderNumber
+        settings.orderNumber = ""
+        
+        if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
         }
         
-        if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, reportInfo: reportInfo, isEmail: false) {
+        
+        
+        if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
     }
     
-    func trackSalePlt(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
+    func trackSalePlt(saleEventId: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
         if !isTrackingEnabled {
             return
         }
-        
+        let orderNumber = settings.orderNumber
+        settings.orderNumber = ""
         if let emailUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
         }
@@ -197,7 +210,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
         queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
-        TradeDoublerSDKSettings.shared.orderNumber = ""
+        settings.orderNumber = ""//increment
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
@@ -227,8 +240,8 @@ class URLHandler {
             Logger.TDLOG("no organization ID on launch, please set organization ID before calling trackOpenApp()")
             return nil
         }
-        let mail = TradeDoublerSDKSettings.shared.userEmail
-        let IDFA = TradeDoublerSDKSettings.shared.IDFA
+        let mail = settings.userEmail
+        let IDFA = settings.IDFA
         let host = "tbl.tradedoubler.com"
         if mail == nil && isEmail && IDFA == nil {
             Logger.TDLOG("no email on launch")
@@ -266,15 +279,15 @@ class URLHandler {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
-        queryItems.append(URLQueryItem(name: "leadNumber", value: TradeDoublerSDKSettings.shared.orderNumber))
-        TradeDoublerSDKSettings.shared.orderNumber = ""
+        queryItems.append(URLQueryItem(name: "leadNumber", value: settings.leadNumber))
+        settings.leadNumber = ""
         queryItems.append(URLQueryItem(name: "extid", value: isEmail ? settings.userEmail : settings.IDFA))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         components.queryItems = queryItems
         return components.url!
     }
     
-    private func buildTrackSaleUrl(eventId: String, currency: String?, orderValue:String, voucher: String? = nil, reportInfo: ReportInfo?, isEmail: Bool) -> URL? {
+    private func buildTrackSaleUrl(eventId: String, currency: String?, orderValue:String, orderNumber: String, voucher: String? = nil, reportInfo: ReportInfo?, isEmail: Bool) -> URL? {
         guard let organizationId = settings.organizationId, let secretCode = settings.secretCode else {
             Logger.TDLOG("creating sale tracking step. Aborted because of at least one obligatory parameter being null.\norganizationId = \(settings.organizationId ?? "null"), secretCode = \(settings.secretCode ?? "null")")
             return nil
@@ -299,7 +312,7 @@ class URLHandler {
             }
         }
         
-        let checksum = countChecksum(secretCode: secretCode, orderNumber: TradeDoublerSDKSettings.shared.orderNumber, orderValue: orderValue)
+        let checksum = countChecksum(secretCode: secretCode, orderNumber: orderNumber, orderValue: orderValue)
         var components = URLComponents()
         components.scheme = "https"
         components.host = "tbl.tradedoubler.com"
@@ -307,11 +320,10 @@ class URLHandler {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
-        queryItems.append(URLQueryItem(name: "orderNumber", value: TradeDoublerSDKSettings.shared.orderNumber))
+        queryItems.append(URLQueryItem(name: "orderNumber", value: orderNumber))
         queryItems.append(URLQueryItem(name: "orderValue", value: orderValue))
         queryItems.append(URLQueryItem(name: "currency", value: "EUR"))
         queryItems.append(URLQueryItem(name: "checksum", value: checksum))
-        TradeDoublerSDKSettings.shared.orderNumber = ""
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
@@ -377,7 +389,7 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
                 }
                 return
             }
-            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!, recoveredKey: false])
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!])
             OfflineDataHandler.shared.requestComplete()
             DispatchQueue.main.async {
                 TradeDoublerSDKSettings.shared.tduid = tduid.value

@@ -16,39 +16,23 @@ class DemoViewController: UIViewController {
     let tradeDoubler = TDSDKInterface.shared
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
 
     @IBAction func sdkSale(_ sender: Any) {
         performSegue(withIdentifier: segueId.segueToSale, sender: self)
-        return
-        tradeDoubler.trackSale(eventId: sdk_sale, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil)//  randomEvent(organizationId: appDelegate.orgId, user: appDelegate.user, isEmail: appDelegate.isEmail)
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
-        performSegue(withIdentifier: segueId.segueToSalePLT, sender: self)
-        return
-        tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, orderValue: "\(arc4random_uniform(100000) + 1)", reportInfo: nil)
+        tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, reportInfo: nil)
     }
     
+    @IBAction func sdkSalePlt(_ sender: Any) {
+        performSegue(withIdentifier: segueId.segueToSalePLT, sender: self)
+    }
     @IBAction func sdkLead(_ sender: Any) {
-        performSegue(withIdentifier: segueId.SegueToLead, sender: self)
-        return
         tradeDoubler.trackLead(eventId: sdk_lead)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case segueId.segueToSale:
-            segue.destination.title = "SALE"
-        case segueId.segueToSalePLT:
-            segue.destination.title = "SALE_PLT"
-        case segueId.SegueToLead:
-            segue.destination.title = "LEAD"
-        default:
-            print("UNKNOWN SEGUE \(segue.identifier.debugDescription)")
-        }
-    }
     @IBAction func useIDFA(_ sender: Any) {
         //ask for IDFA right after
         guard let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") else {
@@ -57,10 +41,14 @@ class DemoViewController: UIViewController {
             }
             return
         }
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        TDSDKInterface.shared.firstRequest(host: appDelegate.host, organizationId: appDelegate.organizationId, user: advertisingIdentifier, tduid: appDelegate.tduid, isEmail: false)
-        appDelegate.setIDFA(advertisingIdentifier)
+        TDSDKInterface.shared.setIDFA(advertisingIdentifier)
     }
+    
+    @IBAction func simulateAppInstall(_ sender: Any) {
+        tradeDoubler.trackInstall(appInstallEventId: sdk_app_install)
+    }
+    
+    
     @available(iOS 14, *)
     func requestPermission() {
         ATTrackingManager.requestTrackingAuthorization { status in

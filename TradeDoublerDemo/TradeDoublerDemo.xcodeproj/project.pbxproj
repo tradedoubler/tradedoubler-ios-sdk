@@ -13,7 +13,6 @@
 		49340202256544530038B12A /* InternalLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49340201256544530038B12A /* InternalLogger.swift */; };
 		495133802577C49F00CCC3C8 /* SaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951337F2577C49F00CCC3C8 /* SaleViewController.swift */; };
 		495133862577C4BF00CCC3C8 /* SalePLTViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */; };
-		4951338C2577C4CF00CCC3C8 /* LeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951338B2577C4CF00CCC3C8 /* LeadViewController.swift */; };
 		495B2E452560418200BED401 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495B2E442560418200BED401 /* SystemConfiguration.framework */; };
 		49A618582549B35F00399334 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618572549B35F00399334 /* AppDelegate.swift */; };
 		49A6185A2549B35F00399334 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618592549B35F00399334 /* SceneDelegate.swift */; };
@@ -97,7 +96,6 @@
 		49340201256544530038B12A /* InternalLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalLogger.swift; sourceTree = "<group>"; };
 		4951337F2577C49F00CCC3C8 /* SaleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleViewController.swift; sourceTree = "<group>"; };
 		495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalePLTViewController.swift; sourceTree = "<group>"; };
-		4951338B2577C4CF00CCC3C8 /* LeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadViewController.swift; sourceTree = "<group>"; };
 		495B2E2F25603DEB00BED401 /* String+SHA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA.swift"; sourceTree = "<group>"; };
 		495B2E3A25603EFF00BED401 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		495B2E442560418200BED401 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -226,7 +224,6 @@
 				49A618652549B36200399334 /* Info.plist */,
 				4951337F2577C49F00CCC3C8 /* SaleViewController.swift */,
 				495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */,
-				4951338B2577C4CF00CCC3C8 /* LeadViewController.swift */,
 			);
 			path = TradeDoublerDemo;
 			sourceTree = "<group>";
@@ -486,7 +483,6 @@
 				49A618582549B35F00399334 /* AppDelegate.swift in Sources */,
 				49A6185A2549B35F00399334 /* SceneDelegate.swift in Sources */,
 				495133802577C49F00CCC3C8 /* SaleViewController.swift in Sources */,
-				4951338C2577C4CF00CCC3C8 /* LeadViewController.swift in Sources */,
 				495133862577C4BF00CCC3C8 /* SalePLTViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,9 +8,13 @@
 import Foundation
 
 public class ReportInfo {
-    let reportEntries : [ReportEntry]
-    init(entries: [ReportEntry]) {
+    public var reportEntries : [ReportEntry]
+    public init(entries: [ReportEntry]) {
         reportEntries = entries
+    }
+    
+    public func append(_ entry: ReportEntry) {
+        reportEntries.append(entry)
     }
     
     func toEncodedString() -> String {
@@ -34,7 +38,7 @@ public class ReportEntry {
     let price: Double
     let quantity: Int
     
-    init(id: String, productName: String, price: Double, quantity: Int) {//quantity?
+    public init(id: String, productName: String, price: Double, quantity: Int) {//quantity?
         self.id = id
         self.productName = productName
         self.price = price

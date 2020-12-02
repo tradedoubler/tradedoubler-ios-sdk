@@ -6,13 +6,16 @@
 //
 
 import Foundation
+import AppTrackingTransparency
+import AdSupport
 
-let tduidKey = "tduid"
+public let tduidKey = "tduid"
 let tduidTimestampKey = "tduidTimestamp"
 let emailKey = "mail"
 let IDFAKey = "idfa"
-public let recoveredKey = "recovered"
+//public let recoveredKey = "recovered"
 let orderNo = "orderNo"
+let leadNo = "leadNo"
 let organizationIdKey = "organizationIdentifier"
 let secretKey = "userSecret"
 
@@ -76,14 +79,22 @@ class TradeDoublerSDKSettings {
     ///set "plain" IDFA, will be saved securely if not null (zeros). Returns sha or nil on read
     var IDFA: String? {
         get {
-            UserDefaults.standard.string(forKey: IDFAKey)
+            if #available(iOS 14.0, *) {
+                if ATTrackingManager.trackingAuthorizationStatus != ATTrackingManager.AuthorizationStatus.authorized {
+                    return nil
+                }
+            }
+            else if !ASIdentifierManager.shared().isAdvertisingTrackingEnabled{
+                return nil
+            }
+            return UserDefaults.standard.string(forKey: IDFAKey)
         }
         set {
             UserDefaults.standard.setValue(newValue?.sha256(), forKey: IDFAKey)
         }
     }
     
-    var orderNumber: String {
+    var orderNumber: String { //internal for framework, cannot be set
         get {
             return "\(UserDefaults.standard.integer(forKey: orderNo))"
         }
@@ -92,6 +103,18 @@ class TradeDoublerSDKSettings {
             var temp = UserDefaults.standard.integer(forKey: orderNo)
             temp = temp + 1
             UserDefaults.standard.setValue(temp, forKey: orderNo)
+        }
+    }
+    
+    var leadNumber: String { //internal for framework, cannot be set
+        get {
+            return "\(UserDefaults.standard.integer(forKey: leadNo))"
+        }
+        
+        set {
+            var temp = UserDefaults.standard.integer(forKey: leadNo)
+            temp = temp + 1
+            UserDefaults.standard.setValue(temp, forKey: leadNo)
         }
     }
     
