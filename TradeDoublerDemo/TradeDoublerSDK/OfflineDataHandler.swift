@@ -25,6 +25,7 @@ class OfflineDataHandler {
     private var processing = false
     var requests = [String]()
     var currentRequest: String?
+    var lastError: Error?
     
     private init() {
         queue.maxConcurrentOperationCount = 1 //protecting requests array from race condition
@@ -168,11 +169,13 @@ class OfflineDataHandler {
     }
     
     func requestFailed(_ error: Error, url: URL) {
-        addOperation {
+        addOperation { [weak self] in
+            guard let self = self else {return}
             defer {
                 self.currentRequest = nil
                 self.processing = false
             }
+            self.lastError = error
             let absolute = url.absoluteString
             Logger.TDLog("\(absolute) failed. Error: \(error.localizedDescription)")
             if self.currentRequest != absolute {

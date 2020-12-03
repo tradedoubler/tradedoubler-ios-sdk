@@ -41,7 +41,7 @@ class SaleViewController: UIViewController {
     }
     
     @IBAction func setAndCall(_ sender: Any) {
-        tradeDoubler.trackSale(eventId: sdk_sale, currency: currencyField.text, reportInfo: entries)
+        tradeDoubler.trackSale(eventId: sdk_sale, currency: currencyField.text, voucher: nil, reportInfo: entries)
         dismiss(animated: true, completion: nil)
     }
 }

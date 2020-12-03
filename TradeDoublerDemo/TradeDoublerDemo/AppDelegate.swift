@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @objc private func gotTduid(_ notification: Notification) {
         
-        guard let tduid = notification.userInfo?[tduidKey] as? String else {
+        guard let tduid = notification.userInfo?[Constants.tduidKey] as? String else {
             presentAlert(title: "receiving TDUID failed")
             return
         }
@@ -49,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func configureFramework() {
-        tradeDoubler.setEmail("adam.tucholski@britenet.com.pl")
-        tradeDoubler.configure(organizationId: "945630", secretCode: "123456789")
+        tradeDoubler.email = "adam.tucholski@britenet.com.pl"
+        tradeDoubler.configure("945630", "123456789")
     }
     
     func presentAlert(title: String, message: String? = nil) {
@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func simulateTduidUrl(_ host: String, _ path: String, _ parameters: [String:String]) {
         if let tduid = tradeDoubler.tduid {
-            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid])
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [Constants.tduidKey : tduid])
             DispatchQueue.main.async {
                 NotificationCenter.default.post(toPost)
             }
@@ -169,7 +169,7 @@ extension AppDelegate: URLSessionDelegate, URLSessionTaskDelegate {
             }).first else {
                 return
             }
-            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!])
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [Constants.tduidKey : tduid.value!])
             DispatchQueue.main.async {
                 self.tradeDoubler.tduid = tduid.value
                 NotificationCenter.default.post(toPost)

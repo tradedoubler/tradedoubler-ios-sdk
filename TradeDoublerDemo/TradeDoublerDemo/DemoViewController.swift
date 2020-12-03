@@ -30,7 +30,7 @@ class DemoViewController: UIViewController {
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
-        tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, reportInfo: nil)
+        tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, voucher: nil, reportInfo: nil)
     }
     
     @IBAction func sdkSalePlt(_ sender: Any) {
@@ -42,13 +42,12 @@ class DemoViewController: UIViewController {
     
     @IBAction func useIDFA(_ sender: Any) {
         //ask for IDFA right after
-        guard let advertisingIdentifier =  UserDefaults.standard.string(forKey: "advertisingIdentifier") else {
+        if UserDefaults.standard.string(forKey: "advertisingIdentifier") == nil {
             if #available(iOS 14.0, *) {
                 requestPermission()
             }
             return
         }
-        TDSDKInterface.shared.setIDFA(advertisingIdentifier)
     }
     
     @IBAction func simulateAppInstall(_ sender: Any) {
@@ -66,7 +65,7 @@ class DemoViewController: UIViewController {
                     print("Authorized")
                     DispatchQueue.main.async { [weak self] in
                         let advertisingIdentifier = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-                        self?.tradeDoubler.setIDFA(advertisingIdentifier)
+                        self?.tradeDoubler.IDFA = advertisingIdentifier
                     }
                 
                     // Now that we are authorized we can get the IDFA

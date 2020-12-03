@@ -22,6 +22,35 @@ public class TDSDKInterface {
     private let settings = TradeDoublerSDKSettings.shared
     private let offlineManager = OfflineDataHandler.shared
     
+    public var tduid: String? {
+        get {
+            settings.tduid
+        }
+        set {
+            settings.tduid = newValue
+        }
+    }
+    
+    public var email: String? {
+        get {
+            settings.userEmail
+        }
+        set {
+            settings.userEmail = newValue
+        }
+    }
+    
+    public var IDFA: String? {
+        get {
+            settings.IDFA
+        }
+        set {
+            if let val = newValue {
+                setIDFA(val)
+            }
+        }
+    }
+    
     func login(email: String) {
         settings.userEmail = email
     }
@@ -30,7 +59,7 @@ public class TDSDKInterface {
         urlHandler.isTrackingEnabled = enabled
     }
     ///currency must be ISO-4217 valid code
-    public func trackSale(eventId: String, currency: String?, voucher: String? = nil, reportInfo: ReportInfo?) {
+    public func trackSale(eventId: String, currency: String?, voucher: String?, reportInfo: ReportInfo?) {
         urlHandler.trackSale(eventId: eventId, currency: currency, reportInfo: reportInfo)
     }
     
@@ -55,15 +84,11 @@ public class TDSDKInterface {
         urlHandler.trackInstall(appInstallEventId: appInstallEventId)
     }
     
-    public func setEmail(_ email: String) {
-        settings.userEmail = email
-    }
-    
     public func logout() {
         settings.userEmail = nil
     }
     
-    public func setIDFA(_ IDFA: String) {
+    func setIDFA(_ IDFA: String) {
         if !IDFA.isNilUUIDString() {
             settings.IDFA = IDFA
         } else {
@@ -71,20 +96,11 @@ public class TDSDKInterface {
         }
     }
     
-    public var tduid: String? {
-        get {
-            return settings.tduid
-        }
-        set {
-            settings.tduid = newValue
-        }
-    }
-    
     public func organizationId() -> String? {
         return settings.organizationId
     }
     /// email & IDFA are configured in separate methods due to protection level
-    public func configure(organizationId: String? = nil, secretCode: String? = nil) {
+    public func configure(_ organizationId: String?, _ secretCode: String?) {
         if organizationId != nil {
             settings.organizationId = organizationId
         }

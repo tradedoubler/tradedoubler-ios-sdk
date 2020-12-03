@@ -324,7 +324,7 @@ class URLHandler {
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
         if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
-        if let info = reportInfo?.toEncodedString().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+        if let info = reportInfo?.toEncodedString().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), !info.isEmpty {
             queryItems.append(URLQueryItem(name: "reportInfo", value: info))
         }
         components.queryItems = queryItems
@@ -332,14 +332,20 @@ class URLHandler {
     }
     
     private func buildTrackSalePltUrl(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo, isEmail: Bool) -> URL? {
+        guard !basketInfo.basketEntries.isEmpty else {
+            Logger.TDLog("PLT basket cannot be empty, returning")
+            return nil
+        }
         guard let organizationId = settings.organizationId else {
             Logger.TDErrorLog("organizationId is null, func: \(#function)")
             return nil
         }
         if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email, returning")
             return nil
         }
         if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA, returning")
             return nil
         }
         var checksum: String? = nil

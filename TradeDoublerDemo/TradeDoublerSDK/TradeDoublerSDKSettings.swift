@@ -16,35 +16,25 @@ import Foundation
 import AppTrackingTransparency
 import AdSupport
 
-public let tduidKey = "tduid"
-let tduidTimestampKey = "tduidTimestamp"
-let emailKey = "mail"
-let IDFAKey = "idfa"
-//public let recoveredKey = "recovered"
-let orderNo = "orderNo"
-let leadNo = "leadNo"
-let organizationIdKey = "organizationIdentifier"
-let secretKey = "userSecret"
-
 class TradeDoublerSDKSettings {
     
     var tduid: String? {
         get {
-            var savedTimestamp = UserDefaults.standard.double(forKey: tduidTimestampKey)
+            var savedTimestamp = UserDefaults.standard.double(forKey: Constants.tduidTimestampKey)
             if savedTimestamp.isNaN {// reading nil from settings may get you NaN
                 savedTimestamp = 0
             }
             if Date().timeIntervalSince1970 - savedTimestamp > secondsTduidIsValid {
-                UserDefaults.standard.setValue(nil, forKey: tduidKey)
-                UserDefaults.standard.setValue(Double(0), forKey: tduidTimestampKey)
+                UserDefaults.standard.setValue(nil, forKey: Constants.tduidKey)
+                UserDefaults.standard.setValue(Double(0), forKey: Constants.tduidTimestampKey)
                 return nil
             }
-            return UserDefaults.standard.string(forKey: tduidKey)
+            return UserDefaults.standard.string(forKey: Constants.tduidKey)
         }
         
         set {
-            UserDefaults.standard.setValue(newValue, forKey: tduidKey)
-            UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: tduidTimestampKey)
+            UserDefaults.standard.setValue(newValue, forKey: Constants.tduidKey)
+            UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: Constants.tduidTimestampKey)
         }
     }
     
@@ -56,30 +46,30 @@ class TradeDoublerSDKSettings {
     
     var organizationId: String? {
         get {
-            return UserDefaults.standard.string(forKey: organizationIdKey)
+            return UserDefaults.standard.string(forKey: Constants.organizationIdKey)
         }
         
         set {
-            UserDefaults.standard.setValue(newValue, forKey: organizationIdKey)
+            UserDefaults.standard.setValue(newValue, forKey: Constants.organizationIdKey)
         }
     }
     
     //set "plain" email, will be saved securely. Returns sha or nil on read
     var userEmail: String? {
         get {
-            UserDefaults.standard.string(forKey: emailKey)
+            UserDefaults.standard.string(forKey: Constants.emailKey)
         }
         set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: emailKey)
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.emailKey)
         }
     }
     
     var secretCode: String? {
         get {
-            UserDefaults.standard.string(forKey: secretKey)
+            UserDefaults.standard.string(forKey: Constants.secretKey)
         }
         set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: secretKey)
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.secretKey)
         }
     }
     
@@ -94,34 +84,34 @@ class TradeDoublerSDKSettings {
             else if !ASIdentifierManager.shared().isAdvertisingTrackingEnabled{
                 return nil
             }
-            return UserDefaults.standard.string(forKey: IDFAKey)
+            return UserDefaults.standard.string(forKey: Constants.IDFAKey)
         }
         set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: IDFAKey)
+            UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.IDFAKey)
         }
     }
     
     var orderNumber: String { //internal for framework, cannot be set
         get {
-            return "\(UserDefaults.standard.integer(forKey: orderNo))"
+            return "\(UserDefaults.standard.integer(forKey: Constants.orderNo))"
         }
         
         set {
-            var temp = UserDefaults.standard.integer(forKey: orderNo)
+            var temp = UserDefaults.standard.integer(forKey: Constants.orderNo)
             temp = temp + 1
-            UserDefaults.standard.setValue(temp, forKey: orderNo)
+            UserDefaults.standard.setValue(temp, forKey: Constants.orderNo)
         }
     }
     
     var leadNumber: String { //internal for framework, cannot be set
         get {
-            return "\(UserDefaults.standard.integer(forKey: leadNo))"
+            return "\(UserDefaults.standard.integer(forKey: Constants.leadNo))"
         }
         
         set {
-            var temp = UserDefaults.standard.integer(forKey: leadNo)
+            var temp = UserDefaults.standard.integer(forKey: Constants.leadNo)
             temp = temp + 1
-            UserDefaults.standard.setValue(temp, forKey: leadNo)
+            UserDefaults.standard.setValue(temp, forKey: Constants.leadNo)
         }
     }
     
