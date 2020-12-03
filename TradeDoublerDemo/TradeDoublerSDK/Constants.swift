@@ -18,10 +18,13 @@ public struct Constants {
     static let tduidTimestampKey = "tduidTimestamp"
     static let emailKey = "mail"
     static let IDFAKey = "idfa"
+    static let installedKey = "already_installed"
     static let orderNo = "orderNo"
     static let leadNo = "leadNo"
     static let organizationIdKey = "organizationIdentifier"
     static let secretKey = "userSecret"
+    static let trackingKey = "TDisTrackingEnabled"
+    static let debugKey = "TDisDebugEnabled"
     public static let tduidKey = "tduid"
     public static let DEFAULT_SALE_EVENT = "51"
 }

@@ -28,7 +28,17 @@ class URLHandler {
     
     let settings = TradeDoublerSDKSettings.shared
     
-    var isTrackingEnabled = true
+    var isTrackingEnabled: Bool {
+        get {
+            internalTracking
+        }
+        set {
+            internalTracking = newValue
+            UserDefaults.standard.setValue(newValue, forKey: Constants.trackingKey)
+        }
+    }
+    
+    private var internalTracking = UserDefaults.standard.value(forKey: Constants.trackingKey) as? Bool ?? true
     
     func executeURLFromOffline(_ URLString: String) {
         guard let URL = URL(string: URLString) else {
@@ -74,19 +84,25 @@ class URLHandler {
         }
     }
     
-    func trackInstall(appInstallEventId: String) {
-        if !isTrackingEnabled {
-            return
+    func trackInstall(appInstallEventId: String) -> Bool {
+        var toReturn: Bool = false
+        if !isTrackingEnabled || UserDefaults.standard.bool(forKey: Constants.installedKey) {
+            return toReturn
         }
         let leadNumber = generateRandomString() + "\(Int64(Date().timeIntervalSince1970))"
         
         if let emailUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
+            UserDefaults.standard.set(true, forKey: Constants.installedKey)
+            toReturn = true
         }
         
         if let IDFAUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
+            UserDefaults.standard.set(true, forKey: Constants.installedKey)
+            toReturn = true
         }
+        return toReturn
     }
     
     private func buildTrackInstallUrl(appInstallEventId: String, leadNumber: String, isEmail: Bool) -> URL? {
@@ -371,9 +387,7 @@ class URLHandler {
         queryParam.append("enc(3)")
         queryParam.append("basket(\(basketInfo.toEncodedString()))")
         if let filtered = queryParam.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            print("before: \(queryParam)")
             queryParam = filtered
-            print("after \(filtered)")
         }
         let toReturn = URL.init(string: queryParam)
         Logger.TDLog("\(#function) returned \(toReturn.debugDescription)")

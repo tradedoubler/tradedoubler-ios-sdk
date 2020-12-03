@@ -15,7 +15,17 @@
 import Foundation
 
 class Logger {
-    public static var isDebug = true
+    static var isDebug: Bool {
+        get {
+            internalDebug
+        }
+        set {
+            internalDebug = newValue
+            UserDefaults.standard.setValue(newValue, forKey: Constants.debugKey)
+        }
+    }
+    
+    private static var internalDebug = UserDefaults.standard.value(forKey: Constants.debugKey) as? Bool ?? true
     
     public static func setDebug(_ flag: Bool) {
         isDebug = flag

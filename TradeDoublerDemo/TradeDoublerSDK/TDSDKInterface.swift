@@ -51,6 +51,24 @@ public class TDSDKInterface {
         }
     }
     
+    public var isDebug: Bool {
+        get {
+            Logger.isDebug
+        }
+        set {
+            Logger.isDebug = newValue
+        }
+    }
+    
+    public var isTracking: Bool {
+        get {
+            urlHandler.isTrackingEnabled
+        }
+        set {
+            urlHandler.isTrackingEnabled = newValue
+        }
+    }
+    
     func login(email: String) {
         settings.userEmail = email
     }
@@ -79,16 +97,16 @@ public class TDSDKInterface {
     public func trackOpenApp() {
         urlHandler.trackOpenApp()
     }
-    
-    public func trackInstall(appInstallEventId: String) {
-        urlHandler.trackInstall(appInstallEventId: appInstallEventId)
+    ///returns flag informing that request was cancelled (unnecessary)
+    public func trackInstall(appInstallEventId: String) -> Bool {
+        return urlHandler.trackInstall(appInstallEventId: appInstallEventId)
     }
     
     public func logout() {
         settings.userEmail = nil
     }
     
-    func setIDFA(_ IDFA: String) {
+    private func setIDFA(_ IDFA: String) {
         if !IDFA.isNilUUIDString() {
             settings.IDFA = IDFA
         } else {
