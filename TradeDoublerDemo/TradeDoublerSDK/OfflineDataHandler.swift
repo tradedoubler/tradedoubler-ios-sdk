@@ -1,9 +1,16 @@
+//Copyright 2020 Tradedoubler
 //
-//  OfflineDataHandler.swift
-//  TradeDoublerSDK
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
 //
-//  Created by AdamT on 01/12/2020.
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
 
 import Foundation
 import CommonCrypto
@@ -40,11 +47,11 @@ class OfflineDataHandler {
     
     private func createJsonString() -> String {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requests, options: []) else {
-            Logger.TDLOG("No data from array in \(#function)")
+            Logger.TDLog("No data from array in \(#function)")
             return ""
         }
         guard let toReturn = String(data: jsonData, encoding: .utf8) else {
-            print("null string in \(#function)")
+            Logger.TDLog("null string in \(#function)")
             return ""
         }
         return toReturn
@@ -52,11 +59,11 @@ class OfflineDataHandler {
     
     func encryptWithAes(_ json: String) -> Data {
         guard let secret = json.data(using: .utf8) else {
-            Logger.TDLOG("encrypting \(json) using utf8 failed in \(#function)")
+            Logger.TDLog("encrypting \(json) failed in \(#function)")
             return Data()
         }
         guard let encr = secret.encryptAES256_CBC_PKCS7_IV(key: generatePass()) else {
-            Logger.TDLOG("FAILURE on encrypt in \(#function)")
+            Logger.TDLog("FAILURE on encrypt in \(#function)")
             return Data()
         }
         return encr
@@ -64,15 +71,15 @@ class OfflineDataHandler {
     
     func decryptWithAes(_ data: Data?) -> [String] {
         guard let data = data else {
-            Logger.TDLOG("No data on decrypt in \(#function)")
+            Logger.TDLog("No data on decrypt in \(#function)")
             return []
         }
         guard let decrypted = data.decryptAES256_CBC_PKCS7_IV(key: generatePass()) else {
-            Logger.TDLOG("FAILURE on decrypt in \(#function) line \(#line)")
+            Logger.TDLog("FAILURE on decrypt in \(#function) line \(#line)")
             return []
         }
         guard let toReturn = try? JSONSerialization.jsonObject(with: decrypted, options: []) as? [String] else {
-            Logger.TDLOG("FAILURE on JSON deserializing in \(#function) line \(#line)")
+            Logger.TDErrorLog("FAILURE on JSON deserializing in \(#function) line \(#line)")
             return []
         }
         return toReturn
@@ -83,10 +90,10 @@ class OfflineDataHandler {
             guard let self = self else {return}
             let absoluteStr = requestUrl.absoluteString
             if self.requests.firstIndex(of: absoluteStr) != nil {
-                Logger.TDLOG("Tried adding the same request more than once, returning")
+                Logger.TDLog("Tried adding the same request more than once, returning")
                 return
             }
-            Logger.TDLOG("appending \(absoluteStr)")
+            Logger.TDLog("appending \(absoluteStr)")
             self.requests.append(absoluteStr)
             UserDefaults.standard.setValue(self.encryptWithAes(self.createJsonString()), forKey: requestsKey)
             if !self.processing {
@@ -99,9 +106,9 @@ class OfflineDataHandler {
         addOperation { [weak self] in
             guard let self = self else {return}
             let absoluteStr = redirectUrl.absoluteString
-            Logger.TDLOG("redirecting to \(absoluteStr)")
+            Logger.TDLog("redirecting to \(absoluteStr)")
             guard let current = self.currentRequest, let index = self.requests.firstIndex(of: current) else {
-                Logger.TDLOG("Redirecting but current request is null or absent on queue (current=\(self.currentRequest.debugDescription), queue \(self.requests.debugDescription)) Redirect aborted.")
+                Logger.TDLog("Redirecting but current request is null or absent on queue (current=\(self.currentRequest.debugDescription), queue \(self.requests.debugDescription)) Redirect aborted.")
                 self.currentRequest = nil
                 self.processing = false
                 return
@@ -118,11 +125,11 @@ class OfflineDataHandler {
         addOperation { [weak self] in
             guard let self = self else {return}
             if self.processing {
-                Logger.TDLOG("Tried to add request but still processing another")
+                Logger.TDLog("Tried to add request but still processing another")
                 return
             }
             guard let first = self.requests.first else {
-                Logger.TDLOG("Tried to add request but nothing enqueued")
+                Logger.TDLog("Tried to add request but nothing enqueued")
                 return
             }
             URLHandler.shared.executeURLFromOffline(first)
@@ -136,24 +143,24 @@ class OfflineDataHandler {
         addOperation { [weak self] in
             guard let self = self else {return}
             defer {
-                Logger.TDLOG("Finished request, looking for next")
+                Logger.TDLog("Finished request, looking for next")
                 self.processing = false
                 self.readRequest()
             }
             guard let absolute = req?.absoluteString ?? self.currentRequest else {
-                Logger.TDLOG("WARNING! request complete, URL unknown")
+                Logger.TDLog("WARNING! request complete, URL unknown")
                 return
             }
             
             guard let index = self.requests.firstIndex(of: absolute) else {
-                Logger.TDLOG("\(absolute) finished but already removed from database")
+                Logger.TDLog("\(absolute) finished but already removed from database")
                 self.processing = false
                 return
             }
-            Logger.TDLOG("finished \(absolute), removing")
+            Logger.TDLog("finished \(absolute), removing")
             self.requests.remove(at: index)
             if self.currentRequest != absolute {
-                Logger.TDLOG("Weird. Finished processing request \(absolute) but current is \(self.currentRequest.debugDescription)")
+                Logger.TDErrorLog("Weird. Finished processing request \(absolute) but current is \(self.currentRequest.debugDescription)")
             }
             self.currentRequest = nil
             UserDefaults.standard.setValue(self.encryptWithAes(self.createJsonString()), forKey: requestsKey)
@@ -167,9 +174,9 @@ class OfflineDataHandler {
                 self.processing = false
             }
             let absolute = url.absoluteString
-            Logger.TDLOG("\(absolute) failed. Error: \(error.localizedDescription)")
+            Logger.TDLog("\(absolute) failed. Error: \(error.localizedDescription)")
             if self.currentRequest != absolute {
-                Logger.TDLOG("Weird. Failed processing request \(absolute) but current is \(self.currentRequest.debugDescription)")
+                Logger.TDErrorLog("Weird. Failed processing request \(absolute) but current is \(self.currentRequest.debugDescription)")
             }
         }
     }

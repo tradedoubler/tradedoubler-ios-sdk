@@ -1,9 +1,17 @@
+//Copyright 2020 Tradedoubler
 //
-//  URLHandler.swift
-//  TradeDoublerSDK
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
 //
-//  Created by Adam Tucholski on 28/10/2020.
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+
 
 import Foundation
 
@@ -24,48 +32,28 @@ class URLHandler {
     
     func executeURLFromOffline(_ URLString: String) {
         guard let URL = URL(string: URLString) else {
-            Logger.TDLOG("string pased from save (\(URLString)) is NOT URL string!")
+            Logger.TDErrorLog("string pased from save (\(URLString)) is NOT URL string!")
+            OfflineDataHandler.shared.requestComplete()
             return
         }
         let task = session.dataTask(with: URL) { (data, response, error) in
             if let resp = response as? HTTPURLResponse {
-                Logger.TDLOG(resp.statusCode.description)
+                Logger.TDLog(resp.statusCode.description)
                 if 200...299 ~= resp.statusCode {
                     OfflineDataHandler.shared.requestComplete(URL)
                 }
             }
             if let error = error {
-                Logger.TDLOG("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+                Logger.TDLog("\(#function) , line: \(#line)\n \(error.localizedDescription)")
                 OfflineDataHandler.shared.requestFailed(error, url: URL)
             }
             if let data = data {
                 if let toPrint = String(data: data, encoding: .utf8) {
-                    Logger.TDLOG("server answered: \n \(toPrint)")
-                    Logger.TDLOG(toPrint)
+                    Logger.TDLog("server answered: \n \(toPrint)")
                 }
             }
         }
         task.resume()
-    }
-    
-    func getTduid(host: String, path: String, parameters: [String : String]) {
-        //https://clk.tradedoubler.com/click?a=982247&p=310409&g=0&f=0
-        Logger.TDLOG("at start we have orderNo = " + "\(settings.orderNumber)")
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = host
-        components.path = path
-        var queryItems = [URLQueryItem]()
-        for key in parameters.keys {
-            queryItems.append(URLQueryItem(name: key, value: parameters[key]))
-        }
-        if !queryItems.isEmpty {
-            components.queryItems = queryItems
-        }
-        let url = components.url!
-        Logger.TDLOG("\(url) in line \(#line) of \(#function)")
-        OfflineDataHandler.shared.addRequest(url)
-        //        Logger.TDLOG("Your tduid to be securely saved & used later is: \(tduid)")
     }
     
     //get email & idfa from storage
@@ -74,12 +62,14 @@ class URLHandler {
             return
         }
         
+        if settings.tduid == nil {
+            return
+        }
+        
         if let emailUrl = buildAppLaunchUrl(isEmail: true) {
-            Logger.TDLOG("file \(#file) line \(#line) url: \(emailUrl)")
             OfflineDataHandler.shared.addRequest(emailUrl)
         }
         if let IDFAUrl = buildAppLaunchUrl(isEmail: false) {
-            Logger.TDLOG("file \(#file) line \(#line) url: \(IDFAUrl)")
             OfflineDataHandler.shared.addRequest(IDFAUrl)
         }
     }
@@ -169,17 +159,16 @@ class URLHandler {
             return
         }
         guard let emailUrl = buildTrackLeadUrl(eventId: eventId, isEmail: true) else {return}
-        Logger.TDLOG(emailUrl.debugDescription)
         OfflineDataHandler.shared.addRequest(emailUrl)
         
         guard let IDFAUrl = buildTrackLeadUrl(eventId: eventId, isEmail: false) else {return}
-        Logger.TDLOG(IDFAUrl.debugDescription)
         OfflineDataHandler.shared.addRequest(IDFAUrl)
     }
     
     func countChecksum(secretCode: String, orderNumber: String, orderValue: String) -> String {
         let prefix = "v04"
-        let suffix = secretCode + orderNumber + orderValue
+        let value = Double(orderValue) ?? 0
+        let suffix = secretCode + orderNumber + String(format: "%.2f", value)
         return prefix + suffix.md5()
     }
     
@@ -237,18 +226,18 @@ class URLHandler {
     /// Developer should default to email if user refuses to use IDFA in settings (or redirect to settings requesting user consent)
     private func buildAppLaunchUrl(isEmail: Bool) -> URL? {
         guard let organizationId = settings.organizationId else {
-            Logger.TDLOG("no organization ID on launch, please set organization ID before calling trackOpenApp()")
+            Logger.TDErrorLog("no organization ID on launch, please set organization ID before calling trackOpenApp()")
             return nil
         }
         let mail = settings.userEmail
         let IDFA = settings.IDFA
         let host = "tbl.tradedoubler.com"
         if mail == nil && isEmail && IDFA == nil {
-            Logger.TDLOG("no email on launch")
+            Logger.TDLog("no email on launch")
             return nil
         }
         if !isEmail && IDFA == nil {
-            Logger.TDLOG("no IDFA on launch")
+            Logger.TDLog("no IDFA on launch")
             return nil
         }
         let user = isEmail ? mail : IDFA
@@ -270,7 +259,7 @@ class URLHandler {
     private func buildTrackLeadUrl(eventId: String, isEmail: Bool) -> URL? {
         var components = URLComponents()
         guard let organizationId = settings.organizationId else {
-            Logger.TDLOG("creating sale tracking step. Aborted because organizationId is null")
+            Logger.TDErrorLog("creating sale tracking step. Aborted because organizationId is null")
             return nil
         }
         components.scheme = "https"
@@ -289,7 +278,14 @@ class URLHandler {
     
     private func buildTrackSaleUrl(eventId: String, currency: String?, orderValue:String, orderNumber: String, voucher: String? = nil, reportInfo: ReportInfo?, isEmail: Bool) -> URL? {
         guard let organizationId = settings.organizationId, let secretCode = settings.secretCode else {
-            Logger.TDLOG("creating sale tracking step. Aborted because of at least one obligatory parameter being null.\norganizationId = \(settings.organizationId ?? "null"), secretCode = \(settings.secretCode ?? "null")")
+            var whatIsNull = ""
+            if settings.organizationId == nil {
+                whatIsNull += "organizationId"
+            }
+            if settings.secretCode == nil {
+                whatIsNull += whatIsNull.count == 0 ? "secretCode" : "and secretCode"
+            }
+            Logger.TDErrorLog("creating sale tracking step. Aborted because of \(whatIsNull) being null)")
             return nil
         }
         
@@ -298,14 +294,14 @@ class URLHandler {
         let user: String
         if isEmail {
             if mail == nil {
-                Logger.TDLOG("no email on launch")
+                Logger.TDLog("no email on launch")
                 return nil
             } else {
                 user = mail!
             }
         } else {
             if IDFA == nil {
-                Logger.TDLOG("no IDFA on launch")
+                Logger.TDLog("no IDFA on launch")
                 return nil
             } else {
                 user = IDFA!
@@ -322,20 +318,22 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "event", value: eventId))
         queryItems.append(URLQueryItem(name: "orderNumber", value: orderNumber))
         queryItems.append(URLQueryItem(name: "orderValue", value: orderValue))
-        queryItems.append(URLQueryItem(name: "currency", value: "EUR"))
         queryItems.append(URLQueryItem(name: "checksum", value: checksum))
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
         if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
-        if reportInfo != nil {queryItems.append(URLQueryItem(name: "reportInfo", value: reportInfo?.toEncodedString()))}
+        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
+        if let info = reportInfo?.toEncodedString().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            queryItems.append(URLQueryItem(name: "reportInfo", value: info))
+        }
         components.queryItems = queryItems
         return components.url
     }
     
     private func buildTrackSalePltUrl(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo, isEmail: Bool) -> URL? {
         guard let organizationId = settings.organizationId else {
-            Logger.TDLOG("organizationId is null, func: \(#function)")
+            Logger.TDErrorLog("organizationId is null, func: \(#function)")
             return nil
         }
         if isEmail && settings.userEmail == nil {
@@ -366,8 +364,13 @@ class URLHandler {
         }
         queryParam.append("enc(3)")
         queryParam.append("basket(\(basketInfo.toEncodedString()))")
+        if let filtered = queryParam.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            print("before: \(queryParam)")
+            queryParam = filtered
+            print("after \(filtered)")
+        }
         let toReturn = URL.init(string: queryParam)
-        Logger.TDLOG("\(#function) returned \(toReturn.debugDescription)")
+        Logger.TDLog("\(#function) returned \(toReturn.debugDescription)")
         return toReturn
     }
 }
@@ -379,7 +382,7 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
     
     func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         if let url = request.url?.absoluteString {
-            Logger.TDLOG(url)
+            Logger.TDLog("\(#function) redirecting to \(url)")
             let components = URLComponents(string: url)
             guard let tduid = components?.queryItems?.filter({ (item) -> Bool in
                 item.name.lowercased() == "tduid"
@@ -389,11 +392,9 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
                 }
                 return
             }
-            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!])
             OfflineDataHandler.shared.requestComplete()
             DispatchQueue.main.async {
                 TradeDoublerSDKSettings.shared.tduid = tduid.value
-                NotificationCenter.default.post(toPost)
             }
         }
     }

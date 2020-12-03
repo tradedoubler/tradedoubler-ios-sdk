@@ -1,9 +1,16 @@
+//Copyright 2020 Tradedoubler
 //
-//  AppDelegate.swift
-//  TradeDoublerDemo
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
 //
-//  Created by Adam Tucholski on 28/10/2020.
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
 
 import UIKit
 import TradeDoublerSDK
@@ -15,6 +22,8 @@ let sdk_lead = "403765"
 let sdk_plt_default = "51"
 let sdk_group_1 = "3408"
 let sdk_group_2 = "3168"
+
+let tduidFound = Notification.Name.init(rawValue: "TDUIDFound")
 
 //defined segue IDs to avoid typos
 struct segueId {
@@ -34,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         
-        TDSDKInterface.shared.setTDUID(tduid)
+        tradeDoubler.tduid = tduid
         
         presentAlert(title: "TDUID", message: tduid)
     }
@@ -67,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         
         configureFramework()
-        tradeDoubler.simulateTDUIDClick(host: "clk.tradedoubler.com", path: "/click", parameters: parameters)
+        simulateTduidUrl("clk.tradedoubler.com", "/click", parameters)
         tradeDoubler.trackOpenApp()
         
         return true
@@ -93,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let tduid = components?.queryItems?.filter({ (item) -> Bool in
             item.name.lowercased() == "tduid"
         }).first?.value {
-            tradeDoubler.setTDUID(tduid)
+            tradeDoubler.tduid = tduid
         }
         return false
     }
@@ -109,6 +118,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFailToContinueUserActivityWithType userActivityType: String, error: Error) {
         print("failedactivity \(userActivity.debugDescription) error: \(error.localizedDescription)")
+    }
+    
+    func simulateTduidUrl(_ host: String, _ path: String, _ parameters: [String:String]) {
+        if let tduid = tradeDoubler.tduid {
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid])
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(toPost)
+            }
+        } else {
+            getTduid(host, path, parameters)
+        }
+        
+    }
+    
+    func getTduid(_ host: String, _ path: String, _ parameters: [String : String]) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = host
+        components.path = path
+        var queryItems = [URLQueryItem]()
+        for key in parameters.keys {
+            queryItems.append(URLQueryItem(name: key, value: parameters[key]))
+        }
+        if !queryItems.isEmpty {
+            components.queryItems = queryItems
+        }
+        let url = components.url!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let resp = response as? HTTPURLResponse {
+                if !(200...299 ~= resp.statusCode) {
+                    print("getting TDUID response code: \(resp.statusCode)")
+                }
+            }
+            if let error = error {
+                print("\(#function) , line: \(#line)\n \(error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
+}
+
+extension AppDelegate: URLSessionDelegate, URLSessionTaskDelegate {
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+        if let url = request.url?.absoluteString {
+            let components = URLComponents(string: url)
+            guard let tduid = components?.queryItems?.filter({ (item) -> Bool in
+                item.name.lowercased() == "tduid"
+            }).first else {
+                return
+            }
+            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid.value!])
+            DispatchQueue.main.async {
+                self.tradeDoubler.tduid = tduid.value
+                NotificationCenter.default.post(toPost)
+            }
+        }
     }
     
 }

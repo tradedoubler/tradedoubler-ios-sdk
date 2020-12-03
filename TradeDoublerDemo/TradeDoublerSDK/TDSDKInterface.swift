@@ -1,9 +1,16 @@
+//Copyright 2020 Tradedoubler
 //
-//  TDSDKInterface.swift
-//  TradeDoublerSDK
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
 //
-//  Created by Adam Tucholski on 28/10/2020.
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
 
 import Foundation
 
@@ -15,21 +22,8 @@ public class TDSDKInterface {
     private let settings = TradeDoublerSDKSettings.shared
     private let offlineManager = OfflineDataHandler.shared
     
-    public func simulateTDUIDClick(host: String, path: String, parameters: [String:String]) {
-        if let tduid = settings.tduid {
-            let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [tduidKey : tduid])
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(toPost)
-            }
-        } else {
-            simulateFirstClick(host: host, path: path, parameters: parameters)
-        }
-        
-    }
-    
     func login(email: String) {
         settings.userEmail = email
-        //set email basically
     }
     
     func setTracking(enabled: Bool) {
@@ -40,7 +34,11 @@ public class TDSDKInterface {
         urlHandler.trackSale(eventId: eventId, currency: currency, reportInfo: reportInfo)
     }
     
-    public func trackSalePlt(saleEventId: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
+    public func trackSalePlt(currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
+        trackSalePlt(saleEventId: Constants.DEFAULT_SALE_EVENT,  currency: currency, voucherCode: voucherCode, basketInfo: basketInfo)
+    }
+    
+    public func trackSalePlt(saleEventId: String = Constants.DEFAULT_SALE_EVENT, currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
         urlHandler.trackSalePlt(saleEventId: saleEventId,  currency: currency, voucherCode: voucherCode, basketInfo: basketInfo)
     }
     
@@ -55,10 +53,6 @@ public class TDSDKInterface {
     
     public func trackInstall(appInstallEventId: String) {
         urlHandler.trackInstall(appInstallEventId: appInstallEventId)
-    }
-    
-    func simulateFirstClick(host: String, path: String, parameters: [String:String]) {
-        urlHandler.getTduid(host: host, path: path, parameters: parameters)//recognize url type, set or read tduid
     }
     
     public func setEmail(_ email: String) {
@@ -77,18 +71,20 @@ public class TDSDKInterface {
         }
     }
     
-    public func setTDUID(_ TDUID: String) {
-        settings.tduid = TDUID
+    public var tduid: String? {
+        get {
+            return settings.tduid
+        }
+        set {
+            settings.tduid = newValue
+        }
     }
     
     public func organizationId() -> String? {
         return settings.organizationId
     }
     /// email & IDFA are configured in separate methods due to protection level
-    public func configure(tduid: String? = nil, organizationId: String? = nil, secretCode: String? = nil) {
-        if tduid != nil {
-            settings.tduid = tduid
-        }
+    public func configure(organizationId: String? = nil, secretCode: String? = nil) {
         if organizationId != nil {
             settings.organizationId = organizationId
         }

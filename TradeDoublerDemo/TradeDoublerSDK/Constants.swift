@@ -14,20 +14,6 @@
 
 import Foundation
 
-class Logger {
-    public static var isDebug = true
-    
-    public static func setDebug(_ flag: Bool) {
-        isDebug = flag
-    }
-    
-    public static func TDLog(_ string: String) {
-        if isDebug {
-            print(string)
-        }
-    }
-    
-    public static func TDErrorLog(_ error: String) {
-        print("📕 Error: \(error))")
-    }
+public struct Constants {
+    public static let DEFAULT_SALE_EVENT = "51"
 }

@@ -13,6 +13,7 @@
 		49340202256544530038B12A /* InternalLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49340201256544530038B12A /* InternalLogger.swift */; };
 		495133802577C49F00CCC3C8 /* SaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951337F2577C49F00CCC3C8 /* SaleViewController.swift */; };
 		495133862577C4BF00CCC3C8 /* SalePLTViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */; };
+		4951339A2578FAB000CCC3C8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495133992578FAB000CCC3C8 /* Constants.swift */; };
 		495B2E452560418200BED401 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495B2E442560418200BED401 /* SystemConfiguration.framework */; };
 		49A618582549B35F00399334 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618572549B35F00399334 /* AppDelegate.swift */; };
 		49A6185A2549B35F00399334 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618592549B35F00399334 /* SceneDelegate.swift */; };
@@ -35,7 +36,6 @@
 		49F91ECA2575B11500270E11 /* BasketInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F91EC92575B11500270E11 /* BasketInfo.swift */; };
 		49F91ED02576545000270E11 /* OfflineDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F91ECF2576545000270E11 /* OfflineDataHandler.swift */; };
 		49F91ED92576AC4C00270E11 /* Data+AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F91ED82576AC4C00270E11 /* Data+AES.swift */; };
-		49FD58912563F7CE006F6286 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD58902563F7CE006F6286 /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +96,7 @@
 		49340201256544530038B12A /* InternalLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalLogger.swift; sourceTree = "<group>"; };
 		4951337F2577C49F00CCC3C8 /* SaleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleViewController.swift; sourceTree = "<group>"; };
 		495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalePLTViewController.swift; sourceTree = "<group>"; };
+		495133992578FAB000CCC3C8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		495B2E2F25603DEB00BED401 /* String+SHA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA.swift"; sourceTree = "<group>"; };
 		495B2E3A25603EFF00BED401 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		495B2E442560418200BED401 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -128,7 +129,6 @@
 		49F91EC92575B11500270E11 /* BasketInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketInfo.swift; sourceTree = "<group>"; };
 		49F91ECF2576545000270E11 /* OfflineDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDataHandler.swift; sourceTree = "<group>"; };
 		49F91ED82576AC4C00270E11 /* Data+AES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+AES.swift"; sourceTree = "<group>"; };
-		49FD58902563F7CE006F6286 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,13 +255,13 @@
 				49A618B52549B55400399334 /* TDSDKInterface.swift */,
 				49A618BF2549B9D400399334 /* URLHandler.swift */,
 				49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */,
-				49FD58902563F7CE006F6286 /* Notifications.swift */,
 				49340201256544530038B12A /* InternalLogger.swift */,
 				49D4BC56256F1D510030E468 /* String+UUID.swift */,
 				49F91EBF257459CE00270E11 /* ReportInfo.swift */,
 				49F91EC92575B11500270E11 /* BasketInfo.swift */,
 				49F91ECF2576545000270E11 /* OfflineDataHandler.swift */,
 				49F91ED82576AC4C00270E11 /* Data+AES.swift */,
+				495133992578FAB000CCC3C8 /* Constants.swift */,
 			);
 			path = TradeDoublerSDK;
 			sourceTree = "<group>";
@@ -507,7 +507,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FD58912563F7CE006F6286 /* Notifications.swift in Sources */,
 				49E8EEC22563C394004F9069 /* TradeDoublerSDKSettings.swift in Sources */,
 				49F91ED02576545000270E11 /* OfflineDataHandler.swift in Sources */,
 				49340202256544530038B12A /* InternalLogger.swift in Sources */,
@@ -518,6 +517,7 @@
 				49F91EC0257459CE00270E11 /* ReportInfo.swift in Sources */,
 				49F91ECA2575B11500270E11 /* BasketInfo.swift in Sources */,
 				49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */,
+				4951339A2578FAB000CCC3C8 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
