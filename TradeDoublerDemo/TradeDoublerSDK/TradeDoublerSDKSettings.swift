@@ -91,29 +91,29 @@ class TradeDoublerSDKSettings {
         }
     }
     
-    var orderNumber: String { //internal for framework, cannot be set
-        get {
-            return "\(UserDefaults.standard.integer(forKey: Constants.orderNo))"
-        }
-        
-        set {
-            var temp = UserDefaults.standard.integer(forKey: Constants.orderNo)
-            temp = temp + 1
-            UserDefaults.standard.setValue(temp, forKey: Constants.orderNo)
-        }
-    }
-    
-    var leadNumber: String { //internal for framework, cannot be set
-        get {
-            return "\(UserDefaults.standard.integer(forKey: Constants.leadNo))"
-        }
-        
-        set {
-            var temp = UserDefaults.standard.integer(forKey: Constants.leadNo)
-            temp = temp + 1
-            UserDefaults.standard.setValue(temp, forKey: Constants.leadNo)
-        }
-    }
+//    var orderNumber: String { //internal for framework, cannot be set
+//        get {
+//            return "\(UserDefaults.standard.integer(forKey: Constants.orderNo))"
+//        }
+//        
+//        set {
+//            var temp = UserDefaults.standard.integer(forKey: Constants.orderNo)
+//            temp = temp + 1
+//            UserDefaults.standard.setValue(temp, forKey: Constants.orderNo)
+//        }
+//    }
+//    
+//    var leadNumber: String { //internal for framework, cannot be set
+//        get {
+//            return "\(UserDefaults.standard.integer(forKey: Constants.leadNo))"
+//        }
+//        
+//        set {
+//            var temp = UserDefaults.standard.integer(forKey: Constants.leadNo)
+//            temp = temp + 1
+//            UserDefaults.standard.setValue(temp, forKey: Constants.leadNo)
+//        }
+//    }
     
     private init() {}
     

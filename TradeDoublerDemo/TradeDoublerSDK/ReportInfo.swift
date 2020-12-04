@@ -24,18 +24,24 @@ public class ReportInfo {
         reportEntries.append(entry)
     }
     
+    public func isEmpty() -> Bool {
+        reportEntries.isEmpty
+    }
+    
     func toEncodedString() -> String {
-        return reportEntries.map( {
+        reportEntries.map( {
             $0.toEncodedString()
         }).joined(separator: "|")
     }
     
-    func orderValue() -> String {
-        var toReturn = Double(0)
-        for entry in reportEntries {
-            toReturn += entry.price * Double(entry.quantity)
+    public var orderValue: String {
+        get {
+            var toReturn = Double(0)
+            for entry in reportEntries {
+                toReturn += entry.price * Double(entry.quantity)
+            }
+            return String(format: "%.2f", toReturn)
         }
-        return String(format: "%.2f", toReturn)
     }
 }
 

@@ -66,43 +66,91 @@ class URLHandler {
         task.resume()
     }
     
-    //get email & idfa from storage
-    func trackOpenApp() {
+    func trackOpenApp() -> Bool {
+        var URLwasCreated = false
         if !isTrackingEnabled {
-            return
+            return URLwasCreated
         }
         
         if settings.tduid == nil {
-            return
+            return URLwasCreated
         }
         
         if let emailUrl = buildAppLaunchUrl(isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
+            URLwasCreated = true
         }
         if let IDFAUrl = buildAppLaunchUrl(isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
+            URLwasCreated = true
         }
+        return URLwasCreated
     }
     
     func trackInstall(appInstallEventId: String) -> Bool {
-        var toReturn: Bool = false
+        var URLwasCreated: Bool = false
         if !isTrackingEnabled || UserDefaults.standard.bool(forKey: Constants.installedKey) {
-            return toReturn
+            return URLwasCreated
         }
         let leadNumber = generateRandomString() + "\(Int64(Date().timeIntervalSince1970))"
         
         if let emailUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
             UserDefaults.standard.set(true, forKey: Constants.installedKey)
-            toReturn = true
+            URLwasCreated = true
         }
         
         if let IDFAUrl = buildTrackInstallUrl(appInstallEventId: appInstallEventId, leadNumber: leadNumber, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
             UserDefaults.standard.set(true, forKey: Constants.installedKey)
-            toReturn = true
+            URLwasCreated = true
         }
-        return toReturn
+        return URLwasCreated
+    }
+    
+    func trackSale(_ eventId: String, _ orderNumber: String, _ orderValue: String, _ currency: String?, _ voucher: String?, _ reportInfo: ReportInfo?) -> Bool {
+        var URLwasCreated = false
+        
+        if !isTrackingEnabled {
+            return URLwasCreated
+        }
+        
+        let internalVoucher: String?
+        if voucher != nil {
+            internalVoucher = voucher!.isEmpty ? nil : voucher
+        } else {
+            internalVoucher = voucher
+        }
+        
+        if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: true) {
+            OfflineDataHandler.shared.addRequest(emailUrl)
+            print("MAIL \(emailUrl.absoluteString)")
+            URLwasCreated = true
+        }
+        
+        if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: false) {
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
+            URLwasCreated = true
+        }
+        return URLwasCreated
+    }
+    
+    func trackSalePlt(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) -> Bool {
+        var URLwasCreated = false
+        if !isTrackingEnabled {
+            return URLwasCreated
+        }
+        
+        if let emailUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
+            OfflineDataHandler.shared.addRequest(emailUrl)
+            URLwasCreated = true
+        }
+        
+        if let IDFAUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: false) {
+            OfflineDataHandler.shared.addRequest(IDFAUrl)
+            URLwasCreated = true
+        }
+        return URLwasCreated
     }
     
     private func buildTrackInstallUrl(appInstallEventId: String, leadNumber: String, isEmail: Bool) -> URL? {
@@ -127,58 +175,21 @@ class URLHandler {
         return components.url
     }
     
-    
-    func trackSale(eventId: String, currency: String?, voucher: String? = nil, reportInfo: ReportInfo?) {
+    func trackLead(eventId: String, leadId: String) -> Bool {
+        var URLwasCreated = false
         if !isTrackingEnabled {
-            return
+            return URLwasCreated
         }
-        let orderValue = reportInfo?.orderValue() ?? "\(arc4random_uniform(10000) + 1)"
-        let internalVoucher: String?
-        if voucher != nil {
-            internalVoucher = voucher!.isEmpty ? nil : voucher
-        } else {
-            internalVoucher = voucher
-        }
-        
-        let orderNumber = settings.orderNumber
-        settings.orderNumber = ""
-        
-        if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: true) {
+        if let emailUrl = buildTrackLeadUrl(eventId: eventId, leadId: leadId, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
+            URLwasCreated = true
         }
         
-        
-        
-        if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: false) {
+        if let IDFAUrl = buildTrackLeadUrl(eventId: eventId, leadId: leadId, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
+            URLwasCreated = true
         }
-    }
-    
-    func trackSalePlt(saleEventId: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) {
-        if !isTrackingEnabled {
-            return
-        }
-        let orderNumber = settings.orderNumber
-        settings.orderNumber = ""
-        if let emailUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
-            OfflineDataHandler.shared.addRequest(emailUrl)
-        }
-        
-        if let IDFAUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: false) {
-            OfflineDataHandler.shared.addRequest(IDFAUrl)
-        }
-        
-    }
-    
-    func trackLead(eventId: String) {
-        if !isTrackingEnabled {
-            return
-        }
-        guard let emailUrl = buildTrackLeadUrl(eventId: eventId, isEmail: true) else {return}
-        OfflineDataHandler.shared.addRequest(emailUrl)
-        
-        guard let IDFAUrl = buildTrackLeadUrl(eventId: eventId, isEmail: false) else {return}
-        OfflineDataHandler.shared.addRequest(IDFAUrl)
+        return URLwasCreated
     }
     
     func countChecksum(secretCode: String, orderNumber: String, orderValue: String) -> String {
@@ -215,7 +226,6 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
         queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
-        settings.orderNumber = ""//increment
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
@@ -272,7 +282,7 @@ class URLHandler {
         return components.url
     }
     
-    private func buildTrackLeadUrl(eventId: String, isEmail: Bool) -> URL? {
+    private func buildTrackLeadUrl(eventId: String, leadId: String, isEmail: Bool) -> URL? {
         var components = URLComponents()
         guard let organizationId = settings.organizationId else {
             Logger.TDErrorLog("creating sale tracking step. Aborted because organizationId is null")
@@ -284,8 +294,7 @@ class URLHandler {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "organization", value: organizationId))
         queryItems.append(URLQueryItem(name: "event", value: eventId))
-        queryItems.append(URLQueryItem(name: "leadNumber", value: settings.leadNumber))
-        settings.leadNumber = ""
+        queryItems.append(URLQueryItem(name: "leadNumber", value: leadId))
         queryItems.append(URLQueryItem(name: "extid", value: isEmail ? settings.userEmail : settings.IDFA))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         components.queryItems = queryItems
@@ -340,7 +349,9 @@ class URLHandler {
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
         if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
-        if let info = reportInfo?.toEncodedString().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), !info.isEmpty {
+        var extendedSet = CharacterSet.urlQueryAllowed
+        extendedSet.insert("|")//needed in this query
+        if let info = reportInfo?.toEncodedString().addingPercentEncoding(withAllowedCharacters: extendedSet), !info.isEmpty {
             queryItems.append(URLQueryItem(name: "reportInfo", value: info))
         }
         components.queryItems = queryItems
@@ -366,7 +377,7 @@ class URLHandler {
         }
         var checksum: String? = nil
         if let secretCode = settings.secretCode {
-            checksum = countChecksum(secretCode: secretCode, orderNumber: orderNumber, orderValue: basketInfo.orderValue())
+            checksum = countChecksum(secretCode: secretCode, orderNumber: orderNumber, orderValue: basketInfo.orderValue)
         }
         var queryParam = "https://tbs.tradedoubler.com/report?o(\(organizationId))"
         queryParam.append("event(\(saleEventId))")

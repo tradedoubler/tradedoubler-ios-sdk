@@ -67,7 +67,7 @@ class TradeDoublerSDKTests: XCTestCase {
     
     func testTrackLead() {
         let exp = expectation(description: "wait for error")
-        tradeDoublerSdk.trackLead(eventId: sdk_lead)
+        tradeDoublerSdk.trackLead(eventId: sdk_lead, leadId: "\(arc4random_uniform(UINT32_MAX))")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 15) { [self] in
             if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
                 exp.fulfill()}
@@ -77,9 +77,10 @@ class TradeDoublerSDKTests: XCTestCase {
     
     func testTrackSale() {
         let exp = expectation(description: "wait for error")
-        let entry1 = ReportEntry(id: "B07HAq", productName: "iOSCar", price: 7331.15, quantity: 2)
-        let entry2 = ReportEntry(id: "qB3Q", productName: "tea", price: 3.14, quantity: 1)
-        tradeDoublerSdk.trackSale(eventId: sdk_sale, currency: "EUR", voucher: "test-voucher", reportInfo: ReportInfo.init(entries: [entry1, entry2]))
+        let reportInfo = ReportInfo(entries: [ReportEntry(id: "\(2432)", productName: "iOSCar", price: 7331.15, quantity: 2),
+                                              ReportEntry(id: "\(7334)", productName: "tea", price: 3.14, quantity: 1)
+        ])
+        tradeDoublerSdk.trackSale(eventId: sdk_sale, orderNumber: "\(arc4random_uniform(UINT32_MAX))", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: "test-voucher", reportInfo: reportInfo)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 15) { [self] in
             if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
                 exp.fulfill()}
@@ -91,7 +92,7 @@ class TradeDoublerSDKTests: XCTestCase {
         let exp = expectation(description: "wait for error")
         let entry1 = BasketEntry(group: sdk_group_1, id: "0BlV", productName: "iOSCar", price: 7331.15, quantity: 2)
         let entry2 = BasketEntry(group: sdk_group_2, id: "CDA14", productName: "tea", price: 3.14, quantity: 1)
-        tradeDoublerSdk.trackSalePlt(currency: "USD", voucherCode: "test-voucher", basketInfo: BasketInfo.init(entries: [entry1, entry2]))
+        tradeDoublerSdk.trackSalePlt(orderNumber: "\(arc4random_uniform(UINT32_MAX))", currency: "USD", voucherCode: "test-voucher", basketInfo: BasketInfo.init(entries: [entry1, entry2]))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 15) { [self] in
             if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
                 exp.fulfill()}

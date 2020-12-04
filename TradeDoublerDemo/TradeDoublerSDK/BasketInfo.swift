@@ -24,18 +24,24 @@ public class BasketInfo {
         basketEntries.append(entry)
     }
     
+    public func isEmpty() -> Bool {
+        basketEntries.isEmpty
+    }
+    
     func toEncodedString() -> String {
-        return basketEntries.map( {
+        basketEntries.map( {
             $0.toEncodedString()
         }).joined(separator: "")
     }
     
-    func orderValue() -> String {
-        var toReturn = Double(0)
-        for entry in basketEntries {
-            toReturn += entry.price * Double(entry.quantity)
+    public var orderValue: String {
+        get {
+            var toReturn = Double(0)
+            for entry in basketEntries {
+                toReturn += entry.price * Double(entry.quantity)
+            }
+            return String(format: "%.2f", toReturn)
         }
-        return String(format: "%.2f", toReturn)
     }
 }
 
