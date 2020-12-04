@@ -19,8 +19,6 @@ public struct Constants {
     static let emailKey = "mail"
     static let IDFAKey = "idfa"
     static let installedKey = "already_installed"
-    static let orderNo = "orderNo"
-    static let leadNo = "leadNo"
     static let organizationIdKey = "organizationIdentifier"
     static let secretKey = "userSecret"
     static let trackingKey = "TDisTrackingEnabled"
