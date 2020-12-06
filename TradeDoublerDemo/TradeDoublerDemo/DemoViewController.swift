@@ -34,12 +34,12 @@ class DemoViewController: UIViewController {
     }
     @IBAction func switchLogging(_ sender: UISwitch) {
         UserDefaults.standard.setValue(sender.isOn, forKey: debugKey)
-        tradeDoubler.isDebug = sender.isOn
+        tradeDoubler.isLoggingEnabled = sender.isOn
     }
     
     @IBAction func switchTracking(_ sender: UISwitch) {
         UserDefaults.standard.setValue(sender.isOn, forKey: trackingKey)
-        tradeDoubler.isTracking = sender.isOn
+        tradeDoubler.isTrackingEnabled = sender.isOn
     }
     
     override func viewDidLoad() {
@@ -56,9 +56,9 @@ class DemoViewController: UIViewController {
     @objc func setOutlets() {
         UserDefaults.standard.bool(forKey: debugKey)
         trackingSwitch.isOn = UserDefaults.standard.bool(forKey: trackingKey)
-        tradeDoubler.isTracking = trackingSwitch.isOn
+        tradeDoubler.isTrackingEnabled = trackingSwitch.isOn
         loggingSwitch.isOn = UserDefaults.standard.bool(forKey: debugKey)
-        tradeDoubler.isDebug = loggingSwitch.isOn
+        tradeDoubler.isLoggingEnabled = loggingSwitch.isOn
         idfaLabel.text = ASIdentifierManager.shared().advertisingIdentifier.uuidString
         if idfaLabel.text?.isEmpty != false {//is empty or nil
             idfaLabel.text = "(null)"

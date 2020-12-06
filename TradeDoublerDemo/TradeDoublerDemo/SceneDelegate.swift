@@ -64,8 +64,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let defaults = UserDefaults.standard
         tradeDoubler.email = "test24588444@tradedoubler.com"
         tradeDoubler.configure(defaults.string(forKey: organizationIdKey), defaults.string(forKey: secretKey))
-        tradeDoubler.isTracking = defaults.bool(forKey: trackingKey)
-        tradeDoubler.isDebug = defaults.bool(forKey: debugKey)
+        tradeDoubler.isTrackingEnabled = defaults.bool(forKey: trackingKey)
+        tradeDoubler.isLoggingEnabled = defaults.bool(forKey: debugKey)
     }
     
     func handleOpeningUrl(URLContexts: Set<UIOpenURLContext>, onLaunch: Bool) {

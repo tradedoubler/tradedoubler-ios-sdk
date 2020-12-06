@@ -62,7 +62,7 @@ class SalePLTViewController: UIViewController {
             groupTxt = sdk_group_2
         }
         let newEntry = BasketEntry.init(group: groupTxt!, id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
-        if tradeDoubler.isDebug {
+        if tradeDoubler.isLoggingEnabled {
             print("Added \(newEntry.description)")
         }
         entries.append(newEntry)

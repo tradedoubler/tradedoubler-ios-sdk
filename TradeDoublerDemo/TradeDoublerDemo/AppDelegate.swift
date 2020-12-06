@@ -62,10 +62,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureFramework() {
         let defaults = UserDefaults.standard
         tradeDoubler.email = "test24588444@tradedoubler.com"
-        let defVal = "(null)"
-        tradeDoubler.configure(defaults.string(forKey: organizationIdKey), defaults.string(forKey: secretKey))
-        tradeDoubler.isTracking = defaults.bool(forKey: trackingKey)
-        tradeDoubler.isDebug = defaults.bool(forKey: debugKey)
+        TDSDKInterface.shared.configure(defaults.string(forKey: organizationIdKey), defaults.string(forKey: secretKey))
+        tradeDoubler.isTrackingEnabled = defaults.bool(forKey: trackingKey)
+        tradeDoubler.isLoggingEnabled = defaults.bool(forKey: debugKey)
+        
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {

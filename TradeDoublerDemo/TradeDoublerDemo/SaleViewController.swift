@@ -68,7 +68,7 @@ class SaleViewController: UIViewController {
         }
         let newEntry = ReportEntry(id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
         entries.append(newEntry)
-        if tradeDoubler.isDebug {
+        if tradeDoubler.isLoggingEnabled {
             print("Added \(newEntry.description)")
         }
         nameField.text = ""

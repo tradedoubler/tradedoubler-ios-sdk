@@ -62,7 +62,7 @@ public class TDSDKInterface {
     /**
      If set to false only error logs will appear in console
      */
-    public var isDebug: Bool {
+    public var isLoggingEnabled: Bool {
         get {
             settings.isDebug
         }
@@ -74,7 +74,7 @@ public class TDSDKInterface {
     /**
      Framework internal setting. If set to false won't generate tracking requests. If true will comply to system settings (wont use IDFA if tracking limited)
      */
-    public var isTracking: Bool {
+    public var isTrackingEnabled: Bool {
         get {
             settings.isTrackingEnabled
         }
@@ -102,10 +102,6 @@ public class TDSDKInterface {
         set {
             settings.secretCode = newValue
         }
-    }
-    
-    func login(email: String) {
-        settings.userEmail = email
     }
     
     /**
