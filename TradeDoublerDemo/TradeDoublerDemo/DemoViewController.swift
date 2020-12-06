@@ -21,27 +21,69 @@ class DemoViewController: UIViewController {
 
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let tradeDoubler = TDSDKInterface.shared
+    
+    @IBOutlet weak var idfaLabel: UILabel!
+    
+    @IBOutlet weak var tduidLabel: UILabel!
+    @IBOutlet weak var loggingSwitch: UISwitch!
+    
+    @IBOutlet weak var trackingSwitch: UISwitch!
+
+    @IBAction func showSettings(_ sender: Any) {
+        UIApplication.shared.open(URL(string:  UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+    }
+    @IBAction func switchLogging(_ sender: UISwitch) {
+        UserDefaults.standard.setValue(sender.isOn, forKey: debugKey)
+        tradeDoubler.isDebug = sender.isOn
+    }
+    
+    @IBAction func switchTracking(_ sender: UISwitch) {
+        UserDefaults.standard.setValue(sender.isOn, forKey: trackingKey)
+        tradeDoubler.isTracking = sender.isOn
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(setOutlets), name: UIApplication.willEnterForegroundNotification, object: nil)
+        setOutlets()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setOutlets()
     }
 
+    @objc func setOutlets() {
+        UserDefaults.standard.bool(forKey: debugKey)
+        trackingSwitch.isOn = UserDefaults.standard.bool(forKey: trackingKey)
+        tradeDoubler.isTracking = trackingSwitch.isOn
+        loggingSwitch.isOn = UserDefaults.standard.bool(forKey: debugKey)
+        tradeDoubler.isDebug = loggingSwitch.isOn
+        idfaLabel.text = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        if idfaLabel.text?.isEmpty != false {//is empty or nil
+            idfaLabel.text = "(null)"
+        } else if idfaLabel.text == "00000000-0000-0000-0000-000000000000" {
+            idfaLabel.text = "(null)"
+        }
+        tduidLabel.text = tradeDoubler.tduid ?? "(null)"
+    }
+    
     @IBAction func sdkSale(_ sender: Any) {
         performSegue(withIdentifier: segueId.segueToSale, sender: self)
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
-        tradeDoubler.trackSale(eventId: sdk_sale_2, currency: nil, voucher: nil, reportInfo: nil)
+        tradeDoubler.trackSale(eventId: sdk_sale_2, orderNumber: "\(arc4random_uniform(UINT32_MAX))", orderValue: "\(arc4random_uniform(10000) + 1)", currency: nil, voucherCode: nil, reportInfo: nil)
     }
     
     @IBAction func sdkSalePlt(_ sender: Any) {
         performSegue(withIdentifier: segueId.segueToSalePLT, sender: self)
     }
     @IBAction func sdkLead(_ sender: Any) {
-        tradeDoubler.trackLead(eventId: sdk_lead)
+        tradeDoubler.trackLead(eventId: sdk_lead, leadId: "\(arc4random_uniform(UINT32_MAX))")
     }
     
     @IBAction func useIDFA(_ sender: Any) {
-        //ask for IDFA right after
         if UserDefaults.standard.string(forKey: "advertisingIdentifier") == nil {
             if #available(iOS 14.0, *) {
                 requestPermission()
@@ -62,10 +104,11 @@ class DemoViewController: UIViewController {
                 case .authorized:
                     // Tracking authorization dialog was shown
                     // and we are authorized
-                    print("Authorized")
                     DispatchQueue.main.async { [weak self] in
                         let advertisingIdentifier = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                         self?.tradeDoubler.IDFA = advertisingIdentifier
+                        print("Authorized, IDFA = \(advertisingIdentifier)")
+                        self?.setOutlets()
                     }
                 
                     // Now that we are authorized we can get the IDFA
@@ -74,7 +117,6 @@ class DemoViewController: UIViewController {
                    // Tracking authorization dialog was
                    // shown and permission is denied
                      print("Denied")
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 case .notDetermined:
                         // Tracking authorization dialog has not been shown
                         print("Not Determined")

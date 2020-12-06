@@ -22,8 +22,26 @@ class SaleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        currencyField.placeholder = "ISO-4217 code"
+        voucherField.placeholder = "voucher code"
+        nameField.placeholder = "name"
+        priceField.placeholder = "price"
+        quantityField.placeholder = "quantity"
     }
     
+    func setOutlets() {
+        currencyField.text = UserDefaults.standard.string(forKey: defaultCurrencyKey)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setOutlets()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setOutlets()
+    }
     
     @IBOutlet weak var currencyField: UITextField!
     @IBOutlet weak var voucherField: UITextField!
@@ -32,9 +50,27 @@ class SaleViewController: UIViewController {
     @IBOutlet weak var quantityField: UITextField!
     
     @IBAction func addItem(_ sender: Any) {
+        var fail = false
+        if (Double(priceField.text ?? "") ?? 0) <= 0 {
+            priceField.text = "0.01"
+            fail = true
+        }
+        if (Int(quantityField.text ?? "") ?? 0) <= 0 {
+            quantityField.text = "1"
+            fail = true
+        }
+        if nameField.text?.isEmpty != false {
+            nameField.text = "empty"
+            fail = true
+        }
+        if fail {
+            return
+        }
         let newEntry = ReportEntry(id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
         entries.append(newEntry)
-        print("Added \(newEntry.description)")
+        if tradeDoubler.isDebug {
+            print("Added \(newEntry.description)")
+        }
         nameField.text = ""
         priceField.text = ""
         quantityField.text = ""

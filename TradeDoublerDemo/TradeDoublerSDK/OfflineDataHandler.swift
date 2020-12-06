@@ -22,7 +22,7 @@ class OfflineDataHandler {
     private let manager = FileManager()
     static let shared = OfflineDataHandler()
     let queue = OperationQueue()
-    private var processing = false
+    var processing = false
     var requests = [String]()
     var currentRequest: String?
     var lastError: Error?
@@ -58,7 +58,7 @@ class OfflineDataHandler {
         return toReturn
     }
     
-    func encryptWithAes(_ json: String) -> Data {
+    private func encryptWithAes(_ json: String) -> Data {
         guard let secret = json.data(using: .utf8) else {
             Logger.TDLog("encrypting \(json) failed in \(#function)")
             return Data()
@@ -70,7 +70,7 @@ class OfflineDataHandler {
         return encr
     }
     
-    func decryptWithAes(_ data: Data?) -> [String] {
+    private func decryptWithAes(_ data: Data?) -> [String] {
         guard let data = data else {
             Logger.TDLog("No data on decrypt in \(#function)")
             return []
@@ -122,7 +122,7 @@ class OfflineDataHandler {
         }
     }
     
-    private func readRequest() {
+    func readRequest() {
         addOperation { [weak self] in
             guard let self = self else {return}
             if self.processing {

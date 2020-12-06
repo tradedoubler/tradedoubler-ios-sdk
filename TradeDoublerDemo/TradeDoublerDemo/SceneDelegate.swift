@@ -13,17 +13,17 @@
 //limitations under the License.
 
 import UIKit
+import TradeDoublerSDK
 
 @available(iOS 13, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let tradeDoubler = TDSDKInterface.shared
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        configureFramework()
+        handleOpeningUrl(URLContexts: connectionOptions.urlContexts, onLaunch: true)
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 
@@ -47,6 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        configureFramework()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -56,7 +57,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        print("oppennni \(URLContexts.count)")
+        handleOpeningUrl(URLContexts: URLContexts, onLaunch: false)
+    }
+    
+    func configureFramework() {
+        let defaults = UserDefaults.standard
+        tradeDoubler.email = "test24588444@tradedoubler.com"
+        tradeDoubler.configure(defaults.string(forKey: organizationIdKey), defaults.string(forKey: secretKey))
+        tradeDoubler.isTracking = defaults.bool(forKey: trackingKey)
+        tradeDoubler.isDebug = defaults.bool(forKey: debugKey)
+    }
+    
+    func handleOpeningUrl(URLContexts: Set<UIOpenURLContext>, onLaunch: Bool) {
+        for context in URLContexts {
+            let url = context.url
+            let components = URLComponents(string: url.relativeString)
+            if let tduid = components?.queryItems?.filter({ (item) -> Bool in
+                item.name.lowercased() == "tduid"
+            }).first?.value {
+                tradeDoubler.tduid = tduid
+                DispatchQueue.main.asyncAfter(deadline: .now() + (onLaunch ? 1 : 0)) {
+                    let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(tduid)", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
+                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
+                }
+                break
+            }
+        }
     }
     
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {

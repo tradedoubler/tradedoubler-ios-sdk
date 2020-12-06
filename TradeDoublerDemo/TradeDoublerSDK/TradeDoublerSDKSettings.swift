@@ -44,15 +44,11 @@ class TradeDoublerSDKSettings {
         }
     }
     
-    var organizationId: String? {
-        get {
-            return UserDefaults.standard.string(forKey: Constants.organizationIdKey)
-        }
-        
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: Constants.organizationIdKey)
-        }
-    }
+    var isDebug = true
+
+    var isTrackingEnabled = true
+    
+    var organizationId: String? = nil
     
     //set "plain" email, will be saved securely. Returns sha or nil on read
     var userEmail: String? {
@@ -64,14 +60,7 @@ class TradeDoublerSDKSettings {
         }
     }
     
-    var secretCode: String? {
-        get {
-            UserDefaults.standard.string(forKey: Constants.secretKey)
-        }
-        set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.secretKey)
-        }
-    }
+    var secretCode: String? = nil
     
     ///set "plain" IDFA, will be saved securely if not null (zeros). Returns sha or nil on read
     var IDFA: String? {
@@ -87,33 +76,13 @@ class TradeDoublerSDKSettings {
             return UserDefaults.standard.string(forKey: Constants.IDFAKey)
         }
         set {
-            UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.IDFAKey)
+            if let new = newValue, !new.isNilUUIDString() {
+                UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.IDFAKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Constants.IDFAKey)
+            }
         }
     }
-    
-//    var orderNumber: String { //internal for framework, cannot be set
-//        get {
-//            return "\(UserDefaults.standard.integer(forKey: Constants.orderNo))"
-//        }
-//        
-//        set {
-//            var temp = UserDefaults.standard.integer(forKey: Constants.orderNo)
-//            temp = temp + 1
-//            UserDefaults.standard.setValue(temp, forKey: Constants.orderNo)
-//        }
-//    }
-//    
-//    var leadNumber: String { //internal for framework, cannot be set
-//        get {
-//            return "\(UserDefaults.standard.integer(forKey: Constants.leadNo))"
-//        }
-//        
-//        set {
-//            var temp = UserDefaults.standard.integer(forKey: Constants.leadNo)
-//            temp = temp + 1
-//            UserDefaults.standard.setValue(temp, forKey: Constants.leadNo)
-//        }
-//    }
     
     private init() {}
     

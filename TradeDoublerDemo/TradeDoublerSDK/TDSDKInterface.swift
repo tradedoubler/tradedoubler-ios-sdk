@@ -46,7 +46,7 @@ public class TDSDKInterface {
         }
     }
     /**
-     Apple identifier for advertising. If user limited Ad tracking, refused authorization on iOS 14.0+ or IDFA was generated on simulator it will be 00000000-0000-0000-000000000000 (nil IDFA string). Otherwise stored as SHA hash string. In this case this metod will return nil and framework won't generate requests with IDFA
+     Apple identifier for advertising. If user limited Ad tracking, refused authorization on iOS 14.0+ or IDFA was generated on simulator it will be 00000000-0000-0000-0000-000000000000 (nil IDFA string). Otherwise stored as SHA hash string. In this case this metod will return nil and framework won't generate requests with IDFA
      */
     public var IDFA: String? {
         get {
@@ -64,10 +64,10 @@ public class TDSDKInterface {
      */
     public var isDebug: Bool {
         get {
-            Logger.isDebug
+            settings.isDebug
         }
         set {
-            Logger.isDebug = newValue
+            settings.isDebug = newValue
         }
     }
     
@@ -76,10 +76,10 @@ public class TDSDKInterface {
      */
     public var isTracking: Bool {
         get {
-            urlHandler.isTrackingEnabled
+            settings.isTrackingEnabled
         }
         set {
-            urlHandler.isTrackingEnabled = newValue
+            settings.isTrackingEnabled = newValue
         }
     }
     
@@ -92,6 +92,15 @@ public class TDSDKInterface {
         }
         set {
             settings.organizationId = newValue
+        }
+    }
+    
+    public var secretCode: String? {
+        get {
+            settings.secretCode
+        }
+        set {
+            settings.secretCode = newValue
         }
     }
     

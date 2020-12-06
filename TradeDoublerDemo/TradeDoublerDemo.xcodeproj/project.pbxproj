@@ -30,6 +30,7 @@
 		49A618A52549B45400399334 /* TradeDoublerSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 49A6188F2549B45300399334 /* TradeDoublerSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		49A618B62549B55400399334 /* TDSDKInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618B52549B55400399334 /* TDSDKInterface.swift */; };
 		49A618C02549B9D400399334 /* URLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A618BF2549B9D400399334 /* URLHandler.swift */; };
+		49D3F792257BE82F00D4CC18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D3F791257BE82E00D4CC18 /* Settings.bundle */; };
 		49D4BC57256F1D510030E468 /* String+UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D4BC56256F1D510030E468 /* String+UUID.swift */; };
 		49E8EEC22563C394004F9069 /* TradeDoublerSDKSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */; };
 		49F91EC0257459CE00270E11 /* ReportInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F91EBF257459CE00270E11 /* ReportInfo.swift */; };
@@ -123,6 +124,7 @@
 		49A618B52549B55400399334 /* TDSDKInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDSDKInterface.swift; sourceTree = "<group>"; };
 		49A618BF2549B9D400399334 /* URLHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandler.swift; sourceTree = "<group>"; };
 		49A618F1254C430600399334 /* TradeDoublerDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TradeDoublerDemo.entitlements; sourceTree = "<group>"; };
+		49D3F791257BE82E00D4CC18 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		49D4BC56256F1D510030E468 /* String+UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UUID.swift"; sourceTree = "<group>"; };
 		49E8EEC12563C394004F9069 /* TradeDoublerSDKSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeDoublerSDKSettings.swift; sourceTree = "<group>"; };
 		49F91EBF257459CE00270E11 /* ReportInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportInfo.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				49A618652549B36200399334 /* Info.plist */,
 				4951337F2577C49F00CCC3C8 /* SaleViewController.swift */,
 				495133852577C4BF00CCC3C8 /* SalePLTViewController.swift */,
+				49D3F791257BE82E00D4CC18 /* Settings.bundle */,
 			);
 			path = TradeDoublerDemo;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D3F792257BE82F00D4CC18 /* Settings.bundle in Resources */,
 				49A618642549B36200399334 /* LaunchScreen.storyboard in Resources */,
 				49A618612549B36200399334 /* Assets.xcassets in Resources */,
 				49A6185F2549B35F00399334 /* Main.storyboard in Resources */,
