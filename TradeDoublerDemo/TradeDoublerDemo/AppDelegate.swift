@@ -99,9 +99,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaults.setValue(true, forKey: trackingKey)
             defaults.setValue(true, forKey: debugKey)
             defaults.setValue("EUR", forKey: defaultCurrencyKey)
-            if UserDefaults.standard.object(forKey: secretKey) == nil  {
-                assert(false)
-            }
         }
 //        https://clk.tradedoubler.com/click?p(310409)a(982247)g(0) - click simulation
         let parameters = [
