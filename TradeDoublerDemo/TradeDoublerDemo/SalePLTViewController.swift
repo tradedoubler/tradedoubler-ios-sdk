@@ -72,7 +72,7 @@ class SalePLTViewController: UIViewController {
     }
     
     @IBAction func setAndCall(_ sender: Any) {
-        tradeDoubler.trackSalePlt(saleEventId: sdk_plt_default, orderNumber: "\(arc4random_uniform(UINT32_MAX))", currency: currencyField.text, voucherCode: voucherField.text, basketInfo: entries)
+        tradeDoubler.trackSalePlt(saleEventId: sdk_plt_default, orderNumber: "\(arc4random_uniform(UINT32_MAX))", currency: currencyField.text, voucherCode: voucherField.text, reportInfo: entries)
         dismiss(animated: true, completion: nil)
     }
 

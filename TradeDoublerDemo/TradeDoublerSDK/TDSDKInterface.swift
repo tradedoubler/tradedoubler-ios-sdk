@@ -107,7 +107,7 @@ public class TDSDKInterface {
     /**
      Method for tracking sale (NOT PLT)
      
-     - Parameter eventId: event identifier that is affiliated with your organization. Obtained from Tradedoubler®
+     - Parameter saleEventId: event identifier that is affiliated with your organization. Obtained from Tradedoubler®
      - Parameter orderNumber: unique order number
      - Parameter orderValue: value of order. You may pass reportInfo.orderValue if it was set
      - Parameter currency: if not nil, must be ISO-4217 valid code
@@ -116,8 +116,8 @@ public class TDSDKInterface {
      
      - Returns: Discardable flag informing if request was created. False if configured to not tracking OR nil IDFA & email in settings
      */
-    @discardableResult public func trackSale(eventId: String, orderNumber: String, orderValue: String, currency: String?, voucherCode: String?, reportInfo: ReportInfo?) -> Bool {
-        urlHandler.trackSale(eventId, orderNumber, orderValue, currency, voucherCode, reportInfo)
+    @discardableResult public func trackSale(saleEventId: String, orderNumber: String, orderValue: String, currency: String?, voucherCode: String?, reportInfo: ReportInfo?) -> Bool {
+        urlHandler.trackSale(saleEventId, orderNumber, orderValue, currency, voucherCode, reportInfo)
     }
     
     /**
@@ -130,8 +130,8 @@ public class TDSDKInterface {
      
      - Returns: Discardable flag informing if request was created. False if configured to not tracking OR nil IDFA & email in settings
      */
-    @discardableResult public func trackSalePlt(orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) -> Bool {
-        trackSalePlt(saleEventId: Constants.DEFAULT_SALE_EVENT, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo)
+    @discardableResult public func trackSalePlt(orderNumber: String, currency: String?, voucherCode: String?, reportInfo: BasketInfo) -> Bool {
+        trackSalePlt(saleEventId: Constants.DEFAULT_SALE_EVENT, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, reportInfo: reportInfo)
     }
     
     /**
@@ -145,8 +145,8 @@ public class TDSDKInterface {
      
      - Returns: Discardable flag informing if request was created. False if configured to not tracking OR nil IDFA & email in settings
      */
-    @discardableResult public func trackSalePlt(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) -> Bool {
-        urlHandler.trackSalePlt(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo)
+    @discardableResult public func trackSalePlt(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, reportInfo: BasketInfo) -> Bool {
+        urlHandler.trackSalePlt(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: reportInfo)
     }
     /**
      Method for tracking lead

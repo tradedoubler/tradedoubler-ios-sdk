@@ -73,7 +73,7 @@ class DemoViewController: UIViewController {
     }
     
     @IBAction func sdkSale2(_ sender: Any) {
-        tradeDoubler.trackSale(eventId: sdk_sale_2, orderNumber: "\(arc4random_uniform(UINT32_MAX))", orderValue: "\(arc4random_uniform(10000) + 1)", currency: nil, voucherCode: nil, reportInfo: nil)
+        tradeDoubler.trackSale(saleEventId: sdk_sale_2, orderNumber: "\(arc4random_uniform(UINT32_MAX))", orderValue: "\(arc4random_uniform(10000) + 1)", currency: nil, voucherCode: nil, reportInfo: nil)
     }
     
     @IBAction func sdkSalePlt(_ sender: Any) {

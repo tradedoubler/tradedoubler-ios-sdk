@@ -78,7 +78,7 @@ class SaleViewController: UIViewController {
     
     @IBAction func setAndCall(_ sender: Any) {
         let value = entries.reportEntries.isEmpty ? "\(arc4random_uniform(10000) + 1)" : "\(entries.orderValue)"
-        _ = tradeDoubler.trackSale(eventId: sdk_sale, orderNumber: "\("\(arc4random_uniform(UINT32_MAX))")", orderValue: value, currency: currencyField.text, voucherCode: nil, reportInfo: entries)
+        _ = tradeDoubler.trackSale(saleEventId: sdk_sale, orderNumber: "\("\(arc4random_uniform(UINT32_MAX))")", orderValue: value, currency: currencyField.text, voucherCode: nil, reportInfo: entries)
         dismiss(animated: true, completion: nil)
     }
 }

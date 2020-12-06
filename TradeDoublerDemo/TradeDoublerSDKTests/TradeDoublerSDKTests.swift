@@ -97,7 +97,7 @@ class TradeDoublerSDKTests: XCTestCase {
         let reportInfo = ReportInfo(entries: [ReportEntry(id: "\(2432)", productName: "iOSCar", price: 7331.15, quantity: 2),
                                               ReportEntry(id: "\(7334)", productName: "tea", price: 3.14, quantity: 1)
         ])
-        let urlCreated = tradeDoublerSdk.trackSale(eventId: sdk_sale, orderNumber: "2048", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: "test-voucher", reportInfo: reportInfo)
+        let urlCreated = tradeDoublerSdk.trackSale(saleEventId: sdk_sale, orderNumber: "2048", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: "test-voucher", reportInfo: reportInfo)
         if !urlCreated {
             queue.asyncAfter(deadline: DispatchTime.now() + 0.5) { [self] in
                 if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
@@ -113,7 +113,7 @@ class TradeDoublerSDKTests: XCTestCase {
         let exp = expectation(description: "wait for error")
         let entry1 = BasketEntry(group: sdk_group_1, id: "0BlV", productName: "iOSCar", price: 7331.15, quantity: 2)
         let entry2 = BasketEntry(group: sdk_group_2, id: "CDA14", productName: "tea", price: 3.14, quantity: 1)
-        let urlCreated = tradeDoublerSdk.trackSalePlt(orderNumber: "1024", currency: "USD", voucherCode: "test-voucher", basketInfo: BasketInfo.init(entries: [entry1, entry2]))
+        let urlCreated = tradeDoublerSdk.trackSalePlt(orderNumber: "1024", currency: "USD", voucherCode: "test-voucher", reportInfo: BasketInfo.init(entries: [entry1, entry2]))
         if !urlCreated {
             queue.asyncAfter(deadline: DispatchTime.now() + 0.5) { [self] in
                 if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
