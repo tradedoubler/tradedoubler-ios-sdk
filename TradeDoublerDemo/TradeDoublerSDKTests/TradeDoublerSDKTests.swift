@@ -80,7 +80,7 @@ class TradeDoublerSDKTests: XCTestCase {
     
     func testTrackLead() {
         let exp = expectation(description: "wait for error")
-        let urlCreated = tradeDoublerSdk.trackLead(eventId: sdk_lead, leadId: "422")
+        let urlCreated = tradeDoublerSdk.trackLead(leadEventId: sdk_lead, leadId: "422")
         if !urlCreated {// tracking disabled or already called
             queue.asyncAfter(deadline: DispatchTime.now() + 0.5) { [self] in
                 if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {

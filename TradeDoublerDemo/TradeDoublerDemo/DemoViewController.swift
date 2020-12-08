@@ -23,11 +23,12 @@ class DemoViewController: UIViewController {
     let tradeDoubler = TDSDKInterface.shared
     
     @IBOutlet weak var idfaLabel: UILabel!
-    
+    @IBOutlet weak var idfaButton: UIButton!
     @IBOutlet weak var tduidLabel: UILabel!
     @IBOutlet weak var loggingSwitch: UISwitch!
-    
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var trackingSwitch: UISwitch!
+    @IBOutlet weak var emailField: UITextField!
 
     @IBAction func showSettings(_ sender: Any) {
         UIApplication.shared.open(URL(string:  UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
@@ -40,6 +41,10 @@ class DemoViewController: UIViewController {
     @IBAction func switchTracking(_ sender: UISwitch) {
         UserDefaults.standard.setValue(sender.isOn, forKey: trackingKey)
         tradeDoubler.isTrackingEnabled = sender.isOn
+    }
+    
+    @IBAction func simulateOpen(_ sender: Any) {
+        tradeDoubler.trackOpenApp()
     }
     
     override func viewDidLoad() {
@@ -55,17 +60,26 @@ class DemoViewController: UIViewController {
 
     @objc func setOutlets() {
         UserDefaults.standard.bool(forKey: debugKey)
+        
+        if #available(iOS 14.0, *) {
+            idfaButton.isEnabled = (ATTrackingManager.trackingAuthorizationStatus != .notDetermined)
+        } else {
+            idfaButton.isEnabled = false
+        }
+        emailField.clearButtonMode = .unlessEditing
         trackingSwitch.isOn = UserDefaults.standard.bool(forKey: trackingKey)
         tradeDoubler.isTrackingEnabled = trackingSwitch.isOn
         loggingSwitch.isOn = UserDefaults.standard.bool(forKey: debugKey)
         tradeDoubler.isLoggingEnabled = loggingSwitch.isOn
         idfaLabel.text = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        emailField.text = tradeDoubler.email
         if idfaLabel.text?.isEmpty != false {//is empty or nil
             idfaLabel.text = "(null)"
         } else if idfaLabel.text == "00000000-0000-0000-0000-000000000000" {
             idfaLabel.text = "(null)"
         }
         tduidLabel.text = tradeDoubler.tduid ?? "(null)"
+        scrollView.layoutSubviews()
     }
     
     @IBAction func sdkSale(_ sender: Any) {
@@ -79,8 +93,9 @@ class DemoViewController: UIViewController {
     @IBAction func sdkSalePlt(_ sender: Any) {
         performSegue(withIdentifier: segueId.segueToSalePLT, sender: self)
     }
+    
     @IBAction func sdkLead(_ sender: Any) {
-        tradeDoubler.trackLead(eventId: sdk_lead, leadId: "\(arc4random_uniform(UINT32_MAX))")
+        performSegue(withIdentifier: segueId.segueToLead, sender: self)
     }
     
     @IBAction func useIDFA(_ sender: Any) {
@@ -128,5 +143,19 @@ class DemoViewController: UIViewController {
             }
         }
     
+}
+
+extension DemoViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text, !text.isEmpty, text != tradeDoubler.email, textField == emailField {
+            tradeDoubler.email = emailField.text
+            setOutlets()
+        }
+    }
 }
 

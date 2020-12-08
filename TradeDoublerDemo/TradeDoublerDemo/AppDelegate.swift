@@ -37,6 +37,7 @@ let tduidFound = Notification.Name(rawValue: "TDUIDFound")
 struct segueId {
     static let segueToSale = "SegueToSale"
     static let segueToSalePLT = "SegueToSalePLT"
+    static let segueToLead = "SegueToLead"
 }
 
 @main

@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="O2n-KB-uoC">
-                                <rect key="frame" x="5" y="5" width="404" height="252"/>
+                                <rect key="frame" x="5" y="5" width="404" height="258"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set sale details" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VU3-8M-BCY">
                                         <rect key="frame" x="0.0" y="0.0" width="404" height="42"/>
@@ -45,6 +45,9 @@
                                                         <rect key="frame" x="80" y="0.0" width="324" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="IEi-fl-Y1s" id="0hX-2D-d9l"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -110,6 +113,9 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="IEi-fl-Y1s" id="lRc-K9-6qx"/>
+                                                        </connections>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rNp-ck-1f9">
                                                         <rect key="frame" x="170" y="0.0" width="72" height="50"/>
@@ -118,6 +124,9 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="IEi-fl-Y1s" id="A90-rE-DCo"/>
+                                                        </connections>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zL9-cE-WC4">
                                                         <rect key="frame" x="242" y="0.0" width="72" height="50"/>
@@ -126,10 +135,16 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="IEi-fl-Y1s" id="R8i-WI-8AQ"/>
+                                                        </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vu0-U5-Kh9">
                                                         <rect key="frame" x="314" y="0.0" width="90" height="50"/>
-                                                        <state key="normal" title="Add"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="Add">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="addItem:" destination="IEi-fl-Y1s" eventType="touchUpInside" id="wAv-eQ-ZUz"/>
                                                         </connections>
@@ -150,11 +165,14 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBK-b6-yD7">
-                                        <rect key="frame" x="0.0" y="208" width="404" height="44"/>
+                                        <rect key="frame" x="0.0" y="208" width="404" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="ZuK-6Y-fob"/>
+                                            <constraint firstAttribute="height" constant="50" id="ZuK-6Y-fob"/>
                                         </constraints>
-                                        <state key="normal" title="Set parameters &amp; call sale"/>
+                                        <state key="normal" title="Set parameters &amp; call sale">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <connections>
                                             <action selector="setAndCall:" destination="IEi-fl-Y1s" eventType="touchUpInside" id="yUO-WN-Qm7"/>
                                         </connections>
@@ -210,7 +228,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aBb-gh-EmA">
-                                <rect key="frame" x="5" y="5" width="404" height="294.5"/>
+                                <rect key="frame" x="5" y="5" width="404" height="300.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sale PLT details" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z96-g2-bg9">
                                         <rect key="frame" x="0.0" y="0.0" width="404" height="42"/>
@@ -237,6 +255,9 @@
                                                         <rect key="frame" x="80" y="0.0" width="324" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="M3V-0p-A45" id="yUP-gr-gFi"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -266,6 +287,9 @@
                                                         <rect key="frame" x="80" y="0.0" width="324" height="33"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="M3V-0p-A45" id="gTW-97-dWh"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -295,6 +319,9 @@
                                                         <rect key="frame" x="80" y="0.0" width="324" height="34"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="M3V-0p-A45" id="xsj-IJ-SeG"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -331,6 +358,9 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="M3V-0p-A45" id="p0n-Mm-XnH"/>
+                                                        </connections>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FPg-wD-EqV">
                                                         <rect key="frame" x="170" y="0.0" width="72" height="50"/>
@@ -347,10 +377,16 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="M3V-0p-A45" id="e12-4T-cOE"/>
+                                                        </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jxd-I3-aU3">
                                                         <rect key="frame" x="314" y="0.0" width="90" height="50"/>
-                                                        <state key="normal" title="Add"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="Add">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="addItem:" destination="M3V-0p-A45" eventType="touchUpInside" id="Cpb-mo-ChI"/>
                                                         </connections>
@@ -371,11 +407,14 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7I-cP-KLd">
-                                        <rect key="frame" x="0.0" y="250.5" width="404" height="44"/>
+                                        <rect key="frame" x="0.0" y="250.5" width="404" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="vsq-EJ-eJF"/>
+                                            <constraint firstAttribute="height" constant="50" id="vsq-EJ-eJF"/>
                                         </constraints>
-                                        <state key="normal" title="Set parameters &amp; call sale PLT"/>
+                                        <state key="normal" title="Set parameters &amp; call sale PLT">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <connections>
                                             <action selector="setAndCall:" destination="M3V-0p-A45" eventType="touchUpInside" id="Y0I-T7-foH"/>
                                         </connections>
@@ -426,14 +465,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hn2-qd-t8z">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hn2-qd-t8z">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spx-Uh-FS4" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
-                                                <rect key="frame" x="5" y="15" width="404" height="495"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
+                                                <rect key="frame" x="5" y="15" width="404" height="595"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="7PH-7E-YFu" userLabel="IDFA">
                                                         <rect key="frame" x="0.0" y="0.0" width="404" height="45"/>
@@ -456,7 +495,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aN7-Ft-WZD" userLabel="TDUID">
-                                                        <rect key="frame" x="0.0" y="45" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="50" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TDUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q9K-ix-FLn">
                                                                 <rect key="frame" x="0.0" y="0.0" width="199.5" height="45"/>
@@ -475,8 +514,27 @@
                                                             </label>
                                                         </subviews>
                                                     </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7RH-IL-uvt" userLabel="Email">
+                                                        <rect key="frame" x="0.0" y="100" width="404" height="45"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3p-cM-ObO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="41" height="45"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vFm-bc-YYY">
+                                                                <rect key="frame" x="49" y="0.0" width="355" height="45"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="9uf-Dr-apb"/>
+                                                                </connections>
+                                                            </textField>
+                                                        </subviews>
+                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="986-qo-aCC" userLabel="Logging">
-                                                        <rect key="frame" x="0.0" y="90" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="150" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is logging enabled" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6iK-GD-AM6">
                                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
@@ -493,7 +551,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1CX-NM-hf0" userLabel="Tracking">
-                                                        <rect key="frame" x="0.0" y="135" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="200" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is tracking enabled" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4TB-uj-BKq">
                                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
@@ -510,52 +568,73 @@
                                                         </subviews>
                                                     </stackView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pX6-rl-9sg">
-                                                        <rect key="frame" x="0.0" y="180" width="404" height="45"/>
-                                                        <state key="normal" title="Settings"/>
+                                                        <rect key="frame" x="0.0" y="250" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="Settings">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="showSettings:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2rJ-Gg-4AZ"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szr-kb-9hY">
-                                                        <rect key="frame" x="0.0" y="225" width="404" height="45"/>
-                                                        <state key="normal" title="Use IDFA"/>
+                                                        <rect key="frame" x="0.0" y="300" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="Request IDFA authorization (iOS 14.0+)">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="useIDFA:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlR-uf-4WH"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-9j-bb2">
-                                                        <rect key="frame" x="0.0" y="270" width="404" height="45"/>
-                                                        <state key="normal" title="Sdk - sale"/>
+                                                        <rect key="frame" x="0.0" y="350" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="SETTING TRACKING SALE">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="sdkSale:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vE9-86-a6P"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HJF-lk-vCN">
-                                                        <rect key="frame" x="0.0" y="315" width="404" height="45"/>
-                                                        <state key="normal" title="Sdk - sale2"/>
-                                                        <connections>
-                                                            <action selector="sdkSale2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="awF-X0-c5m"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnl-i3-dE0">
-                                                        <rect key="frame" x="0.0" y="360" width="404" height="45"/>
-                                                        <state key="normal" title="Sdk - salePLT"/>
-                                                        <connections>
-                                                            <action selector="sdkSalePlt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YaS-jx-C60"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nus-c9-oSJ">
-                                                        <rect key="frame" x="0.0" y="405" width="404" height="45"/>
-                                                        <state key="normal" title="Sdk - lead"/>
+                                                        <rect key="frame" x="0.0" y="400" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="SETTING TRACKING LEAD">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="sdkLead:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vlD-t8-eHb"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XjU-wZ-Dtc">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnl-i3-dE0">
                                                         <rect key="frame" x="0.0" y="450" width="404" height="45"/>
-                                                        <state key="normal" title="Simulate install"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="SETTING TRACKING SALE PLT">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="sdkSalePlt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YaS-jx-C60"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XjU-wZ-Dtc">
+                                                        <rect key="frame" x="0.0" y="500" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="SIMULATE INSTALL">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="simulateAppInstall:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w9X-AY-DqR"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neo-yp-LI6">
+                                                        <rect key="frame" x="0.0" y="550" width="404" height="45"/>
+                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                        <state key="normal" title="SIMULATE OPEN">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="simulateOpen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ufa-vt-G3S"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -571,6 +650,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="0eN-Xc-lUf" firstAttribute="bottom" secondItem="spx-Uh-FS4" secondAttribute="bottom" id="447-S5-UTu"/>
+                                    <constraint firstItem="spx-Uh-FS4" firstAttribute="height" secondItem="Hn2-qd-t8z" secondAttribute="height" priority="1" id="PxQ-a6-0N3"/>
                                     <constraint firstItem="spx-Uh-FS4" firstAttribute="leading" secondItem="0eN-Xc-lUf" secondAttribute="leading" id="Rx3-1L-Vj5"/>
                                     <constraint firstItem="spx-Uh-FS4" firstAttribute="top" secondItem="0eN-Xc-lUf" secondAttribute="top" id="rCF-Cq-z1D"/>
                                     <constraint firstItem="0eN-Xc-lUf" firstAttribute="trailing" secondItem="spx-Uh-FS4" secondAttribute="trailing" id="uIq-x5-ifE"/>
@@ -585,7 +665,6 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="Hn2-qd-t8z" secondAttribute="top" id="24n-3Y-9Sx"/>
                             <constraint firstItem="YIW-Yc-OzB" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="45S-he-wIS"/>
                             <constraint firstItem="Hn2-qd-t8z" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="4Mw-1Q-QWj"/>
-                            <constraint firstItem="spx-Uh-FS4" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" priority="250" id="9hy-6e-zHf"/>
                             <constraint firstItem="Hn2-qd-t8z" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" id="D0S-0r-SK2"/>
                             <constraint firstItem="Hn2-qd-t8z" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="OtF-gr-foI"/>
                             <constraint firstItem="Hn2-qd-t8z" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="TCR-y9-KAG"/>
@@ -595,22 +674,93 @@
                     </view>
                     <navigationItem key="navigationItem" id="998-yv-fuM"/>
                     <connections>
+                        <outlet property="emailField" destination="vFm-bc-YYY" id="TrI-pe-hwu"/>
+                        <outlet property="idfaButton" destination="Szr-kb-9hY" id="3zj-Yj-zup"/>
                         <outlet property="idfaLabel" destination="I1U-Lq-elc" id="5If-mC-D21"/>
                         <outlet property="loggingSwitch" destination="MIk-Ss-piK" id="VvG-h9-i2Y"/>
+                        <outlet property="scrollView" destination="Hn2-qd-t8z" id="4w3-tp-f8w"/>
                         <outlet property="tduidLabel" destination="rbw-Yy-skw" id="25b-H5-0s3"/>
                         <outlet property="trackingSwitch" destination="otQ-2f-4mX" id="cp5-hw-19v"/>
                         <segue destination="IEi-fl-Y1s" kind="show" identifier="SegueToSale" id="ST8-bl-B3h"/>
                         <segue destination="M3V-0p-A45" kind="show" identifier="SegueToSalePLT" id="54b-2L-bTb"/>
+                        <segue destination="MCu-U9-ik2" kind="show" identifier="SegueToLead" id="aEu-NU-fnh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138" y="52"/>
         </scene>
+        <!--Lead View Controller-->
+        <scene sceneID="Jrf-qw-mov">
+            <objects>
+                <viewController id="MCu-U9-ik2" customClass="LeadViewController" customModule="TradeDoublerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="12I-zb-Z2t">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Rem-Rm-Ycw">
+                                <rect key="frame" x="5" y="10" width="404" height="160"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lead details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5O-Xd-lB7">
+                                        <rect key="frame" x="0.0" y="0.0" width="404" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="p0f-yN-PNY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T2W-HB-7Ob">
+                                        <rect key="frame" x="0.0" y="55" width="404" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="rHu-GP-ef6"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="MCu-U9-ik2" id="f1H-Q4-Skl"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ej-zO-jFS">
+                                        <rect key="frame" x="0.0" y="110" width="404" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="I9e-a8-pwc"/>
+                                        </constraints>
+                                        <state key="normal" title="Set parameters &amp; call lead tracking">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setAndCall:" destination="MCu-U9-ik2" eventType="touchUpInside" id="I8N-fT-9TX"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="n6q-Pf-VVY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n6q-Pf-VVY" firstAttribute="trailing" secondItem="Rem-Rm-Ycw" secondAttribute="trailing" constant="5" id="8mi-hd-S9q"/>
+                            <constraint firstItem="Rem-Rm-Ycw" firstAttribute="top" secondItem="n6q-Pf-VVY" secondAttribute="top" constant="10" id="aLn-q8-Zs9"/>
+                            <constraint firstItem="Rem-Rm-Ycw" firstAttribute="leading" secondItem="n6q-Pf-VVY" secondAttribute="leading" constant="5" id="cKR-e3-UK3"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="3sT-PE-jxP"/>
+                    <connections>
+                        <outlet property="leadIdField" destination="T2W-HB-7Ob" id="37U-Fc-o5S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xkk-XC-RbJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-996" y="-4"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

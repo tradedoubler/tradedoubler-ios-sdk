@@ -151,13 +151,13 @@ public class TDSDKInterface {
     /**
      Method for tracking lead
      
-     - Parameter eventId: lead identifier that is affiliated with your organization, obtained from Tradedoubler®
+     - Parameter leadEventId: lead identifier that is affiliated with your organization, obtained from Tradedoubler®
      - Parameter leadId: unique lead identifier
      
      - Returns: flag informing if request was sent. False if configured to not tracking OR nil IDFA & email in settings
      */
-    @discardableResult public func trackLead(eventId: String, leadId: String) -> Bool {
-        urlHandler.trackLead(eventId: eventId, leadId: leadId)
+    @discardableResult public func trackLead(leadEventId: String, leadId: String) -> Bool {
+        urlHandler.trackLead(eventId: leadEventId, leadId: leadId)
     }
     /**
      Method for tracking app opening. Should be called on every  launch of the app

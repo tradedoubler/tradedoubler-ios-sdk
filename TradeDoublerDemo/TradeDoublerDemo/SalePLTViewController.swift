@@ -52,14 +52,29 @@ class SalePLTViewController: UIViewController {
     }
 
     @IBAction func addItem(_ sender: Any) {
-        
+        var fail = false
+        if (Double(priceField.text ?? "") ?? 0) <= 0 {
+            priceField.text = "0.01"
+            fail = true
+        }
+        if (Int(quantityField.text ?? "") ?? 0) <= 0 {
+            quantityField.text = "1"
+            fail = true
+        }
+        if nameField.text?.isEmpty != false {
+            nameField.text = "empty"
+            fail = true
+        }
+        if fail {
+            return
+        }
         var groupTxt = groupField.text
         if groupTxt != nil {
             if groupTxt!.isEmpty {
-                groupTxt = sdk_group_2
+                groupTxt = sdk_group_2 //default on empty text
             }
         } else {
-            groupTxt = sdk_group_2
+            groupTxt = sdk_group_2 //default on nil
         }
         let newEntry = BasketEntry.init(group: groupTxt!, id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
         if tradeDoubler.isLoggingEnabled {
