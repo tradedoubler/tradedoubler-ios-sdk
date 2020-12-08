@@ -62,7 +62,7 @@ class DemoViewController: UIViewController {
         UserDefaults.standard.bool(forKey: debugKey)
         
         if #available(iOS 14.0, *) {
-            idfaButton.isEnabled = (ATTrackingManager.trackingAuthorizationStatus != .notDetermined)
+            idfaButton.isEnabled = true
         } else {
             idfaButton.isEnabled = false
         }
@@ -99,11 +99,25 @@ class DemoViewController: UIViewController {
     }
     
     @IBAction func useIDFA(_ sender: Any) {
+        
         if UserDefaults.standard.string(forKey: "advertisingIdentifier") == nil {
             if #available(iOS 14.0, *) {
+                let array: [ATTrackingManager.AuthorizationStatus] = [.notDetermined, .authorized]
+                if !array.contains(ATTrackingManager.trackingAuthorizationStatus) {
+                    let alert = UIAlertController.init(title: "Using IDFA not allowed", message: "Please go to settings nad allow tracking if you want to use IDFA" , preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (_) in
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+                    }))
+                    present(alert, animated: true, completion: nil)
+                } else if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
                 requestPermission()
+                }
+            } else {
+                if tradeDoubler.isLoggingEnabled {
+                    print("On iOS before version 14.0 you don't need authorization to use IDFA, but usage can be limited. Currently \(ASIdentifierManager.shared().isAdvertisingTrackingEnabled ? "not limited" : "limited")")
+                }
             }
-            return
         }
     }
     
@@ -148,14 +162,21 @@ class DemoViewController: UIViewController {
 extension DemoViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return false
+        return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text, !text.isEmpty, text != tradeDoubler.email, textField == emailField {
+        let text = textField.trimmedTextOrEmpty()
+        if text != tradeDoubler.email, textField == emailField {
             tradeDoubler.email = emailField.text
             setOutlets()
         }
     }
 }
 
+extension UITextField {
+    func trimmedTextOrEmpty() -> String {
+        guard let text = text else {return ""}
+        return text.trimmingCharacters(in: .whitespaces)
+    }
+}

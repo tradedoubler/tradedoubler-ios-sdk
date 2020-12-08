@@ -50,23 +50,22 @@ class SaleViewController: UIViewController {
     @IBOutlet weak var quantityField: UITextField!
     
     @IBAction func addItem(_ sender: Any) {
-        var fail = false
-        if (Double(priceField.text ?? "") ?? 0) <= 0 {
-            priceField.text = "0.01"
-            fail = true
-        }
-        if (Int(quantityField.text ?? "") ?? 0) <= 0 {
-            quantityField.text = "1"
-            fail = true
-        }
-        if nameField.text?.isEmpty != false {
-            nameField.text = "empty"
-            fail = true
-        }
-        if fail {
+        
+        let name = nameField.trimmedTextOrEmpty()
+        guard let price = Double(priceField.trimmedTextOrEmpty()), price > 0, let quantity = Int(quantityField.trimmedTextOrEmpty()), quantity > 0, !name.isEmpty else {
+            if priceField.trimmedTextOrEmpty().isEmpty {
+                priceField.text = "0.01"
+            }
+            if quantityField.trimmedTextOrEmpty().isEmpty {
+                quantityField.text = "1"
+            }
+            if name.isEmpty {
+                nameField.text = "empty"
+            }
             return
         }
-        let newEntry = ReportEntry(id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
+        
+        let newEntry = ReportEntry(id: "\(arc4random_uniform(UINT32_MAX))", productName: name, price: price, quantity: quantity)
         entries.append(newEntry)
         if tradeDoubler.isLoggingEnabled {
             print("Added \(newEntry.description)")
@@ -78,7 +77,7 @@ class SaleViewController: UIViewController {
     
     @IBAction func setAndCall(_ sender: Any) {
         let value = entries.reportEntries.isEmpty ? "\(arc4random_uniform(10000) + 1)" : "\(entries.orderValue)"
-        _ = tradeDoubler.trackSale(saleEventId: sdk_sale, orderNumber: "\("\(arc4random_uniform(UINT32_MAX))")", orderValue: value, currency: currencyField.text, voucherCode: nil, reportInfo: entries)
+        _ = tradeDoubler.trackSale(saleEventId: sdk_sale, orderNumber: "\("\(arc4random_uniform(UINT32_MAX))")", orderValue: value, currency: currencyField.text, voucherCode: nil, reportInfo: entries.isEmpty() ? nil : entries)
         dismiss(animated: true, completion: nil)
     }
 }

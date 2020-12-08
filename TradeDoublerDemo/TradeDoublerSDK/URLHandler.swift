@@ -59,29 +59,50 @@ class URLHandler {
     }
     
     func trackOpenApp() -> Bool {
-        var URLwasCreated = false
+        var wasUrlCreated = false
         if !isTrackingEnabled {
-            return URLwasCreated
+            Logger.TDLog("Tracking disabled. Open app not tracked.")
+            return wasUrlCreated
         }
-        
-        if settings.tduid == nil {
-            return URLwasCreated
+        guard settings.organizationId != nil else {
+            Logger.TDErrorLog("Organization id is null. Configure app before tracking anything. Opening app is not tracked")
+            return wasUrlCreated
+        }
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Both IDFA & email are not set. Please configure framework. Opening app not tracked")
+            return wasUrlCreated
         }
         
         if let emailUrl = buildAppLaunchUrl(isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
-            URLwasCreated = true
+            wasUrlCreated = true
         }
         if let IDFAUrl = buildAppLaunchUrl(isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
-            URLwasCreated = true
+            wasUrlCreated = true
         }
-        return URLwasCreated
+        return wasUrlCreated
     }
     
     func trackInstall(appInstallEventId: String) -> Bool {
         var wasUrlCreated: Bool = false
-        if !isTrackingEnabled || UserDefaults.standard.bool(forKey: Constants.installedKey) {
+        
+        if !isTrackingEnabled {
+            Logger.TDLog("tracking disabled, returning. Installation not tracked")
+            return wasUrlCreated
+        }
+        
+        guard settings.organizationId != nil else {
+            Logger.TDErrorLog("Organization id is null. Configure app before tracking anything. Installation is not tracked")
+            return wasUrlCreated
+        }
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Both IDFA & email are not set. Please configure framework. Installation not tracked")
+            return wasUrlCreated
+        }
+        
+        if UserDefaults.standard.bool(forKey: Constants.installedKey) {
+            Logger.TDLog("Install track already sent, returning")
             return wasUrlCreated
         }
         let leadNumber = generateRandomString() + "\(Int64(Date().timeIntervalSince1970))"
@@ -104,6 +125,24 @@ class URLHandler {
         var wasUrlCreated = false
         
         if !isTrackingEnabled {
+            Logger.TDLog("tracking disabled, returning. Sale not tracked")
+            return wasUrlCreated
+        }
+        
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Missing both email & IDFA. Please configure app")
+            return wasUrlCreated
+        }
+        
+        guard let orgId = settings.organizationId, let secretCode = settings.secretCode else {
+            var whatIsNull = ""
+            if settings.organizationId == nil {
+                whatIsNull += "organizationId"
+            }
+            if settings.secretCode == nil {
+                whatIsNull += whatIsNull.count == 0 ? "secretCode" : "and secretCode"
+            }
+            Logger.TDErrorLog("creating sale tracking step. Aborted because of \(whatIsNull) being null)")
             return wasUrlCreated
         }
         
@@ -114,12 +153,12 @@ class URLHandler {
             internalVoucher = voucher
         }
         
-        if let emailUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: true) {
+        if let emailUrl = buildTrackSaleUrl(organizationId: orgId, secretCode: secretCode, eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
             wasUrlCreated = true
         }
         
-        if let IDFAUrl = buildTrackSaleUrl(eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: false) {
+        if let IDFAUrl = buildTrackSaleUrl(organizationId: orgId, secretCode: secretCode, eventId: eventId, currency: currency, orderValue: orderValue, orderNumber: orderNumber, voucher: internalVoucher, reportInfo: reportInfo, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
             wasUrlCreated = true
         }
@@ -129,54 +168,52 @@ class URLHandler {
     func trackSalePlt(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo) -> Bool {
         var wasUrlCreated = false
         if !isTrackingEnabled {
+            Logger.TDLog("tracking disabled, returning. Sale PLT not tracked")
             return wasUrlCreated
         }
         
-        if let emailUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Missing both email & IDFA. Please configure framework")
+            return wasUrlCreated
+        }
+        
+        guard let orgId = settings.organizationId else {
+            Logger.TDErrorLog("organizationId is null, please configure framework to track")
+            return wasUrlCreated
+        }
+        if let emailUrl = buildTrackSalePltUrl(organizationId: orgId, saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
             wasUrlCreated = true
         }
         
-        if let IDFAUrl = buildTrackSalePltUrl(saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: false) {
+        if let IDFAUrl = buildTrackSalePltUrl(organizationId: orgId, saleEventId: saleEventId, orderNumber: orderNumber, currency: currency, voucherCode: voucherCode, basketInfo: basketInfo, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
             wasUrlCreated = true
         }
         return wasUrlCreated
     }
     
-    private func buildTrackInstallUrl(appInstallEventId: String, leadNumber: String, isEmail: Bool) -> URL? {
-        if isEmail && settings.userEmail == nil {
-            return nil
-        }
-        if !isEmail && settings.IDFA == nil {
-            return nil
-        }
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "tbl.tradedoubler.com"
-        components.path = "/report"
-        var queryItems = [URLQueryItem]()
-        queryItems.append(URLQueryItem(name: "organization", value: settings.organizationId))
-        queryItems.append(URLQueryItem(name: "event", value: appInstallEventId))
-        queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
-        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
-        queryItems.append(URLQueryItem(name: "exttype", value: "1"))
-        queryItems.append(URLQueryItem(name: "extid", value: isEmail ? settings.userEmail : settings.IDFA))
-        components.queryItems = queryItems
-        return components.url
-    }
-    
     func trackLead(eventId: String, leadId: String) -> Bool {
         var wasUrlCreated = false
         if !isTrackingEnabled {
+            Logger.TDLog("Tracking disabled. Lead not tracked")
             return wasUrlCreated
         }
-        if let emailUrl = buildTrackLeadUrl(eventId: eventId, leadId: leadId, isEmail: true) {
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Missing both email & IDFA. Lead not tracked. Please configure framework")
+            return wasUrlCreated
+        }
+        
+        guard let orgId = settings.organizationId else {
+            Logger.TDErrorLog("organizationId is null, please configure framework")
+            return wasUrlCreated
+        }
+        if let emailUrl = buildTrackLeadUrl(organizationId: orgId, eventId: eventId, leadId: leadId, isEmail: true) {
             OfflineDataHandler.shared.addRequest(emailUrl)
             wasUrlCreated = true
         }
         
-        if let IDFAUrl = buildTrackLeadUrl(eventId: eventId, leadId: leadId, isEmail: false) {
+        if let IDFAUrl = buildTrackLeadUrl(organizationId: orgId, eventId: eventId, leadId: leadId, isEmail: false) {
             OfflineDataHandler.shared.addRequest(IDFAUrl)
             wasUrlCreated = true
         }
@@ -238,12 +275,54 @@ class URLHandler {
         return toReturn
     }
     
+    private func buildTrackInstallUrl(appInstallEventId: String, leadNumber: String, isEmail: Bool) -> URL? {
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Missing both email & IDFA. Wont send tracking install because of wrong configuration ")
+            return nil
+        }
+        if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email on track install. Will send only with IDFA")
+            return nil
+        }
+        if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA on track install. Will send only with email")
+            return nil
+        }
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "tbl.tradedoubler.com"
+        components.path = "/report"
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "organization", value: settings.organizationId))
+        queryItems.append(URLQueryItem(name: "event", value: appInstallEventId))
+        queryItems.append(URLQueryItem(name: "leadNumber", value: leadNumber))
+        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
+        queryItems.append(URLQueryItem(name: "exttype", value: "1"))
+        queryItems.append(URLQueryItem(name: "extid", value: isEmail ? settings.userEmail : settings.IDFA))
+        components.queryItems = queryItems
+        return components.url
+    }
+    
     /// For email login: isEmail must be true & user parameter is set to email address
     /// For IDFA usage: isEmail set to false & user parameter is IDFA string
     /// Developer should default to email if user refuses to use IDFA in settings (or redirect to settings requesting user consent)
     private func buildAppLaunchUrl(isEmail: Bool) -> URL? {
+        if settings.userEmail == nil && settings.IDFA == nil {
+            Logger.TDErrorLog("Missing both email & IDFA. Wont send tracking launch because of wrong configuration ")
+            return nil
+        }
+        
         guard let organizationId = settings.organizationId else {
             Logger.TDErrorLog("no organization ID on launch, please set organization ID before calling trackOpenApp()")
+            return nil
+        }
+        
+        if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email on tracking launch. Will send only with IDFA")
+            return nil
+        }
+        if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA on tracking launch. Will send only with email")
             return nil
         }
         let mail = settings.userEmail
@@ -273,12 +352,19 @@ class URLHandler {
         return components.url
     }
     
-    private func buildTrackLeadUrl(eventId: String, leadId: String, isEmail: Bool) -> URL? {
-        var components = URLComponents()
-        guard let organizationId = settings.organizationId else {
-            Logger.TDErrorLog("creating sale tracking step. Aborted because organizationId is null")
+    private func buildTrackLeadUrl(organizationId: String, eventId: String, leadId: String, isEmail: Bool) -> URL? {
+        
+        if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email on tracking lead. Will send only with IDFA")
             return nil
         }
+        if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA on tracking lead. Will send only with email")
+            return nil
+        }
+        
+        var components = URLComponents()
+        
         components.scheme = "https"
         components.host = "tbl.tradedoubler.com"
         components.path = "/report"
@@ -292,37 +378,18 @@ class URLHandler {
         return components.url!
     }
     
-    private func buildTrackSaleUrl(eventId: String, currency: String?, orderValue:String, orderNumber: String, voucher: String? = nil, reportInfo: ReportInfo?, isEmail: Bool) -> URL? {
-        guard let organizationId = settings.organizationId, let secretCode = settings.secretCode else {
-            var whatIsNull = ""
-            if settings.organizationId == nil {
-                whatIsNull += "organizationId"
-            }
-            if settings.secretCode == nil {
-                whatIsNull += whatIsNull.count == 0 ? "secretCode" : "and secretCode"
-            }
-            Logger.TDErrorLog("creating sale tracking step. Aborted because of \(whatIsNull) being null)")
+    private func buildTrackSaleUrl(organizationId: String, secretCode: String, eventId: String, currency: String?, orderValue:String, orderNumber: String, voucher: String? = nil, reportInfo: ReportInfo?, isEmail: Bool) -> URL? {
+        
+        if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email on tracking sale. Will send only with IDFA")
+            return nil
+        }
+        if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA on tracking sale. Will send only with email")
             return nil
         }
         
-        let mail = settings.userEmail
-        let IDFA = settings.IDFA
-        let user: String
-        if isEmail {
-            if mail == nil {
-                Logger.TDLog("no email on launch")
-                return nil
-            } else {
-                user = mail!
-            }
-        } else {
-            if IDFA == nil {
-                Logger.TDLog("no IDFA on launch")
-                return nil
-            } else {
-                user = IDFA!
-            }
-        }
+        let user = isEmail ? settings.userEmail : settings.IDFA
         
         let checksum = countChecksum(secretCode: secretCode, orderNumber: orderNumber, orderValue: orderValue)
         var components = URLComponents()
@@ -349,15 +416,22 @@ class URLHandler {
         return components.url
     }
     
-    private func buildTrackSalePltUrl(saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo, isEmail: Bool) -> URL? {
+    private func buildTrackSalePltUrl(organizationId: String, saleEventId: String, orderNumber: String, currency: String?, voucherCode: String?, basketInfo: BasketInfo, isEmail: Bool) -> URL? {
+        
         guard !basketInfo.basketEntries.isEmpty else {
             Logger.TDLog("PLT basket cannot be empty, returning")
             return nil
         }
-        guard let organizationId = settings.organizationId else {
-            Logger.TDErrorLog("organizationId is null, func: \(#function)")
+        
+        if isEmail && settings.userEmail == nil {
+            Logger.TDLog("No email on tracking sale. Will send only with IDFA")
             return nil
         }
+        if !isEmail && settings.IDFA == nil {
+            Logger.TDLog("No IDFA on tracking sale. Will send only with email")
+            return nil
+        }
+        
         if isEmail && settings.userEmail == nil {
             Logger.TDLog("No email, returning")
             return nil

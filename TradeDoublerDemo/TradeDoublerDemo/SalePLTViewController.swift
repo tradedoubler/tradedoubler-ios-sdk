@@ -35,6 +35,7 @@ class SalePLTViewController: UIViewController {
         nameField.placeholder = "name"
         priceField.placeholder = "price"
         quantityField.placeholder = "quantity"
+        groupField.text = sdk_group_1
     }
     
     func setOutlets() {
@@ -52,31 +53,25 @@ class SalePLTViewController: UIViewController {
     }
 
     @IBAction func addItem(_ sender: Any) {
-        var fail = false
-        if (Double(priceField.text ?? "") ?? 0) <= 0 {
-            priceField.text = "0.01"
-            fail = true
-        }
-        if (Int(quantityField.text ?? "") ?? 0) <= 0 {
-            quantityField.text = "1"
-            fail = true
-        }
-        if nameField.text?.isEmpty != false {
-            nameField.text = "empty"
-            fail = true
-        }
-        if fail {
+        let name = nameField.trimmedTextOrEmpty()
+        guard let price = Double(priceField.trimmedTextOrEmpty()), price > 0, let quantity = Int(quantityField.trimmedTextOrEmpty()), quantity > 0, !name.isEmpty else {
+            if priceField.trimmedTextOrEmpty().isEmpty {
+                priceField.text = "0.01"
+            }
+            if quantityField.trimmedTextOrEmpty().isEmpty {
+                quantityField.text = "1"
+            }
+            if name.isEmpty {
+                nameField.text = "empty"
+            }
             return
         }
-        var groupTxt = groupField.text
-        if groupTxt != nil {
-            if groupTxt!.isEmpty {
-                groupTxt = sdk_group_2 //default on empty text
-            }
-        } else {
-            groupTxt = sdk_group_2 //default on nil
+        
+        if groupField.trimmedTextOrEmpty().isEmpty {
+            groupField.text = sdk_group_2
         }
-        let newEntry = BasketEntry.init(group: groupTxt!, id: "\(arc4random_uniform(UINT32_MAX))", productName: nameField.text?.decomposedStringWithCanonicalMapping ?? "", price: Double(priceField.text ?? "0") ?? 0, quantity: Int(quantityField.text ?? "0") ?? 0)
+        
+        let newEntry = BasketEntry(group: groupField.trimmedTextOrEmpty(), id: "\(arc4random_uniform(UINT32_MAX))", productName: name, price: price, quantity: quantity)
         if tradeDoubler.isLoggingEnabled {
             print("Added \(newEntry.description)")
         }
@@ -87,8 +82,21 @@ class SalePLTViewController: UIViewController {
     }
     
     @IBAction func setAndCall(_ sender: Any) {
+        if entries.isEmpty() {
+            if tradeDoubler.isLoggingEnabled {
+                print("can't send empty basket on sale PLT!")
+            }
+            return
+        }
         tradeDoubler.trackSalePlt(saleEventId: sdk_plt_default, orderNumber: "\(arc4random_uniform(UINT32_MAX))", currency: currencyField.text, voucherCode: voucherField.text, reportInfo: entries)
         dismiss(animated: true, completion: nil)
     }
 
+}
+
+extension SalePLTViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

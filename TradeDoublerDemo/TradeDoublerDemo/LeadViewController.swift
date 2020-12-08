@@ -22,12 +22,13 @@ class LeadViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setOutlets()
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        setOutlets()
     }
     
     func setOutlets() {
@@ -36,12 +37,13 @@ class LeadViewController: UIViewController {
     
 
     @IBAction func setAndCall(_ sender: Any) {
-        guard let text = leadIdField.text, !text.isEmpty else {
+        let leadId = leadIdField.trimmedTextOrEmpty()
+        if leadId.isEmpty {
             leadIdField.text = "empty"
             return
         }
         
-        tradedoubler.trackLead(leadEventId: sdk_lead, leadId: text)
+        tradedoubler.trackLead(leadEventId: sdk_lead, leadId: leadId)
         dismiss(animated: true, completion: nil)
     }
 
@@ -50,6 +52,6 @@ class LeadViewController: UIViewController {
 extension LeadViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return false
+        return true
     }
 }

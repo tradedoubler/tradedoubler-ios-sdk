@@ -203,11 +203,8 @@ public class TDSDKInterface {
      - Returns: flag informing if request was created. False if configured to not tracking OR nil IDFA & email in settings
      */
     public func configure(_ organizationId: String?, _ secretCode: String?) {
-        if organizationId != nil {
-            settings.organizationId = organizationId
-        }
-        if secretCode != nil {
-            settings.secretCode = secretCode
-        }
+        
+        settings.organizationId = organizationId
+        settings.secretCode = secretCode
     }
 }
