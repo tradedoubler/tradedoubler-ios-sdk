@@ -19,6 +19,8 @@ public struct Constants {
     static let emailKey = "TDmail"
     static let IDFAKey = "TDidfa"
     static let installedKey = "TDalready_installed"
+    static let debugKey = "TDshouldBeDebugging"
+    static let trackingKey = "TDshouldBeTracking"
     public static let tduidKey = "tduid"
     public static let DEFAULT_SALE_EVENT = "51"
 }

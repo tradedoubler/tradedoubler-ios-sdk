@@ -44,9 +44,27 @@ class TradeDoublerSDKSettings {
         }
     }
     
-    var isDebug = true
+    var isDebug: Bool {
+        get {
+            if UserDefaults.standard.value(forKey: Constants.debugKey) != nil {
+                return UserDefaults.standard.bool(forKey: Constants.debugKey)}
+            return false
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Constants.debugKey)
+        }
+    }
 
-    var isTrackingEnabled = true
+    var isTrackingEnabled: Bool {
+        get {
+            if UserDefaults.standard.value(forKey: Constants.trackingKey) != nil {
+                return UserDefaults.standard.bool(forKey: Constants.trackingKey)}
+            return true
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Constants.trackingKey)
+        }
+    }
     
     var organizationId: String? = nil
     
