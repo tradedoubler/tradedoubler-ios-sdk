@@ -103,6 +103,22 @@ public class TDSDKInterface {
             settings.secretCode = newValue
         }
     }
+    /**
+     Convenience method for initializing tduid from obtained URL
+     
+     - Parameter url: url with default structure that can contain tduid parameter
+     
+     - Returns: true if tduid was succesfully set, false otherwise
+     */
+    
+    public func handleTduidUrl(url: URL) -> Bool {
+        let components = URLComponents(string: url.absoluteString)
+        guard let tduid = components?.queryItems?.filter({ (item) -> Bool in
+            item.name.lowercased() == "tduid"
+        }).first?.value else {return false }
+        self.tduid = tduid
+        return true
+    }
     
     /**
      Method for tracking sale (NOT PLT)

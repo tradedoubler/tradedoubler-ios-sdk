@@ -139,13 +139,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func handleOpeningUrl(url: URL, onLaunch: Bool) {
-        let components = URLComponents(string: url.absoluteString)
-        if let tduid = components?.queryItems?.filter({ (item) -> Bool in
-            item.name.lowercased() == "tduid"
-        }).first?.value {
-            tradeDoubler.tduid = tduid
+        
+        if tradeDoubler.handleTduidUrl(url: url) {
             DispatchQueue.main.asyncAfter(deadline: .now() + (onLaunch ? 1 : 0)) {
-                let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(tduid)", preferredStyle: .alert)
+                let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(TDSDKInterface.shared.tduid!)", preferredStyle: .alert)
                 alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
                 UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
             }

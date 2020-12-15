@@ -71,13 +71,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func handleOpeningUrl(URLContexts: Set<UIOpenURLContext>, onLaunch: Bool) {
         for context in URLContexts {
             let url = context.url
-            let components = URLComponents(string: url.relativeString)
-            if let tduid = components?.queryItems?.filter({ (item) -> Bool in
-                item.name.lowercased() == "tduid"
-            }).first?.value {
-                tradeDoubler.tduid = tduid
+            if tradeDoubler.handleTduidUrl(url: url) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + (onLaunch ? 1 : 0)) {
-                    let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(tduid)", preferredStyle: .alert)
+                    let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(TDSDKInterface.shared.tduid!)", preferredStyle: .alert)
                     alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
                     UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
                 }

@@ -344,7 +344,6 @@ class URLHandler {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "o", value: organizationId))
         queryItems.append(URLQueryItem(name: "extid", value: user))
-        queryItems.append(URLQueryItem(name: "extid", value: user))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "verify", value: "true"))
@@ -374,6 +373,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "leadNumber", value: leadId))
         queryItems.append(URLQueryItem(name: "extid", value: isEmail ? settings.userEmail : settings.IDFA))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
+        queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         components.queryItems = queryItems
         return components.url!
     }
