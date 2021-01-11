@@ -49,13 +49,13 @@ In this case you need to add custom scheme to your app, like shown on this site:
 
 Additionally, in case of handling custom schemes you need to add following lines to your Info.plist dictionary (open as a source code):
 
-&lt;key>LSApplicationQueriesSchemes&lt;/key>
-
-	&lt;array>
-
-		&lt;string>tduid&lt;/string>
-
-	&lt;/array>
+    <key>LSApplicationQueriesSchemes</key>
+    
+    	<array>
+    
+    		<string>tduid</string>
+    
+    	</array>
 
 Remember that if you have SceneDelegate in your project then you should make sure to handle URL not only in AppDelegate but also there. In many cases AppDelegate won’t be even notified of URL if SceneDelegate is present. Also: your app will try to open all URLs with your scheme (or your domain) and it's developer’s responsibility to check if parameters received from URL are present and in correct format (for example check their length). Setting the URL scheme offers a potential attack vector into your app.
 
@@ -64,33 +64,37 @@ Remember that if you have SceneDelegate in your project then you should make sur
 
 If there is SceneDelegate in the project (iOS 13.0 or later, as long as SceneDelegate has not been removed from the project), the method below: 
 
-**func** scene(**_** scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+```swift
+func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         TDSDKInterface.shared.configure("1234", "5678")
 
-        TDSDKInterface.shared.isTrackingEnabled = **true**
+        TDSDKInterface.shared.isTrackingEnabled = true
 
-        TDSDKInterface.shared.isLoggingEnabled = **true**
+        TDSDKInterface.shared.isLoggingEnabled = true
 
     }
+```
 
 is the suggested location for configuring the framework. Otherwise you need to fall back to the old AppDelegate method: 
 
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         
 
         TDSDKInterface.shared.configure("1234", "5678")
 
-        TDSDKInterface.shared.isTrackingEnabled = **true**
+        TDSDKInterface.shared.isTrackingEnabled = true
 
-        TDSDKInterface.shared.isLoggingEnabled = **true**
+        TDSDKInterface.shared.isLoggingEnabled = true
 
         
 
-        **return** **true**
+        return true
 
     }
+```
 
 There you need to call: 
 
@@ -104,15 +108,18 @@ These parameters are obligatory for the framework to work - first one in all cas
 It’s necessary to identify a user for the tracking to make sense. To accomplish that you have to set at least one of the two following parameters - email and / or IDFA. Framework is storing SHA-256 digest for each of them (if set).  \
 Setting email may be done directly by using:
 
-**TDSDKInterface.shared.email = {USER_EMAIL_PLAINTEXT} **like in code below
+**TDSDKInterface.shared.email = {USER_EMAIL_PLAINTEXT}** like in code below
 
+```swift
 	TDSDKInterface.shared.email = "test012345678@example.com"
-
+```
 SHA256 will be counted internally.
 
 If user is logging out remember to clear this value:
 
+```swift
 TDSDKInterface.shared.email = nil
+```
 
 or use a convenience method:
 
@@ -124,8 +131,9 @@ Same goes for IDFA - you may pass plaintext IDFA string, but in case of user lim
 
 example:
 
+```swift
 TDSDKInterface.shared.IDFA = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-
+```
 
 ### Get TDUID
 
@@ -144,21 +152,22 @@ When intercepting from the default URL obtained on the app opening two methods a
 
 First is SceneDelegate’s
 
-**func** scene(**_** scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+```swift
+func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         configureFramework()
 
-        **for** context **in** connectionOptions.urlContexts {
+        for context in connectionOptions.urlContexts {
 
-            **let** url = context.url
+            let url = context.url
 
-            **if** TDSDKInterface.shared.handleTduidUrl(url: url) {
+            if TDSDKInterface.shared.handleTduidUrl(url: url) {
 
                 // now you have tduid set in framework, debug or ignore
 
-                **break**
+                break
 
-            } **else** {
+            } else {
 
                 //failed setting tduid. Not default URL structure or no tduid parameter obtained
 
@@ -167,40 +176,44 @@ First is SceneDelegate’s
         }
 
     }
+```
 
 Second being AppDelegate’s
 
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        **if** **let** url = launchOptions?[UIApplication.LaunchOptionsKey.url] **as**? URL {
+        if let url = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
 
-            **if** TDSDKInterface.shared.handleTduidUrl(url: url) {
+            if TDSDKInterface.shared.handleTduidUrl(url: url) {
 
                 // now you have tduid set in framework
 
-            } **else** {
+            } else {
 
                 //failed setting tduid. Not default URL structure or no tduid parameter obtained
 
             }
 
         }
+```
 
 Also, when app has been already open the methods of interest are:
 
-**func** scene(**_** scene: UIScene, openURLContexts URLContexts: Set&lt;UIOpenURLContext>) {
+```swift
+func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 
-        **for** context **in** URLContexts {
+        for context in URLContexts {
 
-            **let** url = context.url
+            let url = context.url
 
-            **if** tradeDoubler.handleTduidUrl(url: url) {
+            if tradeDoubler.handleTduidUrl(url: url) {
 
                 // now you have tduid set in framework, debug or ignore
 
-                **break**
+                break
 
-            } **else** {
+            } else {
 
                 //failed setting tduid. Not default URL structure or no tduid parameter obtained
 
@@ -209,9 +222,10 @@ Also, when app has been already open the methods of interest are:
         }
 
     }
+```
 
 And
-
+```swift
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
 
         if TDSDKInterface.shared.handleTduidUrl(url: url) {
@@ -227,6 +241,7 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
         return true
 
     }
+```
 
 Also remember that on devices with iOS 14.0 and later AppDelegate method **directly above** won’t get called. Convenience method** <span style="text-decoration:underline;">handleTduidUrl(url:)</span>** may be used only for default URL structure. If a custom URL was used tduid should be set directly using
 
@@ -239,33 +254,35 @@ For a better understanding, please analyze the methods of the demo app declared 
 
 In some cases, like testing the development version of an application, we may not want to track requests (although it effectively disables every feature you may expect from our framework). In this case property isTrackingEnabled TDSDKInterface singleton object allows us to make an appropriate setting.
 
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         (...)
 
-        TDSDKInterface.shared.isTrackingEnabled = **false**
+        TDSDKInterface.shared.isTrackingEnabled = false
 
-        **return** **true**
+        return true
 
     }
-
+```
 
 ### Enable Logs
 
 In some cases, like testing the development version of an application, we may not log everything happening inside the framework into the console. Flag isLoggingEnabled inside TDSDKInterface singleton object allows to mute almost all logs (except for errors).
 
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         
 
       (...)
 
-        TDSDKInterface.shared.isLoggingEnabled = **false**
+        TDSDKInterface.shared.isLoggingEnabled = false
 
-        **return** **true**
+        return true
 
     }
-
+```
 
 ### Encryption
 
@@ -302,7 +319,9 @@ The iOS version of the framework uses encryption on the CommonCrypto framework f
 
 For tracking app installation in iOS we have prepared the following method:
 
-**@discardableResult** **public** **func** trackInstall(appInstallEventId: String) -> Bool 
+```swift
+@discardableResult public func trackInstall(appInstallEventId: String) -> Bool 
+```
 
 It’s usage, however, is very limited. At the start, it’s necessary to download the application including our framework **from the App Store**, then get the TDUID from the installation URL, and after having this accomplished it’s required to have user email and / or IDFA already set in framework on app’s first run.
 
@@ -310,13 +329,14 @@ The only parameter is trackInstall event identifier, obtained from Tradedoubler.
 
 Returned flag informs if the URL(s) were created (disabled tracking, trying to run this method more than once after installation or not having user identifiers set in the app will take effect in returning false). For the majority of use cases return should be ignored.
 
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         //configure framework here, including retrieving TDUID
 
         TDSDKInterface.shared.trackInstall(appInstallEventId: sdk_app_install)
 
-
+```
 
 
 ### Tracking the Opening of the Application
@@ -328,37 +348,42 @@ To track opening of the application please use the following method:
 It should be invoked on each application launch after configuring necessary parameters.
 
 The Boolean flag returned by this method is discarded by default and is true only when the URL(s) were created (tracking must be enabled and framework configured correctly with at least one unique user identifier).
-
-**func** application(**_** application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: **Any**]?) -> Bool {
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         //configure framework, set email or IDFA
 
         TDSDKInterface.shared.trackOpenApp()
-
+```
 If you need to monitor not only opening a closed app but also situations when the user is bringing your app back from background it is possible. However, if you have sceneDelegate then standard method from AppDelegate won’t get called, so when you are supporting iOS before 13.0 you need to implement both:
 
 AppDelegate:
 
-**func** applicationWillEnterForeground(**_** application: UIApplication) {
+```swift
+func applicationWillEnterForeground(_ application: UIApplication) {
 
         TDSDKInterface.shared.trackOpenApp()
+```
 
 SceneDelegate:
 
-**func** sceneWillEnterForeground(**_** scene: UIScene) {
+```swift
+func sceneWillEnterForeground(_ scene: UIScene) {
 
         TDSDKInterface.shared.trackOpenApp()
-
+```
 
 
 
 ### Track Leads
 
-**func** sdkLead() {
+```swift
+func sdkLead() {
 
         TDSDKInterface.shared.trackLead(leadEventId: sdk_lead, leadId: "1234")
 
     }
+```
 
 
 <table>
@@ -394,9 +419,10 @@ Returned flag is signalling if the URL(s) was / were created and may be safely d
 
 ### Track Sales
 
-**func** sdkSale() {
+```swift
+func sdkSale() {
 
-        **let** reportInfo = ReportInfo(entries: 
+        let reportInfo = ReportInfo(entries: 
 
 [ReportEntry(id: "123", productName: "milk", price: 2.15, quantity: 3),
 
@@ -405,7 +431,7 @@ Returned flag is signalling if the URL(s) was / were created and may be safely d
         TDSDKInterface.shared.trackSale(saleEventId: sdk_sale_2, orderNumber: "14", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: **nil**, reportInfo: reportInfo)
 
     }
-
+```
 
 <table>
   <tr>
@@ -473,10 +499,10 @@ As in every other tracking - returned flag is discardable and is true if URL(s) 
 
 
 ### Track Sales PLT
+```swift
+func sdkSalePLT() {
 
-**func** sdkSalePLT() {
-
-        **let** reportInfo = BasketInfo(entries: 
+        let reportInfo = BasketInfo(entries: 
 
 
     [BasketEntry.init(group: sdk_group_1, id: "123", productName: "milk", price: 2.15, quantity: 3),
@@ -486,14 +512,14 @@ As in every other tracking - returned flag is discardable and is true if URL(s) 
 
         
 
-        TDSDKInterface.shared.trackSalePlt(orderNumber: "28", currency: "EUR", voucherCode: **nil**, reportInfo: reportInfo)
+        TDSDKInterface.shared.trackSalePlt(orderNumber: "28", currency: "EUR", voucherCode: nil, reportInfo: reportInfo)
 
         //or if you have custom event identifier (not 51)
 
         //TDSDKInterface.shared.trackSalePlt(saleEventId: custom_value, orderNumber: "28", currency: "EUR", voucherCode: nil, reportInfo: reportInfo)
 
  }
-
+```
 
 <table>
   <tr>
