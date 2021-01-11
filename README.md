@@ -82,16 +82,12 @@ is the suggested location for configuring the framework. Otherwise you need to f
 
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
         
-
         TDSDKInterface.shared.configure("1234", "5678")
 
         TDSDKInterface.shared.isTrackingEnabled = true
 
-        TDSDKInterface.shared.isLoggingEnabled = true
-
-        
+        TDSDKInterface.shared.isLoggingEnabled = true   
 
         return true
 
@@ -113,7 +109,7 @@ Setting email may be done directly by using:
 **TDSDKInterface.shared.email = {USER_EMAIL_PLAINTEXT}** like in code below
 
 ```swift
-	TDSDKInterface.shared.email = "test012345678@example.com"
+TDSDKInterface.shared.email = "test012345678@example.com"
 ```
 SHA256 will be counted internally.
 
@@ -277,9 +273,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 In some cases, like testing the development version of an application, we may not log everything happening inside the framework into the console. Flag isLoggingEnabled inside TDSDKInterface singleton object allows to mute almost all logs (except for errors).
 
 ```swift
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool { 
 
       (...)
 
@@ -431,10 +425,8 @@ Returned flag is signalling if the URL(s) was / were created and may be safely d
 func sdkSale() {
 
         let reportInfo = ReportInfo(entries: 
-
-[ReportEntry(id: "123", productName: "milk", price: 2.15, quantity: 3),
-
-              ReportEntry(id: "456", productName: "tea", price: 1.00, quantity: 3)])
+		[ReportEntry(id: "123", productName: "milk", price: 2.15, quantity: 3),
+        	ReportEntry(id: "456", productName: "tea", price: 1.00, quantity: 3)])
 
         TDSDKInterface.shared.trackSale(saleEventId: sdk_sale_2, orderNumber: "14", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: nil, reportInfo: reportInfo)
 
@@ -512,13 +504,9 @@ func sdkSalePLT() {
 
         let reportInfo = BasketInfo(entries: 
 
+    		[BasketEntry.init(group: sdk_group_1, id: "123", productName: "milk", price: 2.15, quantity: 3),
 
-    [BasketEntry.init(group: sdk_group_1, id: "123", productName: "milk", price: 2.15, quantity: 3),
-
-
-    BasketEntry.init(group: sdk_group_2, id: "456", productName: "tea", price: 1.00, quantity: 3)])
-
-        
+    		BasketEntry.init(group: sdk_group_2, id: "456", productName: "tea", price: 1.00, quantity: 3)]) 
 
         TDSDKInterface.shared.trackSalePlt(orderNumber: "28", currency: "EUR", voucherCode: nil, reportInfo: reportInfo)
 
