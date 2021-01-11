@@ -123,7 +123,9 @@ TDSDKInterface.shared.email = nil
 
 or use a convenience method:
 
+```swift
 TDSDKInterface.shared.logout()
+```
 
 Same goes for IDFA - you may pass plaintext IDFA string, but in case of user limited / disabled tracking or not authorized when requested on iOS 14.0+ you will get null IDFA string  ("00000000-0000-0000-0000-000000000000"). This case will be seen as a nil (iOS null constant) by the framework. Furthermore, setting IDFA is possible directly by using: 
 
@@ -243,9 +245,11 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
     }
 ```
 
-Also remember that on devices with iOS 14.0 and later AppDelegate method **directly above** won’t get called. Convenience method** <span style="text-decoration:underline;">handleTduidUrl(url:)</span>** may be used only for default URL structure. If a custom URL was used tduid should be set directly using
+Also remember that on devices with iOS 14.0 and later AppDelegate method **directly above** won’t get called. Convenience method **<span style="text-decoration:underline;">handleTduidUrl(url:)</span>** may be used only for default URL structure. If a custom URL was used tduid should be set directly using
 
+```swift
 TDSDKInterface.shared.tduid = "tduid_obtained_from_a_custom_url"
+```
 
 For a better understanding, please analyze the methods of the demo app declared separately in SceneDelegate and AppDelegate above.
 
@@ -343,7 +347,9 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 To track opening of the application please use the following method:
 
+```swift
  @discardableResult public func trackOpenApp() -> Bool
+```
 
 It should be invoked on each application launch after configuring necessary parameters.
 
@@ -428,7 +434,7 @@ func sdkSale() {
 
               ReportEntry(id: "456", productName: "tea", price: 1.00, quantity: 3)])
 
-        TDSDKInterface.shared.trackSale(saleEventId: sdk_sale_2, orderNumber: "14", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: **nil**, reportInfo: reportInfo)
+        TDSDKInterface.shared.trackSale(saleEventId: sdk_sale_2, orderNumber: "14", orderValue: reportInfo.orderValue, currency: "EUR", voucherCode: nil, reportInfo: reportInfo)
 
     }
 ```
