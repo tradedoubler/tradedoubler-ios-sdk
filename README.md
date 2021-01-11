@@ -1,9 +1,3 @@
-### **Installation Manual**
-
-
-[TOC]
-
-
 
 ## iOS Integration 
 
