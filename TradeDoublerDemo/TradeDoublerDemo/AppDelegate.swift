@@ -226,6 +226,7 @@ extension AppDelegate: URLSessionDelegate, URLSessionTaskDelegate {
             guard let tduid = components?.queryItems?.filter({ (item) -> Bool in
                 item.name.lowercased() == "tduid"
             }).first else {
+                completionHandler(request)
                 return
             }
             let toPost = Notification.init(name: tduidFound, object: nil, userInfo: [Constants.tduidKey : tduid.value!])
@@ -233,6 +234,7 @@ extension AppDelegate: URLSessionDelegate, URLSessionTaskDelegate {
                 self.tradeDoubler.tduid = tduid.value
                 NotificationCenter.default.post(toPost)
             }
+            completionHandler(request)
         }
     }
     

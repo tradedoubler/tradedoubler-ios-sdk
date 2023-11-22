@@ -486,12 +486,14 @@ class TemporarySessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
                 if let url = request.url {
                     OfflineDataHandler.shared.performRedirect(url)
                 }
+                completionHandler(request)
                 return
             }
             OfflineDataHandler.shared.requestComplete()
             DispatchQueue.main.async {
                 TradeDoublerSDKSettings.shared.tduid = tduid.value
             }
+            completionHandler(request)
         }
     }
     
