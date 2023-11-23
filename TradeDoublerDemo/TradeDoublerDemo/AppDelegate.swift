@@ -40,6 +40,22 @@ struct segueId {
     static let segueToLead = "SegueToLead"
 }
 
+func keyWindow() -> UIWindow? {
+    if #available(iOS 15.0, *) {
+        return UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .compactMap({$0 as? UIWindowScene})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
+    } else {
+        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+    }
+}
+
+func present(alert: UIAlertController) {
+    keyWindow()?.rootViewController?.present(alert, animated: true)
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -55,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func reconfigureRootView() {
-        if let root = UIApplication.shared.keyWindow?.rootViewController as? DemoViewController {
+        if let root = keyWindow()?.rootViewController as? DemoViewController {
             root.setOutlets()
         }
     }
@@ -87,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }))
         }
         
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
+        present(alert: alert)
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -144,7 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + (onLaunch ? 1 : 0)) {
                 let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(TDSDKInterface.shared.tduid!)", preferredStyle: .alert)
                 alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
-                UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
+                present(alert: alert)
             }
         }
     }
