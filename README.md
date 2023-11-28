@@ -8,21 +8,21 @@ Framework installation is possible using Carthage dependency manager. If you've 
 
 [https://github.com/Carthage/Carthage](https://github.com/Carthage/Carthage)
 
-Especially, if you are working on Xcode 12.0 or newer, you should carefully read informations about necessary workaround:
+Especially, if you are working on Xcode 13.0 or newer, you should carefully read informations about necessary workaround:
 
 [https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md)
 
 If carthage is already installed then to add framework to your project please add this line in your Cartfile:
 
 ```
-github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 1.0.0
+github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.0.0
 ```
 
 After downloading the repository from Carthage you need to configure dependencies manually in build phases of your project. 
 
 **Min SDK Version**
 
-Repository works with iOS version 12.0 and newer.
+Repository works with iOS version 13.0 and newer.
 
 
 ### Additional Configuration
@@ -357,7 +357,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
         TDSDKInterface.shared.trackOpenApp()
 ```
-If you need to monitor not only opening a closed app but also situations when the user is bringing your app back from background it is possible. However, if you have sceneDelegate then standard method from AppDelegate won’t get called, so when you are supporting iOS before 13.0 you need to implement both:
+If you need to monitor not only opening a closed app but also situations when the user is bringing your app back from background it is possible. However, if you have sceneDelegate then standard method from AppDelegate won’t get called, so when you were supporting iOS before 13.0 you need to implement both:
 
 AppDelegate:
 

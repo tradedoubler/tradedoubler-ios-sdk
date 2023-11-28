@@ -10,11 +10,12 @@ import Foundation
 import CommonCrypto
 
 func randomGenerateBytes(count: Int) -> Data? {
-    let bytes = UnsafeMutableRawPointer.allocate(byteCount: count, alignment: 1)
-    defer { bytes.deallocate() }
-    let status = CCRandomGenerateBytes(bytes, count)
-    guard status == kCCSuccess else { return nil }
-    return Data(bytes: bytes, count: count)
+    var bytes = [UInt8](repeating: 0, count: count)
+    let result = SecRandomCopyBytes(kSecRandomDefault, count, &bytes)
+    
+    guard result == errSecSuccess else { return nil }
+    
+    return Data(bytes)
 }
 
 extension Data {

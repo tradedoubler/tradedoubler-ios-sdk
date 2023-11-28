@@ -75,7 +75,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + (onLaunch ? 1 : 0)) {
                     let alert = UIAlertController.init(title: "opened URL", message: "\(url.absoluteString), tudid: \(TDSDKInterface.shared.tduid!)", preferredStyle: .alert)
                     alert.addAction(UIAlertAction.init(title: "OK", style: .cancel, handler: nil))
-                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
+                    present(alert: alert)
                 }
                 break
             }
