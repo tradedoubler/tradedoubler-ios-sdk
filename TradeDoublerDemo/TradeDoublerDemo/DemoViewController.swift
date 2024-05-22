@@ -22,8 +22,6 @@ class DemoViewController: UIViewController {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let tradeDoubler = TDSDKInterface.shared
     
-    @IBOutlet weak var idfaLabel: UILabel!
-    @IBOutlet weak var idfaButton: UIButton!
     @IBOutlet weak var tduidLabel: UILabel!
     @IBOutlet weak var loggingSwitch: UISwitch!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -43,10 +41,6 @@ class DemoViewController: UIViewController {
         tradeDoubler.isTrackingEnabled = sender.isOn
     }
     
-    @IBAction func simulateOpen(_ sender: Any) {
-        tradeDoubler.trackOpenApp()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(setOutlets), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -61,23 +55,12 @@ class DemoViewController: UIViewController {
     @objc func setOutlets() {
         UserDefaults.standard.bool(forKey: debugKey)
         
-        if #available(iOS 14.0, *) {
-            idfaButton.isEnabled = true
-        } else {
-            idfaButton.isEnabled = false
-        }
         emailField.clearButtonMode = .unlessEditing
         trackingSwitch.isOn = UserDefaults.standard.bool(forKey: trackingKey)
         tradeDoubler.isTrackingEnabled = trackingSwitch.isOn
         loggingSwitch.isOn = UserDefaults.standard.bool(forKey: debugKey)
         tradeDoubler.isLoggingEnabled = loggingSwitch.isOn
-        idfaLabel.text = ASIdentifierManager.shared().advertisingIdentifier.uuidString
         emailField.text = tradeDoubler.email
-        if idfaLabel.text?.isEmpty != false {//is empty or nil
-            idfaLabel.text = "(null)"
-        } else if idfaLabel.text == "00000000-0000-0000-0000-000000000000" {
-            idfaLabel.text = "(null)"
-        }
         tduidLabel.text = tradeDoubler.tduid ?? "(null)"
         scrollView.layoutSubviews()
     }
@@ -98,65 +81,9 @@ class DemoViewController: UIViewController {
         performSegue(withIdentifier: segueId.segueToLead, sender: self)
     }
     
-    @IBAction func useIDFA(_ sender: Any) {
-        
-        if UserDefaults.standard.string(forKey: "advertisingIdentifier") == nil {
-            if #available(iOS 14.0, *) {
-                let array: [ATTrackingManager.AuthorizationStatus] = [.notDetermined, .authorized]
-                if !array.contains(ATTrackingManager.trackingAuthorizationStatus) {
-                    let alert = UIAlertController.init(title: "Using IDFA not allowed", message: "Please go to settings nad allow tracking if you want to use IDFA" , preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (_) in
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-                    }))
-                    present(alert, animated: true, completion: nil)
-                } else if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                requestPermission()
-                }
-            } else {
-                if tradeDoubler.isLoggingEnabled {
-                    print("On iOS before version 14.0 you don't need authorization to use IDFA, but usage can be limited. Currently \(ASIdentifierManager.shared().isAdvertisingTrackingEnabled ? "not limited" : "limited")")
-                }
-            }
-        }
-    }
-    
     @IBAction func simulateAppInstall(_ sender: Any) {
         tradeDoubler.trackInstall(appInstallEventId: sdk_app_install)
     }
-    
-    
-    @available(iOS 14, *)
-    func requestPermission() {
-        ATTrackingManager.requestTrackingAuthorization { status in
-                switch status {
-                case .authorized:
-                    // Tracking authorization dialog was shown
-                    // and we are authorized
-                    DispatchQueue.main.async { [weak self] in
-                        let advertisingIdentifier = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-                        self?.tradeDoubler.IDFA = advertisingIdentifier
-                        print("Authorized, IDFA = \(advertisingIdentifier)")
-                        self?.setOutlets()
-                    }
-                
-                    // Now that we are authorized we can get the IDFA
-//                print(ASIdentifierManager.shared().advertisingIdentifier)
-                case .denied:
-                   // Tracking authorization dialog was
-                   // shown and permission is denied
-                     print("Denied")
-                case .notDetermined:
-                        // Tracking authorization dialog has not been shown
-                        print("Not Determined")
-                case .restricted:
-                        print("Restricted")
-                @unknown default:
-                        print("Unknown")
-                }
-            }
-        }
-    
 }
 
 extension DemoViewController: UITextFieldDelegate {

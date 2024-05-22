@@ -80,28 +80,6 @@ class TradeDoublerSDKSettings {
     
     var secretCode: String? = nil
     
-    ///set "plain" IDFA, will be saved securely if not null (zeros). Returns sha or nil on read
-    var IDFA: String? {
-        get {
-            if #available(iOS 14.0, *) {
-                if ATTrackingManager.trackingAuthorizationStatus != ATTrackingManager.AuthorizationStatus.authorized {
-                    return nil
-                }
-            }
-            else if !ASIdentifierManager.shared().isAdvertisingTrackingEnabled{
-                return nil
-            }
-            return UserDefaults.standard.string(forKey: Constants.IDFAKey)
-        }
-        set {
-            if let new = newValue, !new.isNilUUIDString() {
-                UserDefaults.standard.setValue(newValue?.sha256(), forKey: Constants.IDFAKey)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Constants.IDFAKey)
-            }
-        }
-    }
-    
     private init() {}
     
     static let shared = TradeDoublerSDKSettings()

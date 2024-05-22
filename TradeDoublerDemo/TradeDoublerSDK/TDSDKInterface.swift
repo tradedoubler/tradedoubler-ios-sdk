@@ -45,19 +45,6 @@ public class TDSDKInterface {
             settings.userEmail = newValue
         }
     }
-    /**
-     Apple identifier for advertising. If user limited Ad tracking, refused authorization on iOS 14.0+ or IDFA was generated on simulator it will be 00000000-0000-0000-0000-000000000000 (nil IDFA string). Otherwise stored as SHA hash string. In this case this metod will return nil and framework won't generate requests with IDFA
-     */
-    public var IDFA: String? {
-        get {
-            settings.IDFA
-        }
-        set {
-            if let val = newValue {
-                setIDFA(val)
-            }
-        }
-    }
     
     /**
      If set to false only error logs will appear in console
@@ -176,15 +163,6 @@ public class TDSDKInterface {
         urlHandler.trackLead(eventId: leadEventId, leadId: leadId)
     }
     /**
-     Method for tracking app opening. Should be called on every  launch of the app
-     
-     - Returns: flag informing if request was created. False if configured to not tracking OR nil IDFA & email in settings
-     */
-    @discardableResult public func trackOpenApp() -> Bool {
-        urlHandler.trackOpenApp()
-    }
-    
-    /**
      Method for tracking app installing. Should be called only once (on first launch)
      
      - Parameter appInstallEventId: your organization's app install event identifier from Tradedoubler®
@@ -201,15 +179,6 @@ public class TDSDKInterface {
     public func logout() {
         settings.userEmail = nil
     }
-    
-    private func setIDFA(_ IDFA: String) {
-        if !IDFA.isNilUUIDString() {
-            settings.IDFA = IDFA
-        } else {
-            settings.IDFA = nil
-        }
-    }
-    
     /**
      Method for configuring framework
      

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,7 +14,7 @@
             <objects>
                 <viewController id="IEi-fl-Y1s" customClass="SaleViewController" customModule="TradeDoublerDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TJL-pV-uV5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="886"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="O2n-KB-uoC">
@@ -221,7 +221,7 @@
             <objects>
                 <viewController id="M3V-0p-A45" customClass="SalePLTViewController" customModule="TradeDoublerDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cbG-8Z-dXK">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="886"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aBb-gh-EmA">
@@ -463,45 +463,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hn2-qd-t8z">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spx-Uh-FS4" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YIW-Yc-OzB">
-                                                <rect key="frame" x="5" y="15" width="404" height="595"/>
+                                                <rect key="frame" x="5" y="15" width="404" height="445"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="7PH-7E-YFu" userLabel="IDFA">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aN7-Ft-WZD" userLabel="TDUID">
                                                         <rect key="frame" x="0.0" y="0.0" width="404" height="45"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IDFA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTQ-Wq-Imq">
-                                                                <rect key="frame" x="0.0" y="0.0" width="199.5" height="45"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1U-Lq-elc">
-                                                                <rect key="frame" x="204.5" y="0.0" width="199.5" height="45"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="45" id="Efv-0l-4bH"/>
-                                                                </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aN7-Ft-WZD" userLabel="TDUID">
-                                                        <rect key="frame" x="0.0" y="50" width="404" height="45"/>
-                                                        <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TDUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q9K-ix-FLn">
-                                                                <rect key="frame" x="0.0" y="0.0" width="199.5" height="45"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="50.5" height="45"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rbw-Yy-skw">
-                                                                <rect key="frame" x="204.5" y="0.0" width="199.5" height="45"/>
+                                                                <rect key="frame" x="55.5" y="0.0" width="348.5" height="45"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="45" id="o3J-T6-nbj"/>
                                                                 </constraints>
@@ -512,7 +492,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7RH-IL-uvt" userLabel="Email">
-                                                        <rect key="frame" x="0.0" y="100" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="50" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3p-cM-ObO">
                                                                 <rect key="frame" x="0.0" y="0.0" width="48" height="45"/>
@@ -534,7 +514,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="986-qo-aCC" userLabel="Logging">
-                                                        <rect key="frame" x="0.0" y="150" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="100" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is logging enabled" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6iK-GD-AM6">
                                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
@@ -551,7 +531,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1CX-NM-hf0" userLabel="Tracking">
-                                                        <rect key="frame" x="0.0" y="200" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="150" width="404" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is tracking enabled" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4TB-uj-BKq">
                                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
@@ -568,7 +548,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pX6-rl-9sg">
-                                                        <rect key="frame" x="0.0" y="250" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="200" width="404" height="45"/>
                                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                                         <state key="normal" title="Settings">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -577,18 +557,8 @@
                                                             <action selector="showSettings:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2rJ-Gg-4AZ"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szr-kb-9hY">
-                                                        <rect key="frame" x="0.0" y="300" width="404" height="45"/>
-                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
-                                                        <state key="normal" title="Request IDFA authorization (iOS 14.0+)">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="useIDFA:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlR-uf-4WH"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NVt-9j-bb2">
-                                                        <rect key="frame" x="0.0" y="350" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="250" width="404" height="45"/>
                                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                                         <state key="normal" title="SETTING TRACKING SALE">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -598,7 +568,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nus-c9-oSJ">
-                                                        <rect key="frame" x="0.0" y="400" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="300" width="404" height="45"/>
                                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                                         <state key="normal" title="SETTING TRACKING LEAD">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -608,7 +578,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnl-i3-dE0">
-                                                        <rect key="frame" x="0.0" y="450" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="350" width="404" height="45"/>
                                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                                         <state key="normal" title="SETTING TRACKING SALE PLT">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -618,23 +588,13 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XjU-wZ-Dtc">
-                                                        <rect key="frame" x="0.0" y="500" width="404" height="45"/>
+                                                        <rect key="frame" x="0.0" y="400" width="404" height="45"/>
                                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                                         <state key="normal" title="SIMULATE INSTALL">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="simulateAppInstall:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w9X-AY-DqR"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neo-yp-LI6">
-                                                        <rect key="frame" x="0.0" y="550" width="404" height="45"/>
-                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
-                                                        <state key="normal" title="SIMULATE OPEN">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="simulateOpen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ufa-vt-G3S"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -675,8 +635,6 @@
                     <navigationItem key="navigationItem" id="998-yv-fuM"/>
                     <connections>
                         <outlet property="emailField" destination="vFm-bc-YYY" id="TrI-pe-hwu"/>
-                        <outlet property="idfaButton" destination="Szr-kb-9hY" id="3zj-Yj-zup"/>
-                        <outlet property="idfaLabel" destination="I1U-Lq-elc" id="5If-mC-D21"/>
                         <outlet property="loggingSwitch" destination="MIk-Ss-piK" id="VvG-h9-i2Y"/>
                         <outlet property="scrollView" destination="Hn2-qd-t8z" id="4w3-tp-f8w"/>
                         <outlet property="tduidLabel" destination="rbw-Yy-skw" id="25b-H5-0s3"/>
@@ -695,7 +653,7 @@
             <objects>
                 <viewController id="MCu-U9-ik2" customClass="LeadViewController" customModule="TradeDoublerDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="12I-zb-Z2t">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="886"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Rem-Rm-Ycw">
