@@ -178,6 +178,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "extid", value: settings.userEmail))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
+        queryItems.append(URLQueryItem(name: "ttid", value: settings.ttid))
         components.queryItems = queryItems
         return components.url
     }
@@ -207,6 +208,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         queryItems.append(URLQueryItem(name: "extid", value: settings.userEmail))
+        queryItems.append(URLQueryItem(name: "ttid", value: settings.ttid))
         components.queryItems = queryItems
         return components.url
     }
@@ -224,6 +226,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "extid", value: settings.userEmail))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         queryItems.append(URLQueryItem(name: "tduid", value: settings.tduid))
+        queryItems.append(URLQueryItem(name: "ttid", value: settings.ttid))
         components.queryItems = queryItems
         return components.url!
     }
@@ -242,6 +245,7 @@ class URLHandler {
         queryItems.append(URLQueryItem(name: "orderValue", value: orderValue))
         queryItems.append(URLQueryItem(name: "checksum", value: checksum))
         queryItems.append(URLQueryItem(name: "extid", value: settings.userEmail))
+        queryItems.append(URLQueryItem(name: "ttid", value: settings.ttid))
         queryItems.append(URLQueryItem(name: "exttype", value: "1"))
         if currency != nil {queryItems.append(URLQueryItem(name: "currency", value: currency))}
         if voucher != nil {queryItems.append(URLQueryItem(name: "voucher", value: voucher))}
@@ -284,6 +288,7 @@ class URLHandler {
             queryParam.append("voucher(\(voucher))")
         }
         queryParam.append("enc(3)")
+        queryParam.append("ttid(\(settings.ttid)")
         queryParam.append("basket(\(basketInfo.toEncodedString()))")
         if let filtered = queryParam.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             queryParam = filtered

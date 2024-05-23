@@ -78,6 +78,11 @@ class TradeDoublerSDKSettings {
         }
     }
     
+    /// iOS SDK specific value: 22
+    var ttid: String {
+        return "22"
+    }
+    
     var secretCode: String? = nil
     
     private init() {}
