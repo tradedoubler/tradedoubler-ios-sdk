@@ -19,10 +19,10 @@ steps:
 - script: xcrun simctl list
   displayName: 'Show devices list'
 
-- script: xcrun simctl boot 2B96FC9A-EA9C-4732-A6CD-EDAD0EB3A50D
+- script: xcrun simctl boot 9B2491E2-140E-4560-BF88-00C4B644FB9F
   displayName: 'Boot simulator'
 
-- script: xcrun simctl bootstatus 2B96FC9A-EA9C-4732-A6CD-EDAD0EB3A50D
+- script: xcrun simctl bootstatus 9B2491E2-140E-4560-BF88-00C4B644FB9F
   displayName: 'Wait for simulator'
 
 - task: Xcode@5
