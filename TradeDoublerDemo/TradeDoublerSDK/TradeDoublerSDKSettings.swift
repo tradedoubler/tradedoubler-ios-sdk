@@ -78,9 +78,9 @@ class TradeDoublerSDKSettings {
         }
     }
     
-    /// iOS SDK specific value: 22
-    var ttid: String {
-        return "22"
+    /// iOS SDK specific value: 46
+    var convtagtid: String {
+        return "46"
     }
     
     var secretCode: String? = nil
