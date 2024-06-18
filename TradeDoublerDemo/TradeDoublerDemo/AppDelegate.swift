@@ -129,7 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         configureFramework()
         simulateTduidUrl("clk.tradedoubler.com", "/click", parameters)
-        tradeDoubler.trackOpenApp()
         
         return true
     }
