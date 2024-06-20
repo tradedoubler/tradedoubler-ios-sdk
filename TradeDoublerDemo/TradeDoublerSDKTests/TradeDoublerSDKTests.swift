@@ -31,40 +31,20 @@ class TradeDoublerSDKTests: XCTestCase {
     let orgId: String? = "945630"
     let secret = "123456789"
     let email = "test24588444@tradedoubler.com"
-    let IDFA = "28DF02F4-63BE-401D-A60F-D7CA3999EFD4"
     
     func configureTest() {
         tradeDoublerSdk.configure(orgId, secret)
         tradeDoublerSdk.email = email
-        tradeDoublerSdk.IDFA = IDFA
     }
     override func setUpWithError() throws {
         tradeDoublerSdk.tduid = tduid
         tradeDoublerSdk.email = email
-        tradeDoublerSdk.IDFA = IDFA
         offlineHandler.lastError = nil
         UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: Constants.tduidTimestampKey)
     }
     
     override func tearDownWithError() throws {
         tradeDoublerSdk.email = nil
-        tradeDoublerSdk.IDFA = nil
-    }
-    
-    func testTrackAppOpen() throws {
-        configureTest()
-        let exp = expectation(description: "wait for error")
-        let urlCreated = tradeDoublerSdk.trackOpenApp()
-        if !urlCreated {// tracking disabled
-            queue.asyncAfter(deadline: DispatchTime.now() + 0.5) { [self] in
-                if offlineHandler.requests.isEmpty && offlineHandler.lastError == nil {
-                    exp.fulfill()}
-            }
-        } else {
-            offlineHandler.exp = exp
-        }
-        
-        wait(for: [exp], timeout: 16)
     }
     
     func testTrackAppInstall() {

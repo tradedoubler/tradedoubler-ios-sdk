@@ -19,10 +19,10 @@ steps:
 - script: xcrun simctl list
   displayName: 'Show devices list'
 
-- script: xcrun simctl boot 2B96FC9A-EA9C-4732-A6CD-EDAD0EB3A50D
+- script: xcrun simctl boot "iPhone 12 Pro"
   displayName: 'Boot simulator'
 
-- script: xcrun simctl bootstatus 2B96FC9A-EA9C-4732-A6CD-EDAD0EB3A50D
+- script: xcrun simctl bootstatus "iPhone 12 Pro"
   displayName: 'Wait for simulator'
 
 - task: Xcode@5

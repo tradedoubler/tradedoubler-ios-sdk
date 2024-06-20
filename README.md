@@ -15,7 +15,7 @@ Especially, if you are working on Xcode 13.0 or newer, you should carefully read
 If carthage is already installed then to add framework to your project please add this line in your Cartfile:
 
 ```
-github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.0.0
+github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.1.0
 ```
 
 After downloading the repository from Carthage you need to configure dependencies manually in build phases of your project. 
@@ -26,12 +26,6 @@ Repository works with iOS version 13.0 and newer.
 
 
 ### Additional Configuration
-
-If you want to use Apple IDFA then on iOS 14.0+ it is necessary to add AppTrackingTransparency framework and entry in Info.plist under the key 
-
-**NSUserTrackingUsageDescription** 
-
-with a custom message that informs the user why the app is requesting permission to use data for tracking the user or the device.
 
 Opening the URLs on iOS
 
@@ -337,44 +331,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
         TDSDKInterface.shared.trackInstall(appInstallEventId: sdk_app_install)
 
 ```
-
-
-### Tracking the Opening of the Application
-
-To track opening of the application please use the following method:
-
-```swift
- @discardableResult public func trackOpenApp() -> Bool
-```
-
-It should be invoked on each application launch after configuring necessary parameters.
-
-The Boolean flag returned by this method is discarded by default and is true only when the URL(s) were created (tracking must be enabled and framework configured correctly with at least one unique user identifier).
-```swift
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        //configure framework, set email or IDFA
-
-        TDSDKInterface.shared.trackOpenApp()
-```
-If you need to monitor not only opening a closed app but also situations when the user is bringing your app back from background it is possible. However, if you have sceneDelegate then standard method from AppDelegate won’t get called, so when you were supporting iOS before 13.0 you need to implement both:
-
-AppDelegate:
-
-```swift
-func applicationWillEnterForeground(_ application: UIApplication) {
-
-        TDSDKInterface.shared.trackOpenApp()
-```
-
-SceneDelegate:
-
-```swift
-func sceneWillEnterForeground(_ scene: UIScene) {
-
-        TDSDKInterface.shared.trackOpenApp()
-```
-
 
 
 ### Track Leads
