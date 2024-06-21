@@ -13,7 +13,6 @@
 //limitations under the License.
 
 import Foundation
-import CommonCrypto
 
 let requestsKey = "requestsLaunched"
 class OfflineDataHandler {
