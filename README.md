@@ -34,6 +34,15 @@ Then run the following command in your terminal:
 pod install
 ```
 
+While integrating the library using CocoaPods, you may encounter the following error:
+```
+Sandbox: rsync.samba(13105) deny(1) file-write-create
+```
+
+This error usually occurs if your project uses default build settings. To resolve this issue, you can try the setting the `ENABLE_USER_SCRIPT_SANDBOXING` to 'No'. 
+
+For more details check [StackOverflow discussion](https://stackoverflow.com/questions/76590131/error-while-build-ios-app-in-xcode-sandbox-rsync-samba-13105-deny1-file-w/76626156#76626156).
+
 #### Carthage
 
 If you prefer to use Carthage, follow the instructions below.
