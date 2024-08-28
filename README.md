@@ -4,7 +4,8 @@
 
 ### Installation
 
-Framework installation is possible using either Carthage or Swift Package Manager (SPM) dependency managers.
+Framework installation is possible using Swift Package Manager (SPM), CocoaPods or Carthage dependency managers.
+
 
 #### Swift Package Manager (SPM)
 
@@ -19,6 +20,19 @@ https://github.com/tradedoubler/tradedoubler-ios-sdk.git
 3. Choose version 2.2.0 or newer and add the package to your project.
 
 SPM will automatically handle the downloading and integration of the library into your project.
+
+#### CocoaPods
+
+To integrate the library using CocoaPods, add the following line to your `Podfile`:
+
+```ruby
+pod 'TradeDoublerSDK', '~> 2.2.0'
+```
+Then run the following command in your terminal:
+
+```bash
+pod install
+```
 
 #### Carthage
 
