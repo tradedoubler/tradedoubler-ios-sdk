@@ -58,7 +58,7 @@ Especially, if you are working on Xcode 13.0 or newer, you should carefully read
 If Carthage is already installed, add the framework to your project by including this line in your Cartfile:
 
 ```
-github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.1.0
+github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.2.0
 ```
 After downloading the repository with Carthage, you'll need to configure the dependencies manually in the build phases of your project.
 

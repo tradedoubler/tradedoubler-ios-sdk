@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = "13.0"
     s.osx.deployment_target = "10.15"
   
-    s.source        = { :git => "https://github.com/onevcat/TradeDoublerSDK.git", :tag => s.version }
+    s.source        = { :git => "https://github.com/tradedoubler/tradedoubler-ios-sdk.git", :tag => s.version }
     s.source_files  = ["TradeDoublerDemo/TradeDoublerSDK/*.swift"]
   
     s.requires_arc = true
