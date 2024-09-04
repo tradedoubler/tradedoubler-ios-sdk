@@ -4,21 +4,63 @@
 
 ### Installation
 
-Framework installation is possible using Carthage dependency manager. If you've never done that before please use Carthage official documentation, it's really helpful:
+Framework installation is possible using Swift Package Manager (SPM), CocoaPods or Carthage dependency managers.
+
+
+#### Swift Package Manager (SPM)
+
+Starting from version **2.2.0**, the library can be integrated using Swift Package Manager. 
+To integrate the library using SPM, follow these steps:
+
+1. In Xcode, go to `File` > `Add Package Dependencies...`
+2. Enter the URL of the repository in the search field:
+```
+https://github.com/tradedoubler/tradedoubler-ios-sdk.git
+```
+3. Choose version 2.2.0 or newer and add the package to your project.
+
+SPM will automatically handle the downloading and integration of the library into your project.
+
+#### CocoaPods
+
+To integrate the library using CocoaPods, add the following line to your `Podfile`:
+
+```ruby
+pod 'TradeDoublerSDK', '~> 2.2.0'
+```
+Then run the following command in your terminal:
+
+```bash
+pod install
+```
+
+While integrating the library using CocoaPods, you may encounter the following error:
+```
+Sandbox: rsync.samba(13105) deny(1) file-write-create
+```
+
+This error usually occurs if your project uses default build settings. To resolve this issue, you can try the setting the `ENABLE_USER_SCRIPT_SANDBOXING` to 'No'. 
+
+For more details check [StackOverflow discussion](https://stackoverflow.com/questions/76590131/error-while-build-ios-app-in-xcode-sandbox-rsync-samba-13105-deny1-file-w/76626156#76626156).
+
+#### Carthage
+
+If you prefer to use Carthage, follow the instructions below.
+
+If you've never used Carthage before, please refer to the official Carthage documentation for guidance:
 
 [https://github.com/Carthage/Carthage](https://github.com/Carthage/Carthage)
 
-Especially, if you are working on Xcode 13.0 or newer, you should carefully read informations about necessary workaround:
+Especially, if you are working on Xcode 13.0 or newer, you should carefully read the information about the necessary workaround:
 
 [https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md)
 
-If carthage is already installed then to add framework to your project please add this line in your Cartfile:
+If Carthage is already installed, add the framework to your project by including this line in your Cartfile:
 
 ```
-github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.1.0
+github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.2.0
 ```
-
-After downloading the repository from Carthage you need to configure dependencies manually in build phases of your project. 
+After downloading the repository with Carthage, you'll need to configure the dependencies manually in the build phases of your project.
 
 **Min SDK Version**
 
