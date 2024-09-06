@@ -21,3 +21,6 @@ fastlane/test_output
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
+.swiftpm
+TradeDoublerDemo/.DS_Store
+.DS_Store
