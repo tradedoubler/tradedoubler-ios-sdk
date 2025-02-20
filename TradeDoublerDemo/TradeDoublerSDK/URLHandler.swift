@@ -288,7 +288,7 @@ class URLHandler {
             queryParam.append("voucher(\(voucher))")
         }
         queryParam.append("enc(3)")
-        queryParam.append("convtagtid(\(settings.convtagtid)")
+        queryParam.append("convtagtid(\(settings.convtagtid))")
         queryParam.append("basket(\(basketInfo.toEncodedString()))")
         if let filtered = queryParam.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             queryParam = filtered
