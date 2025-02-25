@@ -9,7 +9,7 @@ Framework installation is possible using Swift Package Manager (SPM), CocoaPods 
 
 #### Swift Package Manager (SPM)
 
-Starting from version **2.2.0**, the library can be integrated using Swift Package Manager. 
+Starting from version **2.2.1**, the library can be integrated using Swift Package Manager. 
 To integrate the library using SPM, follow these steps:
 
 1. In Xcode, go to `File` > `Add Package Dependencies...`
@@ -17,7 +17,7 @@ To integrate the library using SPM, follow these steps:
 ```
 https://github.com/tradedoubler/tradedoubler-ios-sdk.git
 ```
-3. Choose version 2.2.0 or newer and add the package to your project.
+3. Choose version 2.2.1 or newer and add the package to your project.
 
 SPM will automatically handle the downloading and integration of the library into your project.
 
@@ -26,7 +26,7 @@ SPM will automatically handle the downloading and integration of the library int
 To integrate the library using CocoaPods, add the following line to your `Podfile`:
 
 ```ruby
-pod 'TradeDoublerSDK', '~> 2.2.0'
+pod 'TradeDoublerSDK', '~> 2.2.1'
 ```
 Then run the following command in your terminal:
 
@@ -58,7 +58,7 @@ Especially, if you are working on Xcode 13.0 or newer, you should carefully read
 If Carthage is already installed, add the framework to your project by including this line in your Cartfile:
 
 ```
-github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.2.0
+github "https://github.com/tradedoubler/tradedoubler-ios-sdk.git" ~> 2.2.1
 ```
 After downloading the repository with Carthage, you'll need to configure the dependencies manually in the build phases of your project.
 

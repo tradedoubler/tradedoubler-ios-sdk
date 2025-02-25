@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name         = "TradeDoublerSDK"
-    s.version      = "2.2.0"
+    s.version      = "2.2.1"
     s.summary      = "TradeDoubler SDK for iOS."
   
     s.description  = <<-DESC

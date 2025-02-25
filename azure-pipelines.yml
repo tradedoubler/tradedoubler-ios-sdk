@@ -19,10 +19,10 @@ steps:
 - script: xcrun simctl list
   displayName: 'Show devices list'
 
-- script: xcrun simctl boot "iPhone 12 Pro"
+- script: xcrun simctl boot "iPhone 16 Pro"
   displayName: 'Boot simulator'
 
-- script: xcrun simctl bootstatus "iPhone 12 Pro"
+- script: xcrun simctl bootstatus "iPhone 16 Pro"
   displayName: 'Wait for simulator'
 
 - task: Xcode@5
@@ -44,7 +44,7 @@ steps:
     destinationTypeOption: 'simulators'
     destinationPlatformOption: 'iOS'
     destinationPlatform: 'iOS Simulator'
-    destinationSimulators: 'iPhone 12'
+    destinationSimulators: 'iPhone 16 Pro'
     xcodeVersion: 'default'
     packageApp: false
     useXcpretty: true
